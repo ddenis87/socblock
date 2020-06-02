@@ -26,13 +26,4 @@ export default {
     }
   }
 }
-
-function ajax_query(strPost,asunc){
-	let request = new XMLHttpRequest();
-	request.open('POST','prog.php', asunc);
-	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	request.send(strPost);
-	return request.responseText;
-}
-
 </script>
