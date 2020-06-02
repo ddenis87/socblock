@@ -29,6 +29,7 @@ export default {
 <style scoped>
 img {
   width: auto;
+  max-width: 50px;
   height: 50px;
   vertical-align: middle;
   border: 0px solid black;

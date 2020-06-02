@@ -24,8 +24,15 @@ body, div, fieldset, ul, li, img, h1, h2, h3 {
   margin: 0;
   padding: 0;
   border: 0px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
+
+
 a {
   text-decoration:none;
+}
+
+h2 {
+  color: forestgreen;
 }
 </style>
