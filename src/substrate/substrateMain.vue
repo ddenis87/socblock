@@ -26,7 +26,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .gridFull {
   display: grid;
   grid-template-areas: "sideTop sideTop"
@@ -53,4 +53,19 @@ export default {
   margin: 5px;
   padding: 5px;
 }
+
+
+.find input[type="text"] {
+    width: 300px;
+    margin: 5px;
+    padding: 5px;
+    border: 0px;
+    border-bottom: 2px solid grey;
+}
+
+.find input[type="button"] {
+  width: 100px;
+  margin: 5px;
+}
+
 </style>

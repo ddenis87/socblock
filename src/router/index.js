@@ -9,6 +9,12 @@ Vue.use(VueRouter)
     path: '/',
     name: 'Home',
     component: Home
+  }
+  ,
+  {
+    path: '/opeka',
+    name: 'opeka',
+    component: () => import('../views/opeka.vue')
   },
   {
     path: '/fss',
