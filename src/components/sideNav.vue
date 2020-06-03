@@ -15,12 +15,12 @@
 export default {
   data: () => ({
     arrNav: [
-      {url: "/", urlImg: "/img/home.png", title: "На главную"},
-      {url: "/opeka", urlImg: "/img/opeka.png", title: "Отдел опеки"},
-      {url: "/fss", urlImg: "/img/fss.png", title: "ФСС"},
-      {url: "/foms", urlImg: "/img/foms.png", title: "ФОМС"},
-      {url: "/fssp", urlImg: "/img/fssp.png", title: "ФССП"},
-      {url: "/czn", urlImg: "/img/czn.png", title: "Центр занятости"}
+      {url: "/", urlImg: "img/home.png", title: "На главную"},
+      {url: "/opeka", urlImg: "img/opeka.png", title: "Отдел опеки"},
+      {url: "/fss", urlImg: "img/fss.png", title: "ФСС"},
+      {url: "/foms", urlImg: "img/foms.png", title: "ФОМС"},
+      {url: "/fssp", urlImg: "img/fssp.png", title: "ФССП"},
+      {url: "/czn", urlImg: "img/czn.png", title: "Центр занятости"}
     ]
   })
 }
