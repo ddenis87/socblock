@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/print.css"/>
+</head>
+<body>
+<h3 text-align='right'>Сведения опеки</h3>
+<div id="list"></div>
+
+<script>
+let strmas = localStorage.getItem('param').split(';');
+let divElement = document.getElementById("list");
+	let strHTML = '';
+	let pElement = document.createElement("div");
+	pElement.className = "element";
+
+  //   //strmas = mas[i].split(';');
+
+  //   strHTML = strHTML + `<table class="tableList">`;
+	// strHTML = strHTML + `<tr><td><b>Фио гражданина:</b> ${strmas[0]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td><b>Фио гражданина:</b> ${strmas1[3]}</td><td><b>�����:</b> //${strmas1[1]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td colspan="2"><b>����� ��������:</b> ${strmas1[2]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td colspan="2"><hr></td></tr>`;
+	// //strHTML = strHTML + `<tr><td colspan="2"><b>��� �������:</b> ${strmas1[5]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td><b>���� ��������:</b> ${strmas1[4]}</td><td><b>�����:</b> //${strmas1[6]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td colspan="2"><b>����� ��������:</b> ${strmas1[7]}</td></tr>`;
+	// //strHTML = strHTML + `<tr><td>${strmas[0]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>����� ����������:</b> ${strmas[1]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>����� ����������:</b> ${strmas[2]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>����:</b> ${strmas[5]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>����� �����:</b> ${strmas[6]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>����� ����������:</b> ${strmas[7]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><img src='_green.jpg'><b>������:</b> ${strmas[8]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>���������:</b> ${strmas[3]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td><b>���� ���������� �������:</b> ${strmas[4]}</td></tr>`;
+	// strHTML = strHTML + `<tr><td class='tright'><b>���� �������� ��������:</b> ${strmas[9]}</td></tr>`;
+	// strHTML = strHTML + `</table>`;
+
+strHTML = strHTML + `	<form>`;
+strHTML = strHTML + `      <table>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td>`;
+strHTML = strHTML + `            <span>ФИО, дата рождения</span>`;
+strHTML = strHTML + `            <input type="text" value="${strmas[0]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `          <td width="160">`;
+strHTML = strHTML + `            <span>СНИЛС</span>`;
+strHTML = strHTML + `            <input type="text" value="${strmas[1]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td colspan="2">`;
+strHTML = strHTML + `            <span>Место проживания</span>`;
+strHTML = strHTML + `            <input type="text" class="noBorder" value="${strmas[2]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td colspan="2">`;
+strHTML = strHTML + `            <span>Дети</span>`;
+strHTML = strHTML + `            <textarea wrap="soft" rows="3" disabled>${strmas[5]}</textarea> `;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td>`;
+strHTML = strHTML + `            <span>Место проживания</span>`;
+strHTML = strHTML + `            <textarea disabled>${strmas[7]}</textarea>`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `          <td width="160">`;
+strHTML = strHTML + `            <span>СНИЛС(ы)</span>`;
+strHTML = strHTML + `            <textarea disabled>${strmas[6]}</textarea>`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td>`;
+strHTML = strHTML + `            <span>Статус</span>`;
+strHTML = strHTML + `            <input type="text" class="noBorder" value="${strmas[8]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `          <td width="160">`;
+strHTML = strHTML + `            <span>Дата решения</span>`;
+strHTML = strHTML + `            <input type="text" class="noBorder" value="${strmas[4]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `        <tr>`;
+strHTML = strHTML + `          <td colspan="2">`;
+strHTML = strHTML + `            <span>Основание</span>`;
+strHTML = strHTML + `            <input type="text" class="noBorder" value="${strmas[3]}" disabled />`;
+strHTML = strHTML + `          </td>`;
+strHTML = strHTML + `        </tr>`;
+strHTML = strHTML + `      </table>`;
+strHTML = strHTML + `    </form>`;
+
+
+	pElement.innerHTML = strHTML;
+	divElement.appendChild(pElement);
+
+</script>
+</body>
+</html>
