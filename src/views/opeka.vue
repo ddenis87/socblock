@@ -61,13 +61,29 @@
         </tr>
       </table>
     </form>
+    <form class="notFound formHidden" id="formEmpty">
+      <table>
+        <tr>
+          <td>
+            <span>Сведения по ФИО:</span>
+            <input type='text' v-model="findFio" />
+            <span> - отсутствуют в базе</span>
+          </td>
+          <td rowspan="6" width="35">
+            <img src="img/printNoBg.png" @click="goPrintEmpty()" />
+          </td>
+        </tr>
+      </table>
+    </form>
   </div>
 </template>
 
 <script>
 import formFind from "@/components/formFind"
 export default {
+  
   data: () => ({
+    findFio: '', 
     lineRes: '',
     arrRes: [],
     // arrRes: [
@@ -78,18 +94,23 @@ export default {
   },
   methods: {
     findRes(data) {
+      let formEmpty = document.getElementById('formEmpty');
+      formEmpty.className = "notFound formHidden";
       if (data.trim()) {
+        this.findFio = data;
         this.lineRes = "Поиск по: " + data + "...";
         let request = new XMLHttpRequest();
         let arrResponse = [];
         this.arrRes = [];
         request.open('POST','php/opeka.php', true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.send(`fio=${data}`);
+        request.send(`function=goFind&fio=${data}`);
         request.onload = () => {
           arrResponse = request.responseText.split("#");
           if (arrResponse.length - 1 == 0) {
             this.lineRes = "Нет записей удовлетворяющих условие поиска..."; 
+            let formEmpty = document.getElementById('formEmpty');
+            formEmpty.className = "notFound formShow";
             return; 
           }
           for (let i = 0; i < arrResponse.length - 1; i++) {
@@ -106,6 +127,18 @@ export default {
       localStorage.setItem('param', Object.values(data).join(";") );
 	    window.open('print.html');
       console.log( Object.values(data));
+    },
+    goPrintEmpty() {
+      let request = new XMLHttpRequest();
+      request.open('POST','php/opeka.php', true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.send(`function=getDates`);
+        request.onload = () => {
+          console.log(request.responseText);
+          let arrDate = request.responseText.split('#');
+          localStorage.setItem('param', `${this.findFio};${arrDate[1]};${arrDate[0]}`);
+          window.open('printEmpty.html');
+        }
     }
   }
 }
@@ -181,4 +214,17 @@ img {
   font-family: 'Times New Roman', Times, serif;
   font-size: 14px;
 }
+
+.notFound span {
+  font-size: 16px;
+}
+
+.formHidden {
+  display: none;
+}
+
+.formShow {
+  display: contents;
+}
+
 </style>

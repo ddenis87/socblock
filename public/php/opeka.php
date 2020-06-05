@@ -1,12 +1,23 @@
 <?php
 
-if(isset($_POST['fio'])) {
- echo startFind(iconv('utf-8', 'cp1251', $_POST['fio']));
+switch($_POST['function']){
+  case "getDates": {echo getDates(); break;}
+  case "goFind": {echo startFind(iconv('utf-8', 'cp1251', $_POST['fio'])); break;}
 }
 
+function getDates() {
+  $dateDB = file_get_contents('date.txt');
+  $dateDB = mb_substr($dateDB,0,10);
+  date_default_timezone_set('UTC');
+  $dateServer = date('d-m-Y');
+  return $dateDB . '#' . $dateServer;
+}
+
+// if(isset($_POST['fio'])) {
+//  echo startFind(iconv('utf-8', 'cp1251', $_POST['fio']));
+// }
+
 function startFind($param) {
-  $opekadate = '20-05-2020';
-  $opekadate = mb_substr($opekadate,0,10);
   $strConnect = "DRIVER={IBM DB2 ODBC DRIVER}; PROTOCOL=TCPIP; HOSTNAME=10.38.0.98; PORT=50000; DATABASE=OPEKA;";
   if($DB_conn1=odbc_connect($strConnect,"db2admin","Centr023")) {
 	$result = '';
@@ -28,17 +39,19 @@ function startFind($param) {
       $v1p9 = odbc_result($resultset1, 9);
 
 
-      $result =  trimSpace($v1p1) . ';' . trimSpace($v1p2) . ';' . trimSpace($v1p3) . ';' . trimSpace($v1p4) . ';' . trimSpace($v1p5) . ';' . trimSpace($v1p6) . ';' .
+      $result .=  trimSpace($v1p1) . ';' . trimSpace($v1p2) . ';' . trimSpace($v1p3) . ';' . trimSpace($v1p4) . ';' . trimSpace($v1p5) . ';' . trimSpace($v1p6) . ';' .
       trimSpace($v1p7) . ';' . trimSpace($v1p8) . ';' . trimSpace($v1p9) . '#';
 	  
-      echo mb_convert_encoding($result,
+      
+    }
+	if ($result == '') {return "0";}
+  } else {
+    return "9#Ошибка подключения к БД";
+  }
+
+return mb_convert_encoding($result,
                                mb_detect_encoding($result),
                                'cp1251');
-    }
-	if ($result == '') {echo "0";}
-  } else {
-    echo "9#Ошибка подключения к БД";
-  }
 }
 
 function trimSpace($_strText) {

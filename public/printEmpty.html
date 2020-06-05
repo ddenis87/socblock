@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/print.css"/>
+</head>
+<body>
+<h3 text-align='right'>Сведения опеки</h3>
+<div id="list"></div>
+
+<script>
+let strmas = localStorage.getItem('param').split(';');
+let divElement = document.getElementById("list");
+	let strHTML = '';
+	let pElement = document.createElement("div");
+	pElement.className = "element";
+
+strHTML = strHTML + `	<form>`;
+strHTML = strHTML + `		<table>`;
+strHTML = strHTML + `	        <tr>`;
+strHTML = strHTML + `	          <td>`;
+strHTML = strHTML + `	            <span>Сведения по ФИО:</span>`;
+strHTML = strHTML + `	            <input type='text' value='${strmas[0]}' />`;
+strHTML = strHTML + `	            <br>`;
+strHTML = strHTML + `	            <span> - отсутствуют в базе</span>`;
+strHTML = strHTML + `	            <br>`;
+strHTML = strHTML + `	          </td>`;
+strHTML = strHTML + `	        </tr>`;
+strHTML = strHTML + `	        <tr>`;
+strHTML = strHTML + `	          <td>`;
+strHTML = strHTML + `	            <span>Дата запроса: ${strmas[1]}</span>`;
+strHTML = strHTML + `	          </td>`;
+strHTML = strHTML + `	        </tr>`;
+strHTML = strHTML + `	        <tr>`;
+strHTML = strHTML + `	          <td>`;
+strHTML = strHTML + `	            <span>Дата последней загрузки сведений: ${strmas[2]}</span>`;
+strHTML = strHTML + `	          </td>`;
+strHTML = strHTML + `	        </tr>`;
+strHTML = strHTML + `	      </table>`;
+strHTML = strHTML + `    </form>`;
+
+
+	pElement.innerHTML = strHTML;
+	divElement.appendChild(pElement);
+
+</script>
+</body>
+</html>
