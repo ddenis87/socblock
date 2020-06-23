@@ -102,10 +102,11 @@ export default {
         let request = new XMLHttpRequest();
         let arrResponse = [];
         this.arrRes = [];
-        request.open('POST','php/opeka.php', true);
+        request.open('POST','./php/opeka.php', true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         request.send(`function=goFind&fio=${data}`);
         request.onload = () => {
+         // console.log(request.responseText);
           arrResponse = request.responseText.split("#");
           if (arrResponse.length - 1 == 0) {
             this.lineRes = "Нет записей удовлетворяющих условие поиска..."; 

@@ -17,25 +17,11 @@ Vue.use(VueRouter)
     component: () => import('../views/opeka.vue')
   },
   {
-    path: '/fss',
-    name: 'fss',
-    component: () => import('../views/fss.vue')
+    path: '/ocenka',
+    name: 'ocenka',
+    component: () => import('../views/ocenka.vue')
   },
-  {
-    path: '/foms',
-    name: 'foms',
-    component: () => import('../views/foms.vue')
-  },
-  {
-    path: '/fssp',
-    name: 'fssp',
-    component: () => import('../views/fssp.vue')
-  },
-  {
-    path: '/czn',
-    name: 'czn',
-    component: () => import('../views/czn.vue')
-  }
+  
 ]
 
 const router = new VueRouter({
