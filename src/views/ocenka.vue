@@ -1,24 +1,24 @@
 <template>
   <form>
-    <meta charset="utf-8">
     <h2>Оценка пенсионных прав застрахованного лица</h2>
-    <hr>
-    <input type="radio" value="" id="r-snils" checked/><label for="r-snils">Искать по СНИЛС</label>
-    <input type="radio" value="" id="r-snils" disabled/><label for="r-snils">Искать по ФИО</label><br>
-    <label>Укажите СНИЛС для поиска:</label><input type="text" placeholder="___-___-___ __" pattern="[0-9]{3}[-][0-9]{3}[-][0-9]{3}[\s][0-9]{2}" v-model="snils" />
-    <button @click.prevent="findUser">Найти...</button><br>
-    <hr>
+    <form-search @findUser="findUser"></form-search>
     <table>
       <tr>
+        <th>№ п/п</th>
         <th>ФИО</th>
         <th>Дата рождения</th>
         <th>Территория</th>
       </tr>
-      <tr v-for="(rowRez, index) in rez" :key="index">
+      <tr><td colspan="4"><hr></td></tr>
+      <template v-for="(rowRez, index) in rez">
+      <tr class="tr-active" :key="index">
+        <td width="40px">{{ index + 1 }}</td>
         <td>{{ rowRez[0] }}</td>
-        <td>{{ rowRez[1] }}</td>
-        <td>{{ rowRez[2] }}</td>
+        <td width="100px">{{ rowRez[1] }}</td>
+        <td width="250px">{{ rowRez[2] }}</td>
       </tr>
+      <tr :key="index + 1000"><td colspan="4"><hr></td></tr>
+      </template>
     </table>
 
     
@@ -26,7 +26,12 @@
 </template>
 
 <script>
+import formSearch from '@/components/ocenka/form-search';
+
 export default {
+  components: {
+    formSearch,
+  },
   data: function() {
     return {
       rez: [
@@ -38,9 +43,8 @@ export default {
   },
   methods: {
     findUser: function() {
+      console.log("HI i`m find");
       let request = new XMLHttpRequest();
-      // let arrResponse = [];
-      // this.arrRes = [];
       request.open('POST','./php/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
@@ -49,10 +53,9 @@ export default {
       request.onload = () => {
         this.rez = request.response;
         console.log(request.response);
-        // console.log(request.responseText);
-        //this.rez = request.responseText;
       }
-    }
+    },
+
   }
 }
 </script>
@@ -60,22 +63,31 @@ export default {
 <style scoped>
   form {
     padding-left: 10px;
-   
+    width: 100%;
+    max-width: 800px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
   }
 
-  input {
-    display: inline-block;
-    margin: 10px;
-  }
+  hr {margin: 0px; padding: 0px;}
+  table {
+    width: 100%;
+    margin: 0px;
+    margin-top: 10px;
+    padding: 0px;
 
-  input[type="text"] {
-    width: 150px;
+  }
+  
+  td, th {
     padding: 3px;
-    border: 2px solid grey;
-    border-radius: 3px;
+    padding-left: 5px;
+    border-left: 2px solid grey;
+    font-size: 12px;
   }
 
-  button {
-    width: 120px;
+  td:first-child, th:first-child {border-left: 0px;}
+
+  .tr-active {
+    cursor: pointer;
   }
 </style>

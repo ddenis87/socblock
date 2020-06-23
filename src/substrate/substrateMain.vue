@@ -34,6 +34,8 @@ export default {
   grid-template-rows: auto auto;
   grid-template-columns: 200px 1fr;
   margin-left: 10px;
+  max-width: 1280px;
+  width: 100%;
 }
 
 .sideTop {
