@@ -1,4 +1,5 @@
 <template>
+<div class="menu">
   <ul>
     <router-link
       v-for="rowNav in arrNav"
@@ -9,6 +10,7 @@
       <div><img v-bind:src="rowNav.urlImg" ></div>{{ rowNav.title }}
     </router-link>
   </ul>
+</div>
 </template>
 
 <script>
@@ -55,5 +57,9 @@ div {
   border: 0px solid black;
   width: 50px;
   margin-right: 10px;
+}
+
+.menu {
+  width: 200px;
 }
 </style>

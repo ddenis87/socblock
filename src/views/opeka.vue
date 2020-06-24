@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import formFind from "@/components/formFind"
+import formFind from "@/components/opeka/formFind"
 export default {
   
   data: () => ({

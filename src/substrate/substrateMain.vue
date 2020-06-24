@@ -31,18 +31,24 @@ export default {
   display: grid;
   grid-template-areas: "sideTop sideTop"
                        "sideNav content";
-  grid-template-rows: auto auto;
+  grid-template-rows: 60px auto;
   grid-template-columns: 200px 1fr;
-  margin-left: 10px;
-  max-width: 1280px;
+  margin: 10px auto;
+  /* margin-left: 10px; */
+  max-width: 1024px;
   width: 100%;
+  min-height: 500px;
+  background-color: rgb(245, 245, 245);
+  border-left: 2px solid grey;
+  border-right: 2px solid grey;
 }
 
 .sideTop {
   grid-area: sideTop;
   padding: 5px 0px 5px 10px;
   border-bottom: 2px solid grey;
-  background-image: linear-gradient(to right, white 40%, blue);
+  /* background-color: blue; */
+  background-image: linear-gradient(to right, white 10%, blue);
 }
 
 .sideNav {
@@ -69,5 +75,28 @@ export default {
   width: 100px;
   margin: 5px;
 }
+
+@media only screen and (max-width: 800px), only screen and (max-device-width: 800px)  {
+  .gridFull {
+  display: grid;
+  grid-template-areas: "sideTop sideTop"
+                       "sideNav content";
+  grid-template-rows: auto auto;
+  grid-template-columns: 50px 1fr;
+  margin-left: 10px;
+  max-width: 1280px;
+  width: 100%;
+}
+  .sideNav {
+    grid-area: sideNav;
+    overflow: hidden;
+    z-index: 1;
+  }
+  .content {
+    background-color: white;
+    z-index: 999;
+  }
+}
+
 
 </style>

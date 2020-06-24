@@ -32,7 +32,7 @@ a {
   text-decoration:none;
 }
 
-h2 {
+h2, h3 {
   color: forestgreen;
 }
 </style>

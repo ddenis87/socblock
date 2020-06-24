@@ -19,7 +19,12 @@ Vue.use(VueRouter)
   {
     path: '/ocenka',
     name: 'ocenka',
-    component: () => import('../views/ocenka.vue')
+    component: () => import('../views/ocenka/ocenka.vue')
+  },
+  {
+    path: '/ocenka-card',
+    name: 'ocenka-card',
+    component: () => import('../views/ocenka/ocenka-card.vue')
   },
   
 ]

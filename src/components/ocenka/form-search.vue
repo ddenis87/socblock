@@ -1,9 +1,9 @@
 <template>
-  <div class="">
+  <div class="form-search">
     <hr>
     <div class="control-radio">
       <input type="radio" id="find-snils" value="snils" v-model="findType" @change="() => {findValue = '';}" /><label for="find-snils">Искать по СНИЛС</label>
-      <input type="radio"  id="find-fio" value="first-name" v-model="findType" @change="() => {findValue = '';}" /><label for="find-fio">Искать по Фамилии</label>
+      <input type="radio"  id="find-fio" value="fio" v-model="findType" @change="() => {findValue = '';}" /><label for="find-fio">Искать по Фамилии</label>
     </div>
     <div class="control-find">
       <template v-if="findType == 'snils'" >
@@ -14,15 +14,15 @@
               maxlength="14"
               v-model="findValue"
               key="snils"
-              @input.prevent="validateInput($event)" />
+              @input.prevent="validateInput" />
       </template>
-      <template v-if="findType == 'first-name'" >
-        <label class="title-input">Укажите Фамилию для поиска:</label>
+      <template v-if="findType == 'fio'" >
+        <label class="title-input">Укажите фамилию для поиска:</label>
         <input type="text" 
-               key="first-name"
+               key="fio"
                v-model="findValue" />
       </template>
-      <button @click.prevent="$emit('findUser')">Найти...</button><br>
+      <button @click.prevent="$emit('findPerson', findValue)">Найти...</button><br>
     </div>
     <hr>
 
@@ -51,10 +51,14 @@ export default {
 </script>
 
 <style scoped>
+  .form-search {
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
   hr {margin: 5px 0px;}
 
   .control-radio {
     margin: 10px 0px;
+    font-family: inherit ;
   }
 
   input[type="radio"] {
@@ -64,7 +68,8 @@ export default {
   }
 
   .control-find {
-    margin: 10px 0px;
+    margin: 20px 0px;
+    font-family: inherit;
   }
 
   input[type="text"] {
@@ -86,7 +91,7 @@ export default {
 
   .title-input {
     display: inline-block;
-    width: 190px;
+    width: 220px;
   }
 
   button {
