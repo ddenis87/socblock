@@ -1,21 +1,21 @@
 <template>
   <div class="ocenka-card">
     <div class="title">
-      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ 'СНИЛС: 157-475-853 98' }}</i></h2>
+      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0][7] }}</i></h2>
     </div>
     <table>
-      <tr><td width="50%">Застрахованное лицо:</td><td>{{ 'Иванов' }} {{ 'Иван' }} {{ 'Иванович' }}</td></tr>
-      <tr><td>Дата рождения:</td><td>{{ '22.05.1987' }}</td></tr>
-      <tr><td>Наименование территориального органа:</td><td>{{ '38010 - Новобурейск' }}</td></tr>
-      <tr><td>Сведения о работе:</td><td>{{ 'Отсутствуют' }}</td></tr>
-      <tr><td>СЗВ-К:</td><td>{{ 'Да' }}</td></tr>
-      <tr><td>СлПриз:</td><td>{{ 'Нет' }}</td></tr>
+      <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0][1] }}</td></tr>
+      <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0][2] }}</td></tr>
+      <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0][0] }}</td></tr>
+      <tr><td>Сведения о работе(ИНН):</td><td>{{ arrDataPerson[0][3] }}</td></tr>
+      <tr><td>Включен в список "СЗВ-К":</td><td>{{ arrDataPerson[0][4] }}</td></tr>
+      <tr><td>Включен в список "СлПриз":</td><td>{{ arrDataPerson[0][5] }}</td></tr>
     </table>
 
     
     <div class="sved">
-      <h3>Сведения об обработке</h3>
-      <div class="sved-control">
+      <h2>Сведения об обработке</h2>
+      <div class="sved-control" v-if="(access)">
         <hr>
         <label for="">Укажите решение:</label>
         <select><option></option><option>Не служил в СА</option></select>
@@ -29,13 +29,16 @@
           <th>Решение</th>
           <th width="30px"></th>
         </tr>
-        <tr v-for="(rowDataPerson, index) in arrDataPerson" :key="index">
-          <td>{{ rowDataPerson[1] }}</td>
-          <td>{{ rowDataPerson[2] }}</td>
-          <td>{{ rowDataPerson[3] }}</td>
+        <tr v-for="(rowDataHistory, index) in arrDataHistory" :key="index">
+          <td>{{ rowDataHistory[1] }}</td>
+          <td>{{ rowDataHistory[0] }}</td>
+          <td>{{ rowDataHistory[2] }}</td>
           <td></td>
         </tr>
       </table>
+    </div>
+    <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
+      <img src="/img/load.gif">
     </div>
   </div>
 </template>
@@ -45,11 +48,35 @@ export default {
   name: 'CardPerson',
   data: function() {
     return {
-      arrDataPerson: [
-        ['1','Найдина Е.П.','12.05.2020','Направлено уведомление страхователю'],
-        ['2','Музыченко Е.П.','21.02.2020','Направлен межведомственный запрос'],
-        ['3','Найдина Е.П.','26.12.2019','Поступило заявление о КОРР ИЛС'],
-      ]
+      arrDataPerson: [['','','','','','','']],
+      arrDataHistory: [['','','']],
+      isLoad: true, 
+      snils: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
+      access: accessUser,
+    }
+  },
+  created: function() {
+    this.isLoad = false;
+    let requestInfo = new XMLHttpRequest();
+    requestInfo.open('POST', pathBackEnd + 'php/ocenka.php', true);
+    requestInfo.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    requestInfo.responseType = 'json';
+    requestInfo.send(`function=getPersonInfoCard&snils=${this.snils}`);
+    requestInfo.onload = () => {
+      this.arrDataPerson = requestInfo.response;
+      this.isLoad = true;
+      //console.log(requestInfo.response);
+    }
+    this.isLoad = false;
+    let requestHistory = new XMLHttpRequest();
+    requestHistory.open('POST', pathBackEnd + 'php/ocenka.php', true);
+    requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    requestHistory.responseType = 'json';
+    requestHistory.send(`function=getPersonInfoCardHistiry&snils=${this.snils}`);
+    requestHistory.onload = () => {
+      this.arrDataHistory = requestHistory.response;
+      this.isLoad = true;
+      console.log(requestHistory.response);
     }
   }
 }
@@ -67,8 +94,8 @@ export default {
     display: flex;
     align-items: center;
   }
-  h2 {margin-right: 10px;}
-  i {color: black;font-size: 14px;}
+  h2 {margin: 0px; margin-right: 10px;font-size: 18px;}
+  i {color: black;font-size: 16px;}
   /* ----------------- */
 
   /* ------table------ */
@@ -90,7 +117,7 @@ export default {
   hr {margin: 10px 0px; padding: 0px;}
 
   .sved {
-    margin: 20px 0px;
+    margin: 0px;
     font-size: 16px;
   }
 
@@ -98,4 +125,25 @@ export default {
   select {width: 200px;margin-right: 10px;}
   
 /* ------------------------- */
+
+/* ------progress-load------ */
+.progress-load {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+  }
+
+  .progress-load img {
+    margin-top: 300px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .is-visible {
+    visibility: hidden;
+  }
+/* ---------------------- */
 </style>

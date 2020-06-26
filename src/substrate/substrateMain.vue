@@ -37,18 +37,19 @@ export default {
   /* margin-left: 10px; */
   max-width: 1024px;
   width: 100%;
-  min-height: 500px;
-  background-color: rgb(245, 245, 245);
+  min-height: 600px;
+  /* background-color: rgb(245, 245, 245); */
   border-left: 2px solid grey;
   border-right: 2px solid grey;
+  border-bottom: 2px solid grey;
 }
 
 .sideTop {
   grid-area: sideTop;
   padding: 5px 0px 5px 10px;
   border-bottom: 2px solid grey;
-  /* background-color: blue; */
-  background-image: linear-gradient(to right, white 10%, blue);
+  background-color: rgb(54, 95, 147);
+  /* background-image: linear-gradient(to right, rgb(54, 95, 147) 60%,white); */
 }
 
 .sideNav {

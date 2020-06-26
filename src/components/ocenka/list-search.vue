@@ -2,18 +2,18 @@
   <div class="list-search">
     <table>
       <tr>
-        <th>№ п/п</th>
+        <th width="45px">№ п/п</th>
         <th>ФИО</th>
-        <th>Дата рождения</th>
-        <th>Территория</th>
+        <th width="100px">Дата рождения</th>
+        <th width="250px">Территория</th>
       </tr>
       <tr><td colspan="4"><hr></td></tr>
       <template v-for="(rowPerson, index) in listPerson">
-      <tr class="tr-active" :key="index" @click="$emit('selectPerson', index)">
-        <td width="45px">{{ index + 1 }}</td>
+      <tr class="tr-active" :key="index" @click="$emit('selectPerson', rowPerson[3])">
+        <td>{{ index + 1 }}</td>
         <td>{{ rowPerson[0] }}</td>
-        <td width="100px">{{ rowPerson[1] }}</td>
-        <td width="250px">{{ rowPerson[2] }}</td>
+        <td>{{ rowPerson[1] }}</td>
+        <td>{{ rowPerson[2] }}</td>
       </tr>
       <tr :key="index + 1000"><td colspan="4"><hr></td></tr>
       </template>

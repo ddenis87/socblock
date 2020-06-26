@@ -1,19 +1,13 @@
 <template>
   <div class="side-bar">
     <div >
-      <img class="logo" src="img/logo-pfr.jpg">
+      <img class="logo" src="img/logo-pfr-blue.jpg">
     </div>
     {{ dT }}
     <div class="profil">
-      <img src="/img/user-profile-bar.png" />
-      <span>Denis Dontsov</span>
-      <img src="/img/drop-down.png" />
-      <div class="slide">
-        <ul>
-          <li><img src="/img/user-profile.png" />Профиль</li>
-          <router-link to="/" tag="li"><img src="/img/user-exit.png" />Выход</router-link>
-        </ul>
-      </div>
+      <img src="/img/user-bar.png" />
+      <span>{{ userName }}</span>
+
     </div>
   </div>
 </template>
@@ -24,10 +18,24 @@ export default {
   data: function() {
     return {
       dT: '',
+      userName: '',
     }
   },
   mounted: function() {
     setInterval(() => {this.dT = Date()}, 1000);
+  },
+  created: function() {
+    let request = new XMLHttpRequest();
+    request.open('POST', pathBackEnd + 'php/user.php', true);
+    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    //requestInfo.responseType = 'json';
+    request.send(``);
+    request.onload = () => {
+      this.userName = request.response;
+      (this.userName !== 'Гость') ? accessUser = true : accessUser = false;
+      this.isLoad = true;
+      console.log(request.response);
+    }
   }
 }
 </script>
@@ -35,15 +43,17 @@ export default {
 <style scoped>
 .side-bar {
   display: flex;
+  margin: 0px 10px;
   align-items: center;
   justify-content: space-between;
+  color: white;
 }
 
 img {
-  width: 25px;
-  height: 25px;
-  margin-left: 5px;
-  margin-right: 5px;
+  width: 40px;
+  height: 40px;
+  /* margin-left: 5px;*/
+  margin-right: 10px; 
 }
 
 .logo {
@@ -55,11 +65,14 @@ img {
   display: inline-flex;
   position: relative;
   width: auto;
-  min-width: 150px;
-  height: 40px;
+  min-width: 100px;
+  height: 45px;
+  padding: 0px 10px;
   border: 1px solid white;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
+  color: white;
+  /* visibility: hidden; */
 }
 
 .slide {
