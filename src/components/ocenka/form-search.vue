@@ -2,27 +2,27 @@
   <div class="form-search">
     <hr>
     <div class="control-radio">
-      <input type="radio" id="find-snils" value="snils" v-model="findType" @change="() => {findValue = '';}" /><label for="find-snils">Искать по СНИЛС</label>
-      <input type="radio"  id="find-fio" value="fio" v-model="findType" @change="() => {findValue = '';}" /><label for="find-fio">Искать по Фамилии</label>
+      <input type="radio" id="find-snils" value="Snils" v-model="findType" @change="() => {findValue = '';}" /><label for="find-snils">Искать по СНИЛС</label>
+      <input type="radio"  id="find-fio" value="Fio" v-model="findType" @change="() => {findValue = '';}" /><label for="find-fio">Искать по Фамилии</label>
     </div>
     <div class="control-find">
-      <template v-if="findType == 'snils'" >
+      <template v-if="findType == 'Snils'" >
         <label class="title-input">Укажите СНИЛС для поиска:</label>
         <input type="text" 
               placeholder="___-___-___ __" 
               pattern="[0-9]{3}[-][0-9]{3}[-][0-9]{3}[\s][0-9]{2}" 
               maxlength="14"
               v-model="findValue"
-              key="snils"
+              key="Snils"
               @input.prevent="validateInput" />
       </template>
-      <template v-if="findType == 'fio'" >
+      <template v-if="findType == 'Fio'" >
         <label class="title-input">Укажите фамилию для поиска:</label>
         <input type="text" 
-               key="fio"
+               key="Fio"
                v-model="findValue" />
       </template>
-      <button @click.prevent="$emit('findPerson', findValue)">Найти...</button><br>
+      <button @click.prevent="$emit('findPerson', findValue, findType)">Найти...</button><br>
     </div>
     <hr>
 
@@ -34,7 +34,7 @@ export default {
   name: 'formSearch',
   data: function() {
     return {
-      findType: 'snils',
+      findType: 'Snils',
       findValue: '',
     }
   },

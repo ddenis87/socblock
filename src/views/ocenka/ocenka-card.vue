@@ -15,13 +15,20 @@
     
     <div class="sved">
       <h2>Сведения об обработке</h2>
+      <hr>
       <div class="sved-control" v-if="(access)">
-        <hr>
+        
         <label for="">Укажите решение:</label>
-        <select><option></option><option>Не служил в СА</option></select>
-        <button>Добавить решение</button>
-        <hr>
+        <select v-model="historyRecord">
+          <option value="" selected disabled>Выберите решение из списка</option>
+          <option v-for="(rowList, index) in arrList" 
+                  :key="index" 
+                  :value='rowList'>{{ rowList }}</option>
+        </select>
+        <button @click="insertHistoryRecord">Добавить решение</button>
+        
       </div>
+      <hr>
       <table>
         <tr>
           <th>Специалист</th>
@@ -40,6 +47,9 @@
     <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
       <img src="/img/load.gif">
     </div>
+    <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
+      Не указано решение!
+    </div>
   </div>
 </template>
 
@@ -50,12 +60,48 @@ export default {
     return {
       arrDataPerson: [['','','','','','','']],
       arrDataHistory: [['','','']],
-      isLoad: true, 
+      arrList: [],
+      isLoad: true, isWarning: true,
       snils: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
       access: accessUser,
+      historyRecord: '',
+    }
+  },
+  methods: {
+    insertHistoryRecord: function() {
+      if(this.historyRecord != '') {
+        console.log(this.historyRecord);
+        // this.isLoad = false;
+        // let request = new XMLHttpRequest();
+        // request.open('POST', pathBackEnd + 'php/ocenka.php', true);
+        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // request.send(`function=insertHistoryRecord&reshenie=${this.historyRecord}&snils=${this.snils}&userName=${accessUserName}`);
+        // request.onload = () => {
+        //   this.isLoad = true;
+        //   console.log(request.response);
+        // }
+      } else {
+        this.isWarning = false,
+        setTimeout(() => { this.isWarning = true }, 1200)
+      }
+    },
+
+    ajax_query: function(selectFile, sendMessage) {
+      this.isLoad = false;
+      let requestInfo = new XMLHttpRequest();
+      requestInfo.open('POST', pathBackEnd + selectFile, true);
+      requestInfo.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      requestInfo.responseType = 'json';
+      requestInfo.send(sendMessage);
+      requestInfo.onload = () => {
+        this.isLoad = true;
+        return requestInfo.response;
+      }
     }
   },
   created: function() {
+    
+    // load person info
     this.isLoad = false;
     let requestInfo = new XMLHttpRequest();
     requestInfo.open('POST', pathBackEnd + 'php/ocenka.php', true);
@@ -67,6 +113,7 @@ export default {
       this.isLoad = true;
       //console.log(requestInfo.response);
     }
+    // load history
     this.isLoad = false;
     let requestHistory = new XMLHttpRequest();
     requestHistory.open('POST', pathBackEnd + 'php/ocenka.php', true);
@@ -76,7 +123,21 @@ export default {
     requestHistory.onload = () => {
       this.arrDataHistory = requestHistory.response;
       this.isLoad = true;
-      console.log(requestHistory.response);
+      //console.log(requestHistory.response);
+    }
+    // load list reshenie if user access
+    if(this.access) {
+      this.isLoad = false;
+      let requestList = new XMLHttpRequest();
+      requestList.open('POST', pathBackEnd + 'php/ocenka-catalog.php', true);
+      requestList.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      requestList.responseType = 'json';
+      requestList.send(`function=getListReshenie`);
+      requestList.onload = () => {
+        this.arrList = requestList.response;
+        this.isLoad = true;
+        // console.log(requestList.response);
+      }
     }
   }
 }
@@ -114,6 +175,13 @@ export default {
   td:last-child {font-style: italic;}
 
 /* ------sved-control------- */
+  .sved-control {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
   hr {margin: 10px 0px; padding: 0px;}
 
   .sved {
@@ -121,8 +189,15 @@ export default {
     font-size: 16px;
   }
 
-  label {margin-right: 10px;}
-  select {width: 200px;margin-right: 10px;}
+  label {width: 220px;}
+  select {
+    width: 100%;
+    min-width: 350px;
+    margin-right: 10px;
+    padding: 2px;
+  }
+
+  button {width: 220px;}
   
 /* ------------------------- */
 
@@ -141,9 +216,28 @@ export default {
     width: 50px;
     height: 50px;
   }
+/* ---------------------- */
+
+/* ------warning------- */
+.warning-insert {
+  display: flex;
+  position: fixed;
+  left: 45%;
+  top: 40%;
+  margin: auto;
+  width: 180px;
+  height: 30px;
+  background-color: black;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 2px grey;
+}
 
   .is-visible {
     visibility: hidden;
   }
-/* ---------------------- */
+
 </style>

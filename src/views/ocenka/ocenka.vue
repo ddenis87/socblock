@@ -28,20 +28,22 @@ export default {
     }
   },
   methods: {
-    findPerson: function(findValue) {
+    findPerson: function(findValue, findType) {
       this.isLoad = !this.isLoad;
       this.selectEmpty = '';
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEnd + 'php/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-      //console.log(findValue);
-      request.send(`function=getPersonInfo&snils=${findValue}`);
+      console.log(findType);
+      request.send(`function=getPersonInfo${findType}&${findType}=${findValue}`)
       request.onload = () => {
+        console.log(findValue);
+        console.log(request.response);
         this.listPerson = request.response;
         if (this.listPerson.length == 0) this.selectEmpty = 'Записи отсутствуют';
         this.isLoad = !this.isLoad;
-        console.log(request.response);
+        
       }
     },
     selectPerson: function(snils) {

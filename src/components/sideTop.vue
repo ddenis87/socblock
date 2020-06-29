@@ -26,12 +26,12 @@ export default {
   },
   created: function() {
     let request = new XMLHttpRequest();
-    request.open('POST', pathBackEnd + 'php/user.php', true);
+    request.open('POST', pathBackEnd + 'php/ocenka-user.php', true);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    //requestInfo.responseType = 'json';
     request.send(``);
     request.onload = () => {
       this.userName = request.response;
+      accessUserName = this.userName;
       (this.userName !== 'Гость') ? accessUser = true : accessUser = false;
       this.isLoad = true;
       console.log(request.response);

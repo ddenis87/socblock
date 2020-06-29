@@ -59,7 +59,7 @@ export default {
 .content {
   grid-area: content;
   border-left: 2px solid grey;
-  margin: 5px;
+  margin: 5px 0px;
   padding: 5px;
 }
 
