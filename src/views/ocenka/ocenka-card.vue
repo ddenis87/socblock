@@ -1,5 +1,9 @@
 <template>
   <div class="ocenka-card">
+    <div class="back">
+      <img src="img/back.png" class="back-img" @click="goBack"/>
+    </div>
+
     <div class="title">
       <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0][7] }}</i></h2>
     </div>
@@ -12,9 +16,10 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ arrDataPerson[0][5] }}</td></tr>
     </table>
 
-    
-    <div class="sved">
+    <div class="title">
       <h2>Сведения об обработке</h2>
+    </div>
+    <div class="sved">
       <hr>
       <div class="sved-control" v-if="(access)">
         
@@ -32,20 +37,23 @@
       <table>
         <tr>
           <th>Специалист</th>
-          <th width="100px">Дата</th>
+          <th width="80px">Дата</th>
           <th>Решение</th>
-          <th width="30px"></th>
+          <th width="30px">Действие</th>
         </tr>
         <tr v-for="(rowDataHistory, index) in arrDataHistory" :key="index">
           <td>{{ rowDataHistory[1] }}</td>
           <td>{{ rowDataHistory[0] }}</td>
           <td>{{ rowDataHistory[2] }}</td>
-          <td></td>
+          <td align="right"><img src="img/button-row-delete.png" class="button-row-control" 
+                                    title="Удалить запись" 
+                                    @click="deleteHistoryRecord(rowDataHistory[3])" disabled /></td>
         </tr>
       </table>
+      <p>{{ selectEmpty }}</p>
     </div>
     <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
-      <img src="/img/load.gif">
+      <img src="img/load.gif">
     </div>
     <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
       Не указано решение!
@@ -65,66 +73,63 @@ export default {
       snils: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
       access: accessUser,
       historyRecord: '',
+      selectEmpty: '',
     }
   },
   methods: {
+    goBack: function() {
+      this.$router.push(`/ocenka`);
+    },
     insertHistoryRecord: function() {
       if(this.historyRecord != '') {
-        console.log(this.historyRecord);
-        // this.isLoad = false;
-        // let request = new XMLHttpRequest();
-        // request.open('POST', pathBackEnd + 'php/ocenka.php', true);
-        // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // request.send(`function=insertHistoryRecord&reshenie=${this.historyRecord}&snils=${this.snils}&userName=${accessUserName}`);
-        // request.onload = () => {
-        //   this.isLoad = true;
-        //   console.log(request.response);
-        // }
+        //console.log(this.historyRecord);
+        this.isLoad = false;
+        let request = new XMLHttpRequest();
+        request.open('POST', pathBackEnd + 'php/ocenka.php', true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.send(`function=insertHistoryRecord&reshenie=${this.historyRecord}&snils=${this.snils}&userName=${accessUserName}`);
+        request.onload = () => {
+          this.loadHistory();
+          this.historyRecord = '';
+          this.isLoad = true;
+        }
       } else {
         this.isWarning = false,
         setTimeout(() => { this.isWarning = true }, 1200)
       }
     },
-
-    ajax_query: function(selectFile, sendMessage) {
-      this.isLoad = false;
+    deleteHistoryRecord: function(param) {
+      console.log(param);
+    },
+    loadInfo: function() {
       let requestInfo = new XMLHttpRequest();
-      requestInfo.open('POST', pathBackEnd + selectFile, true);
+      requestInfo.open('POST', pathBackEnd + 'php/ocenka.php', true);
       requestInfo.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       requestInfo.responseType = 'json';
-      requestInfo.send(sendMessage);
+      requestInfo.send(`function=getPersonInfoCard&snils=${this.snils}`);
       requestInfo.onload = () => {
-        this.isLoad = true;
-        return requestInfo.response;
+        this.arrDataPerson = requestInfo.response;
       }
-    }
+    },
+    loadHistory: function() {
+      let requestHistory = new XMLHttpRequest();
+      this.selectEmpty = '';
+      requestHistory.open('POST', pathBackEnd + 'php/ocenka.php', true);
+      requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      requestHistory.responseType = 'json';
+      requestHistory.send(`function=getPersonInfoCardHistiry&snils=${this.snils}`);
+      requestHistory.onload = () => {
+        this.arrDataHistory = requestHistory.response;
+        if (this.arrDataHistory.length == 0) this.selectEmpty = 'Записи отсутствуют';
+      }
+    },
   },
   created: function() {
-    
+    this.isLoad = false;
     // load person info
-    this.isLoad = false;
-    let requestInfo = new XMLHttpRequest();
-    requestInfo.open('POST', pathBackEnd + 'php/ocenka.php', true);
-    requestInfo.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    requestInfo.responseType = 'json';
-    requestInfo.send(`function=getPersonInfoCard&snils=${this.snils}`);
-    requestInfo.onload = () => {
-      this.arrDataPerson = requestInfo.response;
-      this.isLoad = true;
-      //console.log(requestInfo.response);
-    }
+    this.loadInfo();
     // load history
-    this.isLoad = false;
-    let requestHistory = new XMLHttpRequest();
-    requestHistory.open('POST', pathBackEnd + 'php/ocenka.php', true);
-    requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    requestHistory.responseType = 'json';
-    requestHistory.send(`function=getPersonInfoCardHistiry&snils=${this.snils}`);
-    requestHistory.onload = () => {
-      this.arrDataHistory = requestHistory.response;
-      this.isLoad = true;
-      //console.log(requestHistory.response);
-    }
+    this.loadHistory();
     // load list reshenie if user access
     if(this.access) {
       this.isLoad = false;
@@ -135,27 +140,35 @@ export default {
       requestList.send(`function=getListReshenie`);
       requestList.onload = () => {
         this.arrList = requestList.response;
-        this.isLoad = true;
-        // console.log(requestList.response);
       }
     }
+    this.isLoad = true;
   }
 }
 </script>
 
 <style scoped>
+  h2 {margin: 0px; margin-right: 10px;font-size: 18px;}
+
   .ocenka-card {
     padding-left: 10px;
     width: 100%;
     max-width: 800px;
     font-size: 14px;
   }
+  /* ------back-button------ */
+  .back-img {
+    width: 30px;
+    height: auto;
+    cursor: pointer;
+  }
+  /* ----------------------- */
   /* ------title------ */
   .title {
     display: flex;
-    align-items: center;
+    /* align-items: center;
+    margin-top: 20px; */
   }
-  h2 {margin: 0px; margin-right: 10px;font-size: 18px;}
   i {color: black;font-size: 16px;}
   /* ----------------- */
 
@@ -163,6 +176,7 @@ export default {
   table {
     width: 100%;
     margin: 10px 0px;
+    margin-bottom: 20px;
     font-size: 16px;
     border-spacing: 0px;
   }
@@ -201,6 +215,19 @@ export default {
   
 /* ------------------------- */
 
+/* ------delete-reshenie------ */
+.button-row-control {
+  width: 18px;
+  height: 18px;
+  margin: 3px 3px 0px 3px;
+  padding: 0px;
+  border: 0px solid black;
+  background-color: white;
+  outline: none;
+  cursor: pointer;
+}
+/* -------------------------- */
+
 /* ------progress-load------ */
 .progress-load {
     position: fixed;
@@ -225,7 +252,7 @@ export default {
   left: 45%;
   top: 40%;
   margin: auto;
-  width: 180px;
+  width: 250px;
   height: 30px;
   background-color: black;
   color: white;
@@ -235,7 +262,7 @@ export default {
   border-radius: 3px;
   box-shadow: 2px 2px 2px grey;
 }
-
+/* -------------------- */
   .is-visible {
     visibility: hidden;
   }

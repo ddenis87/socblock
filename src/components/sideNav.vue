@@ -19,7 +19,7 @@ export default {
     arrNav: [
       {url: "/", urlImg: "img/home.png", title: "На главную"},
       {url: "/opeka", urlImg: "img/opeka.png", title: "Отдел опеки"},
-      {url: "/ocenka", urlImg: "img/fss.png", title: "Оценка ПП ЗЛ"},
+      {url: "/ocenka", urlImg: "img/ocenka.png", title: "Оценка ПП ЗЛ"},
       // {url: "/foms", urlImg: "img/foms.png", title: "ФОМС"},
       // {url: "/fssp", urlImg: "img/fssp.png", title: "ФССП"},
       // {url: "/czn", urlImg: "img/czn.png", title: "Центр занятости"}
@@ -31,8 +31,8 @@ export default {
 <style scoped>
 img {
   width: auto;
-  max-width: 50px;
-  height: 50px;
+  max-width: 45px;
+  height: auto;
   vertical-align: middle;
   border: 0px solid black;
 }
@@ -56,10 +56,12 @@ div {
   display: inline-block;
   border: 0px solid black;
   width: 50px;
-  margin-right: 10px;
+  margin-right: 0px;
 }
 
 .menu {
-  width: 200px;
+  width: 95%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 </style>

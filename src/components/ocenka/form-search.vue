@@ -14,13 +14,15 @@
               maxlength="14"
               v-model="findValue"
               key="Snils"
-              @input.prevent="validateInput" />
+              @input.prevent="validateInput"
+              @keyup="findPerson" />
       </template>
       <template v-if="findType == 'Fio'" >
         <label class="title-input">Укажите фамилию для поиска:</label>
         <input type="text" 
                key="Fio"
-               v-model="findValue" />
+               v-model="findValue" 
+               @keydown="findPerson" />
       </template>
       <button @click.prevent="$emit('findPerson', findValue, findType)">Найти...</button><br>
     </div>
@@ -40,12 +42,20 @@ export default {
   },
   methods: {
     validateInput: function(param) {
+      console.log(param);
       if(param.inputType == 'insertText') {
+        this.findValue = this.findValue.replace(/[^0-9\.\-\' ']/g, '');
         if(this.findValue.length == 3) {this.findValue = this.findValue + '-'}
         if(this.findValue.length == 7) {this.findValue = this.findValue + '-'}
         if(this.findValue.length == 11) {this.findValue = this.findValue + ' '}
       }
     },
+    findPerson: function(param) {
+      //console.log(param);
+      if (param.key == "Enter") {
+        this.$emit('findPerson', this.findValue, this.findType);
+      }
+    }
   },
 }
 </script>

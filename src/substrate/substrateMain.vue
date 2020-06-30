@@ -82,7 +82,7 @@ export default {
   display: grid;
   grid-template-areas: "sideTop sideTop"
                        "sideNav content";
-  grid-template-rows: auto auto;
+  grid-template-rows: 60px auto;
   grid-template-columns: 50px 1fr;
   margin-left: 10px;
   max-width: 1280px;

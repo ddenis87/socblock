@@ -102,7 +102,7 @@ export default {
         let request = new XMLHttpRequest();
         let arrResponse = [];
         this.arrRes = [];
-        request.open('POST','./php/opeka.php', true);
+        request.open('POST', pathBackEnd + 'php/opeka.php', true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         request.send(`function=goFind&fio=${data}`);
         request.onload = () => {
@@ -131,7 +131,7 @@ export default {
     },
     goPrintEmpty() {
       let request = new XMLHttpRequest();
-      request.open('POST','php/opeka.php', true);
+      request.open('POST', pathBackEnd + 'php/opeka.php', true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         request.send(`function=getDates`);
         request.onload = () => {

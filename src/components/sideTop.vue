@@ -5,7 +5,7 @@
     </div>
     {{ dT }}
     <div class="profil">
-      <img src="/img/user-bar.png" />
+      <img src="img/user.png" />
       <span>{{ userName }}</span>
 
     </div>
@@ -68,14 +68,14 @@ img {
   min-width: 100px;
   height: 45px;
   padding: 0px 10px;
-  border: 1px solid white;
+  border: 0px solid white;
   /* justify-content: space-between; */
   align-items: center;
   color: white;
   /* visibility: hidden; */
 }
 
-.slide {
+/*.slide {
   position: absolute;
   display: block;
   width: 150px;
@@ -95,5 +95,5 @@ img {
 .profil:hover > .slide {
   opacity: 1;
   height: 90px;
-}
+}*/
 </style>

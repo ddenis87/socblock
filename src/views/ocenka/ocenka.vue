@@ -5,10 +5,12 @@
     <list-search :list-person="listPerson" @selectPerson="selectPerson"></list-search>
     <p>{{ selectEmpty }}</p>
     <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
-      <img src="/img/load.gif">
+      <img src="img/load.gif">
     </div>
-
     
+    <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
+      Не указано условие поиска!
+    </div>
   </div>
 </template>
 
@@ -25,21 +27,27 @@ export default {
       listPerson: [],
       isLoad: true,
       selectEmpty: '',
+      isWarning: true,
     }
   },
   methods: {
     findPerson: function(findValue, findType) {
+      if (findValue == '') {
+        this.isWarning = false;
+        setTimeout(() => {this.isWarning = true}, 1200);
+        return;
+      }
       this.isLoad = !this.isLoad;
       this.selectEmpty = '';
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEnd + 'php/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-      console.log(findType);
+//      console.log(findType);
       request.send(`function=getPersonInfo${findType}&${findType}=${findValue}`)
       request.onload = () => {
-        console.log(findValue);
-        console.log(request.response);
+//        console.log(findValue);
+//        console.log(request.response);
         this.listPerson = request.response;
         if (this.listPerson.length == 0) this.selectEmpty = 'Записи отсутствуют';
         this.isLoad = !this.isLoad;
@@ -47,12 +55,11 @@ export default {
       }
     },
     selectPerson: function(snils) {
-      //console.log(this.listPerson[index]);
       this.$router.push(`/ocenka-card?snils=${snils}`);
     }
   },
   created: function() {
-    console.log(accessUser);
+    //console.log(accessUser);
   }
 }
 </script>
@@ -83,6 +90,25 @@ export default {
     width: 50px;
     height: 50px;
   }
+
+  /* ------warning------- */
+  .warning-insert {
+    display: flex;
+    position: fixed;
+    left: 45%;
+    top: 40%;
+    margin: auto;
+    width: 250px;
+    height: 30px;
+    background-color: black;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px grey;
+  }
+  /* -------------------- */
 
   .is-visible {
     visibility: hidden;
