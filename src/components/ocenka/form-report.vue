@@ -1,15 +1,24 @@
 <template>
   <div class="form-search">
     <hr>
-    
+     <control-select :width="300" :defaultTitle="defaultTitle[0]" />
     <hr>
   </div>
 </template>
 
 <script>
+import ControlSelect from '@/components/form-element/control-select';
+
 export default {
   name: "FormReport",
-
+  components: {
+    ControlSelect,
+  },
+  data: function() {
+    return {
+      defaultTitle: ['Укажите МРУ',],
+    }
+  },
 }
 </script>
 

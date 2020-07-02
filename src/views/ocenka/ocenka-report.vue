@@ -3,13 +3,18 @@
     <div class="title">
       <h2>Оценка пенсионных прав - Отчеты</h2>
     </div>
+    <form-report />
     <button @click="buildReportAll">Build Report</button>
   </div>
 </template>
 
 <script>
+import FormReport from '@/components/ocenka/form-report';
 export default {
   name: 'OcenkaReport',
+  components: {
+    FormReport,
+  },
   data: function() {
     return {
       listReport: [],
