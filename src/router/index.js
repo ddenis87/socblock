@@ -26,6 +26,11 @@ Vue.use(VueRouter)
     name: 'ocenka-card',
     component: () => import('../views/ocenka/ocenka-card.vue')
   },
+  {
+    path: '/ocenka-report',
+    name: 'ocenka-report',
+    component: () => import('../views/ocenka/ocenka-report.vue')
+  },
   
 ]
 

@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'formSearch',
+  name: 'FormSearch',
   data: function() {
     return {
       findType: 'Snils',

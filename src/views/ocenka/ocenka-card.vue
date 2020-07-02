@@ -5,13 +5,15 @@
     </div>
 
     <div class="title">
-      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0][7] }}</i></h2>
+      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0][6] }}</i></h2>
     </div>
     <table>
       <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0][1] }}</td></tr>
       <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0][2] }}</td></tr>
       <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0][0] }}</td></tr>
-      <tr><td>Сведения о работе(ИНН):</td><td>{{ arrDataPerson[0][3] }}</td></tr>
+      <tr><td>Наименование МРУ:</td><td>{{ arrDataPerson[0][7] }}</td></tr>
+
+      <tr><td>Работающий:</td><td>{{ arrDataPerson[0][3] }}</td></tr>
       <tr><td>Включен в список "СЗВ-К":</td><td>{{ arrDataPerson[0][4] }}</td></tr>
       <tr><td>Включен в список "СлПриз":</td><td>{{ arrDataPerson[0][5] }}</td></tr>
     </table>
@@ -66,7 +68,7 @@ export default {
   name: 'CardPerson',
   data: function() {
     return {
-      arrDataPerson: [['','','','','','','']],
+      arrDataPerson: [['','','','','','','','']],
       arrDataHistory: [['','','']],
       arrList: [],
       isLoad: true, isWarning: true,
@@ -153,7 +155,7 @@ export default {
   .ocenka-card {
     padding-left: 10px;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     font-size: 14px;
   }
   /* ------back-button------ */

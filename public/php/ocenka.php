@@ -22,7 +22,7 @@ function getPersonInfoSnils($vsnils) {
 
     if($DB_conn1 === false) {var_dump(odbc_errormsg()); die();} 
 
-    $sql1="select rayonA, familiya, name, middlename, Birth, job, szvk, slpriz, ins2002, snils from sved where snils='".$snils."'"; // sved
+    $sql1="select rn1, familiya, name, middlename, Birth, job, szvk, slpriz, snils, mru from sved where snils='".$snils."'"; // sved
     
     $resultset1 = odbc_prepare($DB_conn1, $sql1);
     $success1 = odbc_execute($resultset1);
@@ -34,6 +34,7 @@ function getPersonInfoSnils($vsnils) {
                     ' ' . endecode(trim(odbc_result($resultset1, 4)));
         $arrRow[] = endecode(trim(odbc_result($resultset1, 5)));
         $arrRow[] = getTO(trim(odbc_result($resultset1, 1)));
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 9)));
         $arrRow[] = endecode(trim(odbc_result($resultset1, 10)));
         $arrReturn[] =  $arrRow;
         $arrRow = [];
@@ -52,7 +53,7 @@ function getPersonInfoFio($vfio) {
 
     if($DB_conn1 === false) {var_dump(odbc_errormsg()); die();} 
     $param = mb_strtoupper($vfio, 'cp1251');
-    $sql1="select rayonA, familiya, name, middlename, Birth, job, szvk, slpriz, ins2002, snils from sved where UPPER(familiya) like '".$param."%'"; // sved
+    $sql1="select rn1, familiya, name, middlename, Birth, job, szvk, slpriz, snils, mru from sved where UPPER(familiya) like '".$param."%'"; // sved
 
     $resultset1 = odbc_prepare($DB_conn1, $sql1);
     $success1 = odbc_execute($resultset1);
@@ -64,6 +65,7 @@ function getPersonInfoFio($vfio) {
                     ' ' . endecode(trim(odbc_result($resultset1, 4)));
         $arrRow[] = endecode(trim(odbc_result($resultset1, 5)));
         $arrRow[] = getTO(trim(odbc_result($resultset1, 1)));
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 9)));
         $arrRow[] = endecode(trim(odbc_result($resultset1, 10)));
         $arrReturn[] = $arrRow;
         $arrRow = [];
@@ -83,23 +85,24 @@ function getPersonInfoCard($vsnils) {
 
     if($DB_conn1 === false) {var_dump(odbc_errormsg()); die();} 
 
-    $sql1="select rayonA, familiya, name, middlename, Birth, job, szvk, slpriz, ins2002, snils from sved where snils='".$snils."'"; // sved
+    $sql1="select rn1, familiya, name, middlename, Birth, job, szvk, slpriz, snils, mru from sved where snils='".$snils."'"; // sved
     
     $resultset1 = odbc_prepare($DB_conn1, $sql1);
     $success1 = odbc_execute($resultset1);
     $arrRow = [];
     $arrReturn = [];
     while($row=odbc_fetch_row($resultset1)){
-        $arrRow[] = getTO(trim(odbc_result($resultset1, 1))); //1
+        $arrRow[] = getTO(trim(odbc_result($resultset1, 1))); //0 rn1
         $arrRow[] = endecode(trim(odbc_result($resultset1, 2))) . 
                     ' ' . endecode(trim(odbc_result($resultset1, 3))) .
-                    ' ' . endecode(trim(odbc_result($resultset1, 4))); //2
-        $arrRow[] = endecode(trim(odbc_result($resultset1, 5))); //3
-        $arrRow[] = (endecode(trim(odbc_result($resultset1, 6))) == 'Да') ? endecode(trim(odbc_result($resultset1, 9))) : 'Нет'; //4
-        $arrRow[] = endecode(trim(odbc_result($resultset1, 7))); //5
-        $arrRow[] = (endecode(trim(odbc_result($resultset1, 8))) == '') ? 'Нет' : endecode(trim(odbc_result($resultset1, 8))); //6
-        $arrRow[] = endecode(trim(odbc_result($resultset1, 9))); //7
-        $arrRow[] = endecode(trim(odbc_result($resultset1, 10))); //8
+                    ' ' . endecode(trim(odbc_result($resultset1, 4))); //1 fio
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 5))); //2 date
+        $arrRow[] = (endecode(trim(odbc_result($resultset1, 6)))); //3 job  == 'Да') ? endecode(trim(odbc_result($resultset1, 9))) : 'Нет'; //4
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 7))); //4 szvk
+        $arrRow[] = (endecode(trim(odbc_result($resultset1, 8)))); //5 slpriz  == '') ? 'Нет' : endecode(trim(odbc_result($resultset1, 8))); //6
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 9))); //6 snils
+        $arrRow[] = endecode(trim(odbc_result($resultset1, 10))); //7 mru
+        
         $arrReturn[] =  $arrRow;
         $arrRow = [];
     }

@@ -1,6 +1,9 @@
 <template>
   <div class='ocenka'>
-    <h2>Оценка пенсионных прав застрахованного лица</h2>
+    <div class="title">
+      <h2>Оценка пенсионных прав застрахованного лица</h2>
+      <button @click="goReport">Перейти к отчетам</button>
+    </div>
     <form-search @findPerson="findPerson"></form-search>
     <list-search :list-person="listPerson" @selectPerson="selectPerson"></list-search>
     <p>{{ selectEmpty }}</p>
@@ -31,6 +34,9 @@ export default {
     }
   },
   methods: {
+    goReport: function() {
+      this.$router.push(`/ocenka-report`);
+    },
     findPerson: function(findValue, findType) {
       if (findValue == '') {
         this.isWarning = false;
@@ -49,7 +55,10 @@ export default {
 //        console.log(findValue);
 //        console.log(request.response);
         this.listPerson = request.response;
-        if (this.listPerson.length == 0) this.selectEmpty = 'Записи отсутствуют';
+        console.log(typeof(this.listPerson));
+        console.log(this.listPerson);
+        if ("length" in this.listPerson && this.listPerson == 0) this.selectEmpty = 'Записи отсутствуют';
+        //if (this.listPerson.length == 0) this.selectEmpty = 'Записи отсутствуют';
         this.isLoad = !this.isLoad;
         
       }
@@ -72,8 +81,19 @@ export default {
   .ocenka {
     padding-left: 10px;
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     font-size: 14px;
+  }
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  button {
+    width: 150px;
+    padding: 3px;
   }
 
   .progress-load {

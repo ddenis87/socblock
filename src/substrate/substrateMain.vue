@@ -35,7 +35,7 @@ export default {
   grid-template-columns: 200px 1fr;
   margin: 10px auto;
   /* margin-left: 10px; */
-  max-width: 1024px;
+  max-width: 1280px;
   width: 100%;
   min-height: 600px;
   /* background-color: rgb(245, 245, 245); */
