@@ -2,17 +2,20 @@
   <div class="form-search">
     <hr>
      <control-select :width="300" :defaultTitle="defaultTitle[0]" />
+    <form-report-filter />
     <hr>
   </div>
 </template>
 
 <script>
 import ControlSelect from '@/components/form-element/control-select';
+import FormReportFilter from '@/components/ocenka/form-report-filter';
 
 export default {
   name: "FormReport",
   components: {
     ControlSelect,
+    FormReportFilter,
   },
   data: function() {
     return {
