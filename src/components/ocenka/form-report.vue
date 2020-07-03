@@ -22,6 +22,9 @@ export default {
       defaultTitle: ['Укажите МРУ',],
     }
   },
+  created: function() {
+    
+  },
 }
 </script>
 
