@@ -14,6 +14,7 @@
       </tr>
       <tr v-for="(row, index) in listRow" :key="index">
         <td>{{ row.CNAME }}</td>
+        
       </tr>
     </table>
     </fieldset>
