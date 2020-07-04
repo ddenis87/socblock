@@ -34,14 +34,14 @@ export default {
         //drop down
         let intervalHeight = setInterval(() => {
           if (this.heightFilter > 300) {clearInterval(intervalHeight); return;};
-          this.heightFilter = +this.heightFilter + +3;
-        }, 5);
+          this.heightFilter = +this.heightFilter + +5;
+        }, 3);
       } else if (this.heightFilter >= 300) {
       //drop up
         let intervalHeight = setInterval(() => {
           if (this.heightFilter <= 30) {clearInterval(intervalHeight); return;};
-          this.heightFilter = +this.heightFilter - +3;
-        }, 5);
+          this.heightFilter = +this.heightFilter - +5;
+        }, 3);
       }
 
     },

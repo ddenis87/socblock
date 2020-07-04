@@ -22,7 +22,27 @@ export default {
     }
   },
   mounted: function() {
-    setInterval(() => {this.dT = Date()}, 1000);
+    let pointPoint = ':';
+    let dateNow = new Date();
+    let dd = (+dateNow.getDate() < 10) ? '0' + dateNow.getDate() : dateNow.getDate();
+    let mm = (+dateNow.getMonth() < 10) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
+    let yyyy = dateNow.getFullYear();
+    let hh = dateNow.getHours();
+    let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
+    this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + mi;
+    setInterval(() => {
+      let dateNow = new Date();
+      let dd = (+dateNow.getDate() < 10) ? '0' + dateNow.getDate() : dateNow.getDate();
+      let mm = (+dateNow.getMonth() < 10) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
+      let yyyy = dateNow.getFullYear();
+      let hh = dateNow.getHours();
+    let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
+    this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + pointPoint + mi;
+      //this.dT = Date()
+    }, 1000);
+    setInterval(() => {
+      (pointPoint == ':') ? pointPoint = ' ' : pointPoint = ':';
+    }, 1000);
   },
   created: function() {
     let request = new XMLHttpRequest();
