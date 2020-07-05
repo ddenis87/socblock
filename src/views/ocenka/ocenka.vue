@@ -49,18 +49,13 @@ export default {
       request.open('POST', pathBackEnd + 'php/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-//      console.log(findType);
       request.send(`function=getPersonInfo${findType}&${findType}=${findValue}`)
       request.onload = () => {
-//        console.log(findValue);
-//        console.log(request.response);
         this.listPerson = request.response;
         console.log(typeof(this.listPerson));
         console.log(this.listPerson);
         if ("length" in this.listPerson && this.listPerson == 0) this.selectEmpty = 'Записи отсутствуют';
-        //if (this.listPerson.length == 0) this.selectEmpty = 'Записи отсутствуют';
         this.isLoad = !this.isLoad;
-        
       }
     },
     selectPerson: function(snils) {

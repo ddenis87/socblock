@@ -8,7 +8,7 @@
     <div class="report-control-filter" :style="{height: heightFilter + 'px'}">
       <div class="filter-header">
         <div class="filter-header-element">
-          Фильтр по умолчанию: Решения - Все | Территории - Все
+          Фильтр по умолчанию: Территории - {{ textFilterDistrict }} | Решения - {{ textFilterReshenie }}
         </div>
         <div class="filter-header-element button-build" @click="dropFilter">
           Расширенный фильтр <img src="/img/report-setting.png" >
@@ -18,37 +18,59 @@
         <!-- -----блок МРУ----- -->
         <fieldset class="block-checkbox">
           <legend>МРУ</legend>
-          <label class="rn-title"><input type="checkbox" id="ch1">Все (сводно)</label>
+          <label class="rn-title"><input type="checkbox" 
+                                         v-model="isCheckAllMRU"
+                                         @change="selectMRUAll" >Все (сводно)</label>
           <hr>
-          <template v-for="(row, index) in arrDistrict">
-            <div v-if="(+row.MRU)" :key="index">
+          <template v-for="(row, index) in arrListDistrict">
+            <div v-if="(+row.MRU == 0)" :key="index">
               <label class="rn-row"><input type="checkbox" 
                                            :value="row.ID"
-                                           v-model="df">{{ row.CNAME }}</label>
+                                           :disabled="isDisabledMRU"
+                                           v-model="arrFilterMRU"
+                                           @change="selectMRU">{{ row.CNAME }}</label>
             </div>
           </template>
         </fieldset>
         <!-- блок территориальные органы -->
         <fieldset class="block-checkbox">
           <legend>Территориальные органы</legend>
-          <label class="rn-title"><input type="checkbox" id="ch1">Все</label>
+          <label class="rn-title"><input type="checkbox" 
+                                         v-model="isCheckAllDistrict"
+                                         @change="selectDistrictAll">Все</label>
           <hr>
           <div class="two-collumn">
-            <template v-for="(row, index) in arrDistrict">
-              <label :key="index" v-if="(+row.MRU)" class="rn-title"><input type="checkbox" id="">{{ row.CNAME }}</label>
-              <label :key="index" v-else class="rn-row"><input type="checkbox" id="">{{ row.CNAME }}</label>
+            <template v-for="(row, index) in arrListDistrict">
+              <label :key="index" 
+                     v-if="(+row.MRU == 0)" 
+                     class="rn-title"><input type="checkbox" 
+                                             :value="row.ID"
+                                             :disabled="isDisabledDistrict"
+                                             v-model="arrFilterDistrict"
+                                             @change="selectDistrict" >{{ row.CNAME }}</label>
+              <label :key="index" 
+                     v-else class="rn-row"><input type="checkbox" 
+                                                  :value="row.ID"
+                                                  :disabled="isDisabledDistrict"
+                                                  v-model="arrFilterDistrict"
+                                                  @change="selectDistrict">{{ row.CNAME }}</label>
             </template>
           </div>
         </fieldset>
         <!-- блок решений -->
         <fieldset class="block-checkbox">
           <legend>Вынесенные решения</legend>
-          <label class="rn-title"><input type="checkbox" id="ch1">Все</label>
+          <label class="rn-title"><input type="checkbox" 
+                                         v-model="isCheckAllReshenie"
+                                         @change="selectReshenieAll">Все</label>
           <hr>
           <div class="two-collumn">
-            <template v-for="(row, index) in arrReshenie">
-              <!-- <label :key="index" v-if="(+row.MRU)" class="rn-title"><input type="checkbox" id="">{{ row.CNAME }}</label> -->
-              <label :key="index" class="rn-row"><input type="checkbox" id="">{{ row.CNAME }}</label>
+            <template v-for="(row, index) in arrListReshenie">
+              <label :key="index" class="rn-row"><input type="checkbox"
+                                                        :value="row"
+                                                        :disabled="isDisabledReshenie"
+                                                        v-model="arrFilterReshenie"
+                                                        @change="selectReshenie" >{{ row.CNAME }}</label>
             </template>
           </div>
         </fieldset>
@@ -61,7 +83,7 @@
         <div class="filter-header-element">
           Отчет будет сформирован на дату: {{ dateReportText }}
         </div>
-        <div class="filter-header-element button-build">
+        <div class="filter-header-element button-build" @click="buildingReport">
           Построить отчет <img src="/img/report-build.png" >
         </div>
       </div>
@@ -79,20 +101,153 @@ export default {
     InputDate,
   },
   props: {
-    arrDistrict: Array,
-    arrReshenie: Array,
+    
   },
   data: function() {
     return {
       heightFilter: 30,
       dateReport: '', // дата отчета // дата в формате yyyy-mm-dd
-      dateReportText: '..' // дата отчета // дата в формате dd.mm.yyyy
+      dateReportText: '..', // дата отчета // дата в формате dd.mm.yyyy
+      arrListDistrict: [ // список тер.органов
+          {ID: '1',   CNAME: 'Благовещенск',         MRU: '0'},
+          {ID: '2',   CNAME: 'Ивановка',             MRU: '1'},
+          {ID: '3',   CNAME: 'Тамбовка',             MRU: '1'},
+          {ID: '4',   CNAME: 'Константиновка',       MRU: '1'},
+          {ID: '5',   CNAME: 'Белогорск',            MRU: '0'},
+          {ID: '6',   CNAME: 'Зея',                  MRU: '1'},
+          {ID: '7',   CNAME: 'Тында',                MRU: '1'},
+          {ID: '8',   CNAME: 'Октябрьский район',    MRU: '1'},
+          {ID: '9',   CNAME: 'Ромненский район',     MRU: '1'},
+          {ID: '10',  CNAME: 'Серышевский район',    MRU: '1'},
+          {ID: '11',  CNAME: 'Райчихинск',           MRU: '0'},
+          {ID: '12',  CNAME: 'Архаринский район',    MRU: '1'},
+          {ID: '13',  CNAME: 'Бурейский',            MRU: '1'},
+          {ID: '14',  CNAME: 'Завитинский район',    MRU: '1'},
+          {ID: '15',  CNAME: 'Михайловский район',   MRU: '1'},
+          {ID: '16',  CNAME: 'Свободный',            MRU: '0'},
+          {ID: '17',  CNAME: 'Шимановский район',    MRU: '1'},
+          {ID: '18',  CNAME: 'Магдагачинский район', MRU: '1'},
+          {ID: '19',  CNAME: 'Мазановский район',    MRU: '1'},
+          {ID: '20',  CNAME: 'Селемджинский район',  MRU: '1'},
+          {ID: '21',  CNAME: 'Сковородинский район', MRU: '1'},
+        ],
+      arrListReshenie: [ // список решений
+        {ID: '1', CNAME: 'Корректировка СНИЛС'},
+        {ID: '2', CNAME: 'Не служил'},
+        {ID: '3', CNAME: 'Отправлено уведомление страхователю на прием'},
+        {ID: '4', CNAME: 'Направлен межведомственный запрос'},
+        {ID: '5', CNAME: 'Отправлено уведомление страхователю'},
+        {ID: '6', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '7', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '8', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '9', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '10', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '11', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '12', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '13', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '14', CNAME: 'Направлено приглашение гражданину'},
+        {ID: '15', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '16', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '17', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '18', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '19', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '20', CNAME: 'Направлено приглашение гражданину'},
+      ],
+      arrFilterMRU: [],
+      arrFilterDistrict: [],
+      arrFilterReshenie: [],
+
+      isCheckAllMRU: false,
+      isCheckAllReshenie: true,
+      isCheckAllDistrict: true,
+
+      isDisabledMRU: false,
+      isDisabledReshenie: false,
+      isDisabledDistrict: false,
+
+      textFilterDistrict: 'Все',
+      textFilterReshenie: 'Все',
     }
   },
   created: function() {
+    //this.arrListDistrict = this.ajaxQuery('php/ocenka-report.php', 'function=getListDistrict');
+    //this.arrListReshenie = this.ajaxQuery('php/ocenka-report.php', 'function=getListReshenie');
+
+    this.selectReshenieAll(); // отмечаем все решения по умолчанию
+    this.selectDistrictAll(); // отмечаем все тер.органы по умолчанию
   },
   methods: {
-    dropFilter: function() {
+    selectMRU: function() { // выбор МРУ
+      // отключаем фильтр по тер.органам-----
+      this.isDisabledDistrict = false;    //|
+      this.isCheckAllDistrict = false;    //|
+      this.arrFilterDistrict.length = 0;  //|
+      // ------------------------------------
+      this.textFilterDistrict = 'Определено пользователем';
+      this.$emit('selectedMRU', this.arrFilterMRU);
+    },
+    selectMRUAll: function() { // выбор всех МРУ
+      this.arrFilterMRU.length = 0;
+      this.isDisabledMRU = !this.isDisabledMRU;
+      // отключаем фильтр по тер.органам-----
+      this.isDisabledDistrict = false;    //|
+      this.isCheckAllDistrict = false;    //|
+      this.arrFilterDistrict.length = 0;  //|
+      // ------------------------------------
+      this.textFilterDistrict = 'Определено пользователем';
+      for (let i = 0; i < this.arrListDistrict.length; i++) {
+        if (+this.arrListDistrict[i].MRU == 0) this.arrFilterMRU.push(this.arrListDistrict[i].ID);
+      }
+      this.$emit('selectedMRU', this.arrFilterMRU);
+    },
+
+    selectDistrict: function() { // выбор тер.органов
+      // отключаем фильтр по МРУ--------
+      this.isDisabledMRU = false;    //|
+      this.isCheckAllMRU = false;    //|
+      this.arrFilterMRU.length = 0;  //|
+      // -------------------------------
+      this.textFilterDistrict = 'Определено пользователем';
+      this.$emit('selectedDistrict', this.arrFilterDistrict);
+    },
+    selectDistrictAll: function() { // выбор всех тер.органов (по умолчанию)
+      this.arrFilterDistrict.length = 0;
+      this.isDisabledDistrict = !this.isDisabledDistrict;
+      // отключаем фильтр по МРУ--------
+      this.isDisabledMRU = false;    //|
+      this.isCheckAllMRU = false;    //|
+      this.arrFilterMRU.length = 0;  //|
+      // -------------------------------
+      for (let i = 0; i < this.arrListDistrict.length; i++) this.arrFilterDistrict.push(this.arrListDistrict[i].ID);
+      this.$emit('selectedDistrict', this.arrFilterDistrict);
+    },
+
+    selectReshenie: function() { // выбор решения
+      this.textFilterReshenie = 'Определено пользователем';
+      this.$emit('selectedReshenie', this.arrFilterReshenie); // выбор решений
+    },
+    selectReshenieAll: function() { // выбор всех решений (по умолчанию)
+      this.arrFilterReshenie.length = 0;
+      this.isDisabledReshenie = !this.isDisabledReshenie;
+      for (let i = 0; i < this.arrListReshenie.length; i++) this.arrFilterReshenie.push(this.arrListReshenie[i]);
+      this.$emit('selectedReshenie', this.arrFilterReshenie);
+    },
+
+    buildingReport: function() {
+      this.$emit('buildingReport', this.dateReport);
+    },
+
+    ajaxQuery: function(fileQuery, stringQuery, collBackFunction) { // колбэк функция под вопросом
+      let request = new XMLHttpRequest();
+      request.open('POST', pathBackEndrep + fileQuery, true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      request.responseType = 'json';
+      request.send(stringQuery);
+      request.onload = () => {
+        return request.response;
+      };
+    },
+    dropFilter: function() { // слайдер расширенного отчета
       if (this.heightFilter <= 30) {  //drop down
         let intervalHeight = setInterval(() => {
           if (this.heightFilter > 360) {clearInterval(intervalHeight); return;};
