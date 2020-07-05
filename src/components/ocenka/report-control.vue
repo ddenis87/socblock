@@ -18,9 +18,11 @@
         <!-- -----блок МРУ----- -->
         <fieldset class="block-checkbox">
           <legend>МРУ</legend>
-          <label class="rn-title"><input type="checkbox" 
-                                         v-model="isCheckAllMRU"
-                                         @change="selectMRUAll" >Все (сводно)</label>
+          <div class="blue">
+            <label class="rn-title"><input type="checkbox" 
+                                                v-model="isCheckAllMRU"
+                                                @change="selectMRUAll" >Все (сводно)</label>
+          </div>
           <hr>
           <template v-for="(row, index) in arrListDistrict">
             <div v-if="(+row.MRU == 0)" :key="index">
@@ -35,9 +37,11 @@
         <!-- блок территориальные органы -->
         <fieldset class="block-checkbox">
           <legend>Территориальные органы</legend>
-          <label class="rn-title"><input type="checkbox" 
-                                         v-model="isCheckAllDistrict"
-                                         @change="selectDistrictAll">Все</label>
+          <div class="blue">
+            <label class="rn-title blue"><input type="checkbox" 
+                                                v-model="isCheckAllDistrict"
+                                                @change="selectDistrictAll">Все</label>
+          </div>
           <hr>
           <div class="two-collumn">
             <template v-for="(row, index) in arrListDistrict">
@@ -60,9 +64,11 @@
         <!-- блок решений -->
         <fieldset class="block-checkbox">
           <legend>Вынесенные решения</legend>
-          <label class="rn-title"><input type="checkbox" 
-                                         v-model="isCheckAllReshenie"
-                                         @change="selectReshenieAll">Все</label>
+          <div class="green">
+            <label class="rn-title green"><input type="checkbox" 
+                                          v-model="isCheckAllReshenie"
+                                          @change="selectReshenieAll">Все</label>
+          </div>
           <hr>
           <div class="two-collumn">
             <template v-for="(row, index) in arrListReshenie">
@@ -344,10 +350,14 @@ export default {
     margin-right: 5px;
   }
   .rn-title {
-    margin: 5px 3px;
+    width: 100%;
+    /* margin: 5px 3px; */
     font-style: italic;
     font-weight: bold;
   }
+  .blue {width: 100%; background-color: lightblue;}
+  .green {width: 100%; background-color: lightgreen;}
+
   .rn-row {
     margin: 5px 10px;
     font-size: 13px;

@@ -20,7 +20,6 @@
           </td>
           <td class="title-collumn"><div class="vertical-text">Всего вынесено решений</div></td>
         </tr>
-        <!-- <tr :key="index + 1000"><td class="no-m-p" :colspan="arrDistrict.length"><hr></td></tr> -->
         <!-- ---------------------------- -->
 
         <!-- ----------------строки - тер.органы---------------- -->
@@ -33,16 +32,10 @@
                 :class="{'title-row-mru': (!+row[0]) ? true : false }">{{ row[indexCol + 2] }}</td>
             <td class="count-content"
                 :class="{'title-row-mru': (!+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
-            <!-- <td class="title-row" >{{ row.CNAME }}</td>
-            <td class="count-content">{{ row.R1 }}</td>
-            <td class="count-content">{{ row.R2 }}</td>
-            <td class="count-content">{{ row.R3 }}</td>
-            <td class="count-content">{{ +row.R1 + +row.R2 + +row.R3 }}</td> -->
           <!-- ------------------------------------------------ -->
  
-        </tr>
-        <!-- <tr :key="index + 1000"><td :colspan="arrDistrict.length"><hr></td></tr> -->
-      </template>
+          </tr>
+        </template>
       <tr>
         <td>Итого по решениям:</td>
         <td></td>
@@ -135,14 +128,16 @@ export default {
   }
 
   td {
+    /* position: relative; */
     margin: 0px;
     padding: 5px 0px;
-    /* border: 0px solid black;
+    /* border: 2px solid grey;
     border-left: 0px solid cadetblue;
     border-right: 0px solid cadetblue; */
   }
   td:first-child {
     border-right: 2px solid grey;
+    /* border-top: 2px solid grey; */
   }
 
   .vertical-text {
@@ -153,6 +148,15 @@ export default {
     border: 0px solid black;
     align-items: center;
   }
+
+  /* .vertical-text {
+    position: absolute;
+    width: 160px;
+    left: 3px;
+    border: 1px solid black;
+    transform: rotate(-90deg);
+    transform-origin: left top 0px;
+  } */
 
   .count-content {
     text-align: center;
