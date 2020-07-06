@@ -25,24 +25,37 @@
         <!-- ----------------строки - тер.органы---------------- -->
         <template v-for="(row, index) in arrReport">
           <tr :key="index" >
-            <td class="title-row" :class="{'title-row-mru': (!+row[0]) ? true : false }" >{{ row[1] }}</td>
-            <td v-for="(col, indexCol) in arrReshenie.length" 
+            <td class="title-row" :class="{'title-row-mru': (+row[0]) ? true : false }" >{{ row[1] }}</td>
+            <td v-for="(col, indexCol) in arrReport[index].length" 
                 :key="indexCol + 2"
                 class="count-content"
-                :class="{'title-row-mru': (!+row[0]) ? true : false }">{{ row[indexCol + 2] }}</td>
+                :class="{'title-row-mru': (+row[0]) ? true : false }">{{ row[indexCol + 2] }}</td>
+
+
             <td class="count-content"
-                :class="{'title-row-mru': (!+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
+                :class="{'title-row-mru': (+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
           <!-- ------------------------------------------------ -->
- 
           </tr>
         </template>
-      <tr>
-        <td>Итого по решениям:</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
+
+        <!-- <template v-for="(row, rowIndex) in arrReport">
+            <tr :key="rowIndex">
+              <td class="title-row" :class="{'title-row-mru': (+row[rowIndex]) ? true : false }" >{{ row[rowIndex + 1] }}</td>
+              <template v-if="rowIndex > 2">
+                 <td v-for(col, colIndex) in row[rowIndex] :key="colIndex">{{ col['DECISIONCOUNT'] }}</td> 
+              </template>
+            </tr>
+        </template> -->
+
+
+          
+        <tr>
+          <td>Итого по решениям:</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
       </table>
     </fieldset>
   </div>
@@ -60,13 +73,14 @@ export default {
       // textFilterDistrict: 'Все',
       // textFilterReshenie: 'Все',
       sumRow: 0,
-      arrReport: [
-        ['0', 'Благовещенск',        '2',  '45', '76', '11',   '0',   '77'], //
-        ['1', 'Тамбовка',            '5',  '1',  '2',  '2',    '0',   '6'],  // [MRU, NAME-DISTRICT, COUNT(), ..., arrReshenie.length]
-        ['1', 'Селемджинский район', '3',  '9',  '1',  '8',    '4',   '4'],  //
-        ['1', 'Экимчан',             '0',  '4',  '5',  '4',    '1',   '3'],  //
-        ['0', 'Белогорск',           '2',  '2',  '2',  '2',    '2',   '1'],  //
-      ], // результат запроса []
+      arrReport: Array,
+      // arrReport: [
+      //   ['0', 'Благовещенск',        '2',  '45', '76', '11',   '0',   '77'], //
+      //   ['1', 'Тамбовка',            '5',  '1',  '2',  '2',    '0',   '6'],  // [MRU, NAME-DISTRICT, COUNT(), ..., arrReshenie.length]
+      //   ['1', 'Селемджинский район', '3',  '9',  '1',  '8',    '4',   '4'],  //
+      //   ['1', 'Экимчан',             '0',  '4',  '5',  '4',    '1',   '3'],  //
+      //   ['0', 'Белогорск',           '2',  '2',  '2',  '2',    '2',   '1'],  //
+      // ], // результат запроса []
       arrDistrict: [], // значения тер.органов для выбоки данных [ID]
       arrReshenie: [], // столбцы отчета [{ID: '1', CNAME: 'Пример решения'}]
     }
@@ -86,6 +100,34 @@ export default {
     buildingReport: function(dateReport) {
       console.log(dateReport);
       console.log(this.arrDistrict);
+      console.log(this.arrReshenie);
+      let request = new XMLHttpRequest();
+      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      request.responseType = 'json';
+      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}`);
+      request.onload = () => {
+        //console.log(request.response);
+        this.arrReport = request.response;
+        //console.log(this.arrReport[0]);
+        //console.log(this.arrReport[0][2]);
+        let newArrReport = [];
+        newArrReport.push(this.arrReport);
+        newArrReport = newArrReport[0]
+        //console.log(newArrReport[0]);
+        //console.log(newArrReport[1]);
+
+        for(let i = 0; i < newArrReport.length; i++) {
+          let promArr = newArrReport[i];
+          for(let j = 0; j < promArr.length; j++) {
+            if (j > 1) {
+              console.log(promArr[j].DECISIONCOUNT);
+            } else {
+              console.log(newArrReport[j]);
+            }
+          }
+        }
+      }
     },
   },
   created: function() {

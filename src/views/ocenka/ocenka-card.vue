@@ -5,17 +5,17 @@
     </div>
 
     <div class="title">
-      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0][6] }}</i></h2>
+      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0].SNILS }}</i></h2>
     </div>
     <table>
-      <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0][1] }}</td></tr>
-      <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0][2] }}</td></tr>
-      <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0][0] }}</td></tr>
-      <tr><td>Наименование МРУ:</td><td>{{ arrDataPerson[0][7] }}</td></tr>
+      <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0].FA + " " + arrDataPerson[0].IM + " " + arrDataPerson[0].OT}}</td></tr>
+      <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0].BIRTHDAY }}</td></tr>
+      <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0].NAME_DISTRICT }}</td></tr>
+      <tr><td>Наименование МРУ:</td><td>{{ (arrDataPerson[0].NAME_MRU) ? arrDataPerson[0].NAME_MRU : 'Является МРУ' }}</td></tr>
 
-      <tr><td>Работающий:</td><td>{{ arrDataPerson[0][3] }}</td></tr>
-      <tr><td>Включен в список "СЗВ-К":</td><td>{{ arrDataPerson[0][4] }}</td></tr>
-      <tr><td>Включен в список "СлПриз":</td><td>{{ arrDataPerson[0][5] }}</td></tr>
+      <tr><td>Работающий:</td><td>{{ (+arrDataPerson[0].JOB) ? 'Да' : 'Нет' }}</td></tr>
+      <tr><td>Включен в список "СЗВ-К":</td><td>{{ (arrDataPerson[0].SZVK) ? 'Да' : 'Нет' }}</td></tr>
+      <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
     </table>
 
     <div class="title">
@@ -23,14 +23,14 @@
     </div>
     <div class="sved">
       <hr>
-      <div class="sved-control" v-if="(access)">
+      <div class="sved-control" v-if="(access)"> <!-- access - может использовать глобальную переменную -->
         
         <label for="">Укажите решение:</label>
-        <select v-model="historyRecord">
+        <select v-model="decisionId">
           <option value="" selected disabled>Выберите решение из списка</option>
           <option v-for="(rowList, index) in arrList" 
                   :key="index" 
-                  :value='rowList'>{{ rowList }}</option>
+                  :value='rowList.ID'>{{ rowList.CNAME }}</option>
         </select>
         <button @click="insertHistoryRecord">Добавить решение</button>
         
@@ -44,9 +44,9 @@
           <th width="30px">Действие</th>
         </tr>
         <tr v-for="(rowDataHistory, index) in arrDataHistory" :key="index">
-          <td>{{ rowDataHistory[1] }}</td>
-          <td>{{ rowDataHistory[0] }}</td>
-          <td>{{ rowDataHistory[2] }}</td>
+          <td>{{ rowDataHistory.SPEC }}</td>
+          <td>{{ rowDataHistory.CDATE }}</td>
+          <td>{{ rowDataHistory.DECISION }}</td>
           <td align="right"><img src="img/button-row-delete.png" class="button-row-control" 
                                     title="Удалить запись" 
                                     @click="deleteHistoryRecord(rowDataHistory[3])" disabled /></td>
@@ -72,9 +72,9 @@ export default {
       arrDataHistory: [['','','']],
       arrList: [],
       isLoad: true, isWarning: true,
-      snils: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
+      personId: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
       access: accessUser,
-      historyRecord: '',
+      decisionId: '',
       selectEmpty: '',
     }
   },
@@ -83,16 +83,19 @@ export default {
       this.$router.push(`/ocenka`);
     },
     insertHistoryRecord: function() {
-      if(this.historyRecord != '') {
-        //console.log(this.historyRecord);
+      if(this.decisionId != '') {
+        console.log(this.personId);
+        console.log(accessUserId);
+        console.log(this.decisionId);
+
         this.isLoad = false;
         let request = new XMLHttpRequest();
-        request.open('POST', pathBackEnd + 'php/ocenka.php', true);
+        request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.send(`function=insertHistoryRecord&reshenie=${this.historyRecord}&snils=${this.snils}&userName=${accessUserName}`);
+        request.send(`function=insertHistory&personId=${this.personId}&specId=${accessUserId}&decisionId=${this.decisionId}`);
         request.onload = () => {
           this.loadHistory();
-          this.historyRecord = '';
+          this.decisionId = '';
           this.isLoad = true;
         }
       } else {
@@ -104,22 +107,23 @@ export default {
       console.log(param);
     },
     loadInfo: function() {
-      let requestInfo = new XMLHttpRequest();
-      requestInfo.open('POST', pathBackEnd + 'php/ocenka.php', true);
-      requestInfo.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      requestInfo.responseType = 'json';
-      requestInfo.send(`function=getPersonInfoCard&snils=${this.snils}`);
-      requestInfo.onload = () => {
-        this.arrDataPerson = requestInfo.response;
+      let request = new XMLHttpRequest();
+      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      request.responseType = 'json';
+      request.send(`function=getPersonInfo&personId=${this.personId}`);
+      request.onload = () => {
+        this.arrDataPerson = request.response;
+        console.log(request.response);
       }
     },
     loadHistory: function() {
       let requestHistory = new XMLHttpRequest();
       this.selectEmpty = '';
-      requestHistory.open('POST', pathBackEnd + 'php/ocenka.php', true);
+      requestHistory.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
       requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       requestHistory.responseType = 'json';
-      requestHistory.send(`function=getPersonInfoCardHistiry&snils=${this.snils}`);
+      requestHistory.send(`function=getPersonHistiry&personId=${this.personId}`);
       requestHistory.onload = () => {
         this.arrDataHistory = requestHistory.response;
         if (this.arrDataHistory.length == 0) this.selectEmpty = 'Записи отсутствуют';
@@ -136,10 +140,10 @@ export default {
     if(this.access) {
       this.isLoad = false;
       let requestList = new XMLHttpRequest();
-      requestList.open('POST', pathBackEnd + 'php/ocenka-catalog.php', true);
+      requestList.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
       requestList.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       requestList.responseType = 'json';
-      requestList.send(`function=getListReshenie`);
+      requestList.send(`function=getListDecision`);
       requestList.onload = () => {
         this.arrList = requestList.response;
       }

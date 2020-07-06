@@ -18,6 +18,7 @@ export default {
   data: function() {
     return {
       dT: '',
+      arrUser: Array,
       userName: '',
     }
   },
@@ -46,15 +47,22 @@ export default {
   },
   created: function() {
     let request = new XMLHttpRequest();
-    request.open('POST', pathBackEnd + 'php/ocenka-user.php', true);
+    request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.send(``);
+    request.responseType = 'json';
+    request.send(`function=getUser`);
     request.onload = () => {
-      this.userName = request.response;
-      accessUserName = this.userName;
-      (this.userName !== 'Гость') ? accessUser = true : accessUser = false;
+      this.arrUser = request.response;
+      if (this.arrUser.length) {
+        accessUser = true;
+        accessUserId = this.arrUser[0].ID;
+        this.userName = this.arrUser[0].CNAME;
+
+      } else {
+        accessUser = false;
+        this.userName = 'Гость';
+      }
       this.isLoad = true;
-      console.log(request.response);
     }
   }
 }

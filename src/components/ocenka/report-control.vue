@@ -25,12 +25,12 @@
           </div>
           <hr>
           <template v-for="(row, index) in arrListDistrict">
-            <div v-if="(+row.MRU == 0)" :key="index">
+            <div v-if="(+row.ISMRU == 1)" :key="index">
               <label class="rn-row"><input type="checkbox" 
-                                           :value="row.ID"
+                                           :value="row.MRUID"
                                            :disabled="isDisabledMRU"
                                            v-model="arrFilterMRU"
-                                           @change="selectMRU">{{ row.CNAME }}</label>
+                                           @change="selectMRU">{{ row.MRUNAME }}</label>
             </div>
           </template>
         </fieldset>
@@ -46,18 +46,18 @@
           <div class="two-collumn">
             <template v-for="(row, index) in arrListDistrict">
               <label :key="index" 
-                     v-if="(+row.MRU == 0)" 
+                     v-if="(+row.ISMRU == 1)" 
                      class="rn-title"><input type="checkbox" 
-                                             :value="row.ID"
+                                             :value="row.DISTRICTID"
                                              :disabled="isDisabledDistrict"
                                              v-model="arrFilterDistrict"
-                                             @change="selectDistrict" >{{ row.CNAME }}</label>
+                                             @change="selectDistrict" >{{ row.DISTRICTNAME }}</label>
               <label :key="index" 
                      v-else class="rn-row"><input type="checkbox" 
-                                                  :value="row.ID"
+                                                  :value="row.DISTRICTID"
                                                   :disabled="isDisabledDistrict"
                                                   v-model="arrFilterDistrict"
-                                                  @change="selectDistrict">{{ row.CNAME }}</label>
+                                                  @change="selectDistrict">{{ row.DISTRICTNAME }}</label>
             </template>
           </div>
         </fieldset>
@@ -115,44 +115,44 @@ export default {
       dateReport: '', // дата отчета // дата в формате yyyy-mm-dd
       dateReportText: '..', // дата отчета // дата в формате dd.mm.yyyy
       arrListDistrict: [ // список тер.органов
-          {ID: '1',   CNAME: 'Благовещенск',         MRU: '0'},
-          {ID: '2',   CNAME: 'Ивановка',             MRU: '1'},
-          {ID: '3',   CNAME: 'Тамбовка',             MRU: '1'},
-          {ID: '4',   CNAME: 'Константиновка',       MRU: '1'},
-          {ID: '5',   CNAME: 'Белогорск',            MRU: '0'},
-          {ID: '6',   CNAME: 'Зея',                  MRU: '1'},
-          {ID: '7',   CNAME: 'Тында',                MRU: '1'},
-          {ID: '8',   CNAME: 'Октябрьский район',    MRU: '1'},
-          {ID: '9',   CNAME: 'Ромненский район',     MRU: '1'},
-          {ID: '10',  CNAME: 'Серышевский район',    MRU: '1'},
-          {ID: '11',  CNAME: 'Райчихинск',           MRU: '0'},
-          {ID: '12',  CNAME: 'Архаринский район',    MRU: '1'},
-          {ID: '13',  CNAME: 'Бурейский',            MRU: '1'},
-          {ID: '14',  CNAME: 'Завитинский район',    MRU: '1'},
-          {ID: '15',  CNAME: 'Михайловский район',   MRU: '1'},
-          {ID: '16',  CNAME: 'Свободный',            MRU: '0'},
-          {ID: '17',  CNAME: 'Шимановский район',    MRU: '1'},
-          {ID: '18',  CNAME: 'Магдагачинский район', MRU: '1'},
-          {ID: '19',  CNAME: 'Мазановский район',    MRU: '1'},
-          {ID: '20',  CNAME: 'Селемджинский район',  MRU: '1'},
-          {ID: '21',  CNAME: 'Сковородинский район', MRU: '1'},
+          // {ID: '1',   CNAME: 'Благовещенск',         MRU: '0'},
+          // {ID: '2',   CNAME: 'Ивановка',             MRU: '1'},
+          // {ID: '3',   CNAME: 'Тамбовка',             MRU: '1'},
+          // {ID: '4',   CNAME: 'Константиновка',       MRU: '1'},
+          // {ID: '5',   CNAME: 'Белогорск',            MRU: '0'},
+          // {ID: '6',   CNAME: 'Зея',                  MRU: '1'},
+          // {ID: '7',   CNAME: 'Тында',                MRU: '1'},
+          // {ID: '8',   CNAME: 'Октябрьский район',    MRU: '1'},
+          // {ID: '9',   CNAME: 'Ромненский район',     MRU: '1'},
+          // {ID: '10',  CNAME: 'Серышевский район',    MRU: '1'},
+          // {ID: '11',  CNAME: 'Райчихинск',           MRU: '0'},
+          // {ID: '12',  CNAME: 'Архаринский район',    MRU: '1'},
+          // {ID: '13',  CNAME: 'Бурейский',            MRU: '1'},
+          // {ID: '14',  CNAME: 'Завитинский район',    MRU: '1'},
+          // {ID: '15',  CNAME: 'Михайловский район',   MRU: '1'},
+          // {ID: '16',  CNAME: 'Свободный',            MRU: '0'},
+          // {ID: '17',  CNAME: 'Шимановский район',    MRU: '1'},
+          // {ID: '18',  CNAME: 'Магдагачинский район', MRU: '1'},
+          // {ID: '19',  CNAME: 'Мазановский район',    MRU: '1'},
+          // {ID: '20',  CNAME: 'Селемджинский район',  MRU: '1'},
+          // {ID: '21',  CNAME: 'Сковородинский район', MRU: '1'},
         ],
       arrListReshenie: [ // список решений
-        {ID: '1', CNAME: 'Корректировка СНИЛС'},
-        {ID: '2', CNAME: 'Не служил'},
-        {ID: '3', CNAME: 'Отправлено уведомление страхователю на прием'},
-        {ID: '4', CNAME: 'Направлен межведомственный запрос'},
-        {ID: '5', CNAME: 'Отправлено уведомление страхователю'},
-        {ID: '6', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '7', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '8', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '9', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '10', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '11', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '12', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '13', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '14', CNAME: 'Направлено приглашение гражданину'},
-        {ID: '15', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '1', CNAME: 'Корректировка СНИЛС'},
+        // {ID: '2', CNAME: 'Не служил'},
+        // {ID: '3', CNAME: 'Отправлено уведомление страхователю на прием'},
+        // {ID: '4', CNAME: 'Направлен межведомственный запрос'},
+        // {ID: '5', CNAME: 'Отправлено уведомление страхователю'},
+        // {ID: '6', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '7', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '8', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '9', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '10', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '11', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '12', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '13', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '14', CNAME: 'Направлено приглашение гражданину'},
+        // {ID: '15', CNAME: 'Направлено приглашение гражданину'},
         // {ID: '16', CNAME: 'Направлено приглашение гражданину'},
         // {ID: '17', CNAME: 'Направлено приглашение гражданину'},
         // {ID: '18', CNAME: 'Направлено приглашение гражданину'},
@@ -177,12 +177,24 @@ export default {
   },
   created: function() {
     //this.arrListDistrict = this.ajaxQuery('php/ocenka-report.php', 'function=getListDistrict');
-    //this.arrListReshenie = this.ajaxQuery('php/ocenka-report.php', 'function=getListReshenie');
+    this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDecision', this.loadDecision);
+    this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDistrict', this.loadDistrict);
 
-    this.selectReshenieAll(); // отмечаем все решения по умолчанию
-    this.selectDistrictAll(); // отмечаем все тер.органы по умолчанию
+    //this.selectReshenieAll(), 2000); // отмечаем все решения по умолчанию
+    //this.selectDistrictAll(); // отмечаем все тер.органы по умолчанию
+  },
+  mounted: function() {
   },
   methods: {
+    loadDecision: function(arrList){
+      this.arrListReshenie = arrList;
+      this.selectReshenieAll();
+    },
+    loadDistrict: function(arrList){
+      this.arrListDistrict = arrList;
+      //console.log(arrList);
+      this.selectDistrictAll();
+    },
     selectMRU: function() { // выбор МРУ
       // отключаем фильтр по тер.органам-----
       this.isDisabledDistrict = false;    //|
@@ -202,7 +214,7 @@ export default {
       // ------------------------------------
       this.textFilterDistrict = 'Определено пользователем';
       for (let i = 0; i < this.arrListDistrict.length; i++) {
-        if (+this.arrListDistrict[i].MRU == 0) this.arrFilterMRU.push(this.arrListDistrict[i].ID);
+        if (+this.arrListDistrict[i].ISMRU == 1) this.arrFilterMRU.push(this.arrListDistrict[i].MRUID);
       }
       this.$emit('selectedMRU', this.arrFilterMRU);
     },
@@ -224,7 +236,7 @@ export default {
       this.isCheckAllMRU = false;    //|
       this.arrFilterMRU.length = 0;  //|
       // -------------------------------
-      for (let i = 0; i < this.arrListDistrict.length; i++) this.arrFilterDistrict.push(this.arrListDistrict[i].ID);
+      for (let i = 0; i < this.arrListDistrict.length; i++) this.arrFilterDistrict.push(this.arrListDistrict[i].DISTRICTID);
       this.$emit('selectedDistrict', this.arrFilterDistrict);
     },
 
@@ -250,7 +262,8 @@ export default {
       request.responseType = 'json';
       request.send(stringQuery);
       request.onload = () => {
-        return request.response;
+        collBackFunction(request.response);
+        //return request.response;
       };
     },
     dropFilter: function() { // слайдер расширенного отчета

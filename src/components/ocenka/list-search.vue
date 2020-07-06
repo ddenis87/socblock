@@ -11,13 +11,13 @@
       </tr>
       <tr><td colspan="6"><hr></td></tr>
       <template v-for="(rowPerson, index) in listPerson">
-      <tr class="tr-active" :key="index" @click="$emit('selectPerson', rowPerson[3])">
+      <tr class="tr-active" :key="index" @click="$emit('selectPerson', rowPerson.ID)">
         <td>{{ index + 1 }}</td>
-        <td>{{ rowPerson[3] }}</td>
-        <td>{{ rowPerson[0] }}</td>
-        <td>{{ rowPerson[1] }}</td>
-        <td>{{ rowPerson[2] }}</td>
-        <td>{{ rowPerson[4] }}</td>
+        <td>{{ rowPerson.SNILS }}</td>
+        <td>{{ rowPerson.FA + " " + rowPerson.IM + " " + rowPerson.OT }}</td>
+        <td>{{ rowPerson.BIRTHDAY }}</td>
+        <td>{{ rowPerson.NAME_DISTRICT }}</td>
+        <td>{{ (rowPerson.NAME_MRU) ? rowPerson.NAME_MRU : 'Аз есьм МРУ' }}</td>
       </tr>
       <tr :key="index + 1000"><td colspan="6"><hr></td></tr>
       </template>
