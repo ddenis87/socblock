@@ -25,9 +25,9 @@
       <hr>
       <div class="sved-control" v-if="(access)"> <!-- access - может использовать глобальную переменную -->
         
-        <label for="">Укажите решение:</label>
+        <label for="">Укажите результат:</label>
         <select v-model="decisionId">
-          <option value="" selected disabled>Выберите решение из списка</option>
+          <option value="" selected disabled>Выберите результат из списка</option>
           <option v-for="(rowList, index) in arrList" 
                   :key="index" 
                   :value='rowList.ID'>{{ rowList.CNAME }}</option>
@@ -40,7 +40,7 @@
         <tr>
           <th>Специалист</th>
           <th width="80px">Дата</th>
-          <th>Решение</th>
+          <th>Результат</th>
           <th width="30px">Действие</th>
         </tr>
         <tr v-for="(rowDataHistory, index) in arrDataHistory" :key="index">

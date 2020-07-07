@@ -1,7 +1,8 @@
 <template>
   <div class='report'>
     <div class="title">
-      <h2>Оценка пенсионных прав - Отчеты</h2>
+      <h2>Оценка пенсионных прав застрахованного лица</h2>
+      <button class="print" @click="goBase">Перейти к базе</button>
     </div>
     <report-control @selectedMRU="selectedMRU"
                     @selectedDistrict="selectedDistrict"
@@ -18,46 +19,33 @@
               :key="index" 
               class="title-collumn"><div class="vertical-text">{{ row.CNAME }}</div>
           </td>
-          <td class="title-collumn"><div class="vertical-text">Всего вынесено решений</div></td>
+          <td class="title-collumn"><div class="vertical-text">Всего вынесено результатов работы</div></td>
         </tr>
         <!-- ---------------------------- -->
 
         <!-- ----------------строки - тер.органы---------------- -->
-        <template v-for="(row, index) in arrReport">
-          <tr :key="index" >
-            <td class="title-row" :class="{'title-row-mru': (+row[0]) ? true : false }" >{{ row[1] }}</td>
-            <td v-for="(col, indexCol) in arrReport[index].length" 
-                :key="indexCol + 2"
-                class="count-content"
-                :class="{'title-row-mru': (+row[0]) ? true : false }">{{ row[indexCol + 2] }}</td>
-
-
-            <td class="count-content"
-                :class="{'title-row-mru': (+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
-          <!-- ------------------------------------------------ -->
-          </tr>
-        </template>
-
-        <!-- <template v-for="(row, rowIndex) in arrReport">
+        <template v-for="(row, rowIndex) in arrReport">
             <tr :key="rowIndex">
-              <td class="title-row" :class="{'title-row-mru': (+row[rowIndex]) ? true : false }" >{{ row[rowIndex + 1] }}</td>
-              <template v-if="rowIndex > 2">
-                 <td v-for(col, colIndex) in row[rowIndex] :key="colIndex">{{ col['DECISIONCOUNT'] }}</td> 
-              </template>
+              <td class="title-row" :class="{'title-row-mru': (+row[0]) ? true : false }" >{{ row[1] }}</td>
+              
+                 <td v-for="col in arrReshenie.length" 
+                     :key="col + 1000"
+                     class="count-content"
+                     :class="{'title-row-mru': (+row[0]) ? true : false }">{{ (row[col + 1]) ? row[col + 1] : '0' }}</td> 
+              
+              <td class="count-content"
+                :class="{'title-row-mru': (+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
             </tr>
-        </template> -->
+        </template>
+        <!-- ------------------------------------------------ -->
 
-
-          
         <tr>
-          <td>Итого по решениям:</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
         </tr>
       </table>
     </fieldset>
+    <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
+      Не выбран ни один территориальный орган или МРУ
+    </div>
   </div>
 </template>
 
@@ -70,17 +58,10 @@ export default {
   },
   data: function() {
     return {
-      // textFilterDistrict: 'Все',
-      // textFilterReshenie: 'Все',
       sumRow: 0,
-      arrReport: Array,
-      // arrReport: [
-      //   ['0', 'Благовещенск',        '2',  '45', '76', '11',   '0',   '77'], //
-      //   ['1', 'Тамбовка',            '5',  '1',  '2',  '2',    '0',   '6'],  // [MRU, NAME-DISTRICT, COUNT(), ..., arrReshenie.length]
-      //   ['1', 'Селемджинский район', '3',  '9',  '1',  '8',    '4',   '4'],  //
-      //   ['1', 'Экимчан',             '0',  '4',  '5',  '4',    '1',   '3'],  //
-      //   ['0', 'Белогорск',           '2',  '2',  '2',  '2',    '2',   '1'],  //
-      // ], // результат запроса []
+      typeFilter: false,
+      isWarning: true,
+      arrReport: Array, // итоговый отчет [["0", "Благовещенск", "3", "1", ...]] [["MRU", "DISTRICT", "COUNT-DECISION", ...]]
       arrDistrict: [], // значения тер.органов для выбоки данных [ID]
       arrReshenie: [], // столбцы отчета [{ID: '1', CNAME: 'Пример решения'}]
     }
@@ -89,49 +70,37 @@ export default {
     sumCollumn: function(rowValue) {
       let sum = 0;
       for (let i = 2; i < rowValue.length; i++) {
-        sum += +rowValue[i];
+        if (rowValue[i]) {
+          sum += +rowValue[i];
+        }
       }
       return sum;
     },
-    selectedMRU: function(arrValue) {this.arrDistrict = arrValue;}, // событие фильтра
-    selectedDistrict: function(arrValue) {this.arrDistrict = arrValue;}, // событие фильтра
+    goBase: function() {this.$router.push(`/ocenka`);},
+    selectedMRU: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
+    selectedDistrict: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
     selectedReshenie: function(arrValue) {this.arrReshenie = arrValue;}, // событие фильтра
 
     buildingReport: function(dateReport) {
-      console.log(dateReport);
-      console.log(this.arrDistrict);
-      console.log(this.arrReshenie);
+      if (!this.arrDistrict.length) {
+        this.isWarning = false;
+        setTimeout(() => {this.isWarning = true}, 2000);
+        return;
+      }
+      this.arrReport = [];
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}`);
+      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}`);
       request.onload = () => {
-        //console.log(request.response);
-        this.arrReport = request.response;
-        //console.log(this.arrReport[0]);
-        //console.log(this.arrReport[0][2]);
         let newArrReport = [];
-        newArrReport.push(this.arrReport);
-        newArrReport = newArrReport[0]
-        //console.log(newArrReport[0]);
-        //console.log(newArrReport[1]);
-
-        for(let i = 0; i < newArrReport.length; i++) {
-          let promArr = newArrReport[i];
-          for(let j = 0; j < promArr.length; j++) {
-            if (j > 1) {
-              console.log(promArr[j].DECISIONCOUNT);
-            } else {
-              console.log(newArrReport[j]);
-            }
-          }
-        }
+        this.arrReport = request.response;
       }
     },
   },
   created: function() {
-    console.log(this.arrReport);
+    //console.log(this.arrReport);
   }
 }
 </script>
@@ -143,17 +112,24 @@ export default {
     max-width: 1000px;
     font-size: 14px;
   }
+  .title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
   table {
     border-spacing: 0px;
     width: 100%;
     border-collapse: collapse;
   }
   .title-collumn {
+    position: relative;
     border-left: 1px solid grey;
     border-bottom: 1px solid grey;
-    border-top: 2px solid grey;
+    border-top: 0px solid grey;
     height: 180px;
-    min-width: 40px;
+    width: 40px;
+    /* min-width: 40px; */
     vertical-align: bottom;
     overflow: hidden;
   }
@@ -171,10 +147,9 @@ export default {
 
   td {
     /* position: relative; */
-    margin: 0px;
     padding: 5px 0px;
-    /* border: 2px solid grey;
-    border-left: 0px solid cadetblue;
+     /* border: 0px solid grey; */
+    /*border-left: 0px solid cadetblue;
     border-right: 0px solid cadetblue; */
   }
   td:first-child {
@@ -182,23 +157,23 @@ export default {
     /* border-top: 2px solid grey; */
   }
 
-  .vertical-text {
+  /* .vertical-text {
     display: flex;
     height: 100%;
     width: 40px;
     writing-mode: sideways-lr;
     border: 0px solid black;
     align-items: center;
-  }
+  } */
 
-  /* .vertical-text {
+  .vertical-text {
     position: absolute;
-    width: 160px;
+    width: 195px;
     left: 3px;
-    border: 1px solid black;
+    border: 0px solid black;
     transform: rotate(-90deg);
     transform-origin: left top 0px;
-  } */
+  }
 
   .count-content {
     text-align: center;
@@ -207,15 +182,18 @@ export default {
 
   .title-row {
     width: 150px;
+    max-width: 150px;
     padding-left: 10px;
     border-bottom: 0px solid grey;
   }
 
   .title-row-mru {
     font-weight: bold;
+    background-color: lightblue; /*:cadetblue;*/
+  }
+  .title-row-mru:first-child {
     font-style: italic;
     padding-left: 5px;
-    background-color: lightblue; /*:cadetblue;*/
   }
 
   fieldset {border: 1px solid black; padding: 10px;}
@@ -227,6 +205,33 @@ export default {
   .empty-first {
     border-top: 2px solid grey;
     border-left: 2px solid grey;
+    width: 150px;
+    max-width: 150px;
+  }
+    /* ------warning------- */
+  .warning-insert {
+    display: flex;
+    position: fixed;
+    left: 45%;
+    top: 40%;
+    margin: auto;
+    width: 400px;
+    height: 30px;
+    background-color: black;
+    color: white;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px grey;
+  }
+  /* -------------------- */
 
+  .is-visible {
+    visibility: hidden;
+  }
+
+  @media print {
+    .print {display: none;}
   }
 </style>

@@ -5,7 +5,7 @@
          :style="{ width: widthInput }" 
          :class="'position-' + positionLabel"
          v-model="dateReport"
-         @input="inputDate">
+         @input="inputDate" disabled>
 </div>
 </template>
 

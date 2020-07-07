@@ -27,6 +27,9 @@ body, div, fieldset, ul, li, img, h1, h2, h3 {
   font-family: 'Times New Roman', Times, serif;
 }
 
+html {
+  overflow-y: scroll;
+}
 
 a {
   text-decoration:none;

@@ -17,11 +17,11 @@
       <div class="filter-body">
         <!-- -----блок МРУ----- -->
         <fieldset class="block-checkbox">
-          <legend>МРУ</legend>
+          <legend>МРУ (сводно)</legend>
           <div class="blue">
             <label class="rn-title"><input type="checkbox" 
                                                 v-model="isCheckAllMRU"
-                                                @change="selectMRUAll" >Все (сводно)</label>
+                                                @change="selectMRUAll" >Все</label>
           </div>
           <hr>
           <template v-for="(row, index) in arrListDistrict">
@@ -36,7 +36,7 @@
         </fieldset>
         <!-- блок территориальные органы -->
         <fieldset class="block-checkbox">
-          <legend>Территориальные органы</legend>
+          <legend>Территориальные органы (отдельно по каждому)</legend>
           <div class="blue">
             <label class="rn-title blue"><input type="checkbox" 
                                                 v-model="isCheckAllDistrict"
@@ -67,7 +67,7 @@
           <div class="green">
             <label class="rn-title green"><input type="checkbox" 
                                           v-model="isCheckAllReshenie"
-                                          @change="selectReshenieAll">Все</label>
+                                          @change="selectReshenieAll" disabled>Все</label> <!--убрать превент-->
           </div>
           <hr>
           <div class="two-collumn">
@@ -76,7 +76,7 @@
                                                         :value="row"
                                                         :disabled="isDisabledReshenie"
                                                         v-model="arrFilterReshenie"
-                                                        @change="selectReshenie" >{{ row.CNAME }}</label>
+                                                        @change="selectReshenie" >{{ row.CNAME }}</label> <!--убрать превент-->
             </template>
           </div>
         </fieldset>
@@ -176,12 +176,8 @@ export default {
     }
   },
   created: function() {
-    //this.arrListDistrict = this.ajaxQuery('php/ocenka-report.php', 'function=getListDistrict');
     this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDecision', this.loadDecision);
     this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDistrict', this.loadDistrict);
-
-    //this.selectReshenieAll(), 2000); // отмечаем все решения по умолчанию
-    //this.selectDistrictAll(); // отмечаем все тер.органы по умолчанию
   },
   mounted: function() {
   },
@@ -202,7 +198,7 @@ export default {
       this.arrFilterDistrict.length = 0;  //|
       // ------------------------------------
       this.textFilterDistrict = 'Определено пользователем';
-      this.$emit('selectedMRU', this.arrFilterMRU);
+      this.$emit('selectedMRU', this.arrFilterMRU, true); // 3 arg - тип отчета true -> МРУ
     },
     selectMRUAll: function() { // выбор всех МРУ
       this.arrFilterMRU.length = 0;
@@ -216,7 +212,7 @@ export default {
       for (let i = 0; i < this.arrListDistrict.length; i++) {
         if (+this.arrListDistrict[i].ISMRU == 1) this.arrFilterMRU.push(this.arrListDistrict[i].MRUID);
       }
-      this.$emit('selectedMRU', this.arrFilterMRU);
+      this.$emit('selectedMRU', this.arrFilterMRU, true); // 3 arg - тип отчета true -> МРУ
     },
 
     selectDistrict: function() { // выбор тер.органов
@@ -226,7 +222,7 @@ export default {
       this.arrFilterMRU.length = 0;  //|
       // -------------------------------
       this.textFilterDistrict = 'Определено пользователем';
-      this.$emit('selectedDistrict', this.arrFilterDistrict);
+      this.$emit('selectedDistrict', this.arrFilterDistrict, false); // 3 arg - тип отчета false -> Территория
     },
     selectDistrictAll: function() { // выбор всех тер.органов (по умолчанию)
       this.arrFilterDistrict.length = 0;
@@ -236,8 +232,9 @@ export default {
       this.isCheckAllMRU = false;    //|
       this.arrFilterMRU.length = 0;  //|
       // -------------------------------
+      if (!this.isDisabledDistrict) {return;}
       for (let i = 0; i < this.arrListDistrict.length; i++) this.arrFilterDistrict.push(this.arrListDistrict[i].DISTRICTID);
-      this.$emit('selectedDistrict', this.arrFilterDistrict);
+      this.$emit('selectedDistrict', this.arrFilterDistrict, false); // 3 arg - тип отчета false -> Территория
     },
 
     selectReshenie: function() { // выбор решения
@@ -252,6 +249,7 @@ export default {
     },
 
     buildingReport: function() {
+      // this.dropFilter();
       this.$emit('buildingReport', this.dateReport);
     },
 
@@ -387,5 +385,9 @@ export default {
 
   .button-build:hover img {
     transform: rotate(45deg);
+  }
+
+  @media print {
+    .report-control {display: none;}
   }
 </style>
