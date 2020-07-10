@@ -1,7 +1,7 @@
 <template>
   <div class="ocenka-card">
     <div class="back">
-      <img src="img/back.png" class="back-img" @click="goBack"/>
+      <button @click="goBack">Вернуться</button>
     </div>
 
     <div class="title">
@@ -23,7 +23,7 @@
     </div>
     <div class="sved">
       <hr>
-      <div class="sved-control" v-if="(access)"> <!-- access - может использовать глобальную переменную -->
+      <div class="sved-control" v-if="(access)"> <!-- access - может сразу использовать глобальную переменную -->
         
         <label for="">Укажите результат:</label>
         <select v-model="decisionId">
@@ -32,24 +32,24 @@
                   :key="index" 
                   :value='rowList.ID'>{{ rowList.CNAME }}</option>
         </select>
-        <button @click="insertHistoryRecord">Добавить решение</button>
+        <button @click="insertHistoryRecord">Добавить результат</button>
         
       </div>
       <hr>
       <table>
         <tr>
-          <th>Специалист</th>
-          <th width="80px">Дата</th>
+          <th width="280px">Специалист</th>
+          <th width="85px">Дата</th>
           <th>Результат</th>
           <th width="30px">Действие</th>
         </tr>
         <tr v-for="(rowDataHistory, index) in arrDataHistory" :key="index">
           <td>{{ rowDataHistory.SPEC }}</td>
-          <td>{{ rowDataHistory.CDATE }}</td>
+          <td>{{ modDate(rowDataHistory.CDATE),  }}</td>
           <td>{{ rowDataHistory.DECISION }}</td>
-          <td align="right"><img src="img/button-row-delete.png" class="button-row-control" 
+          <td align="center"><img src="img/button-row-delete.png" class="button-row-control" 
                                     title="Удалить запись" 
-                                    @click="deleteHistoryRecord(rowDataHistory[3])" disabled /></td>
+                                    @click="deleteHistoryRecord(rowDataHistory.ID)"  /></td>
         </tr>
       </table>
       <p>{{ selectEmpty }}</p>
@@ -58,7 +58,7 @@
       <img src="img/load.gif">
     </div>
     <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
-      Не указано решение!
+      {{ warningText }}
     </div>
   </div>
 </template>
@@ -68,6 +68,7 @@ export default {
   name: 'CardPerson',
   data: function() {
     return {
+      arrMonth: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
       arrDataPerson: [['','','','','','','','']],
       arrDataHistory: [['','','']],
       arrList: [],
@@ -76,18 +77,23 @@ export default {
       access: accessUser,
       decisionId: '',
       selectEmpty: '',
+      warningText: '',
     }
   },
   methods: {
+    modDate: function(val) {
+      let nVal = String(val);
+      let nDay = nVal.slice(0,2);
+      let nMonth = ((this.arrMonth.indexOf(nVal.slice(3,6)) + 1) < 10) ? '0' + String(this.arrMonth.indexOf(nVal.slice(3,6)) + 1) : String(this.arrMonth.indexOf(nVal.slice(3,6)) + 1);
+      let nYear = '20' + String(nVal.slice(7,9));
+      nVal = nDay + '.' + nMonth + '.' + nYear;
+      return nVal;
+    },
     goBack: function() {
       this.$router.push(`/ocenka`);
     },
     insertHistoryRecord: function() {
       if(this.decisionId != '') {
-        console.log(this.personId);
-        console.log(accessUserId);
-        console.log(this.decisionId);
-
         this.isLoad = false;
         let request = new XMLHttpRequest();
         request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
@@ -99,12 +105,30 @@ export default {
           this.isLoad = true;
         }
       } else {
-        this.isWarning = false,
-        setTimeout(() => { this.isWarning = true }, 1200)
+        this.warningText = 'Не указано решение!';
+        this.isWarning = false;
+        setTimeout(() => { this.isWarning = true }, 1200);
       }
     },
     deleteHistoryRecord: function(param) {
-      console.log(param);
+      if (accessUserAdmin == true) {
+        this.isLoad = false;
+        let request = new XMLHttpRequest();
+        request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        request.send(`function=deleteHistory&historyId=${param}`);
+        request.onload = () => {
+          this.loadHistory();
+          this.isLoad = true;
+          if (request.response == '1') {alert("Запись удалена");}
+          else {alert("БД: Ошибка удаления");}
+        }
+      } else {
+        this.warningText = 'Нет прав на удаление!';
+        this.isWarning = false;
+        setTimeout(() => { this.isWarning = true }, 1500);
+      }
+
     },
     loadInfo: function() {
       let request = new XMLHttpRequest();
@@ -114,7 +138,6 @@ export default {
       request.send(`function=getPersonInfo&personId=${this.personId}`);
       request.onload = () => {
         this.arrDataPerson = request.response;
-        console.log(request.response);
       }
     },
     loadHistory: function() {
@@ -172,8 +195,6 @@ export default {
   /* ------title------ */
   .title {
     display: flex;
-    /* align-items: center;
-    margin-top: 20px; */
   }
   i {color: black;font-size: 16px;}
   /* ----------------- */
@@ -186,7 +207,8 @@ export default {
     font-size: 16px;
     border-spacing: 0px;
   }
-  th {text-align: left; background-color: limegreen; color: white; padding: 3px;}
+
+  th {text-align: left; background-color: rgb(54, 95, 147); color: white; padding: 3px;}
   td {
     padding: 5px;
     border-bottom: 2px solid grey;
@@ -210,14 +232,19 @@ export default {
   }
 
   label {width: 220px;}
+
   select {
     width: 100%;
     min-width: 350px;
+    max-width: 550px;
     margin-right: 10px;
     padding: 2px;
   }
 
-  button {width: 220px;}
+  button {
+    width: 150px;
+    padding: 3px;
+  }
   
 /* ------------------------- */
 

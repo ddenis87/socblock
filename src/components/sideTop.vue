@@ -24,13 +24,6 @@ export default {
   },
   mounted: function() {
     let pointPoint = ':';
-    let dateNow = new Date();
-    let dd = (+dateNow.getDate() < 10) ? '0' + dateNow.getDate() : dateNow.getDate();
-    let mm = (+dateNow.getMonth() < 10) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
-    let yyyy = dateNow.getFullYear();
-    let hh = dateNow.getHours();
-    let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
-    this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + ':' + mi;
     setInterval(() => {
       let dateNow = new Date();
       let dd = (+dateNow.getDate() < 10) ? '0' + dateNow.getDate() : dateNow.getDate();
@@ -57,7 +50,7 @@ export default {
         accessUser = true;
         accessUserId = this.arrUser[0].ID;
         this.userName = this.arrUser[0].CNAME;
-
+        if (this.userName[0] == '$') accessUserAdmin = true;
       } else {
         accessUser = false;
         this.userName = 'Гость';

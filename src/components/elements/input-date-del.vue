@@ -41,7 +41,7 @@ export default {
 <style scoped>
 .input-date {
   display: inline-block;
-  margin: 5px 0px;
+
   border: 0px solid grey;
 }
 .position-left {
@@ -49,7 +49,11 @@ export default {
 }
 .position-top {
   display: block;
+  margin-left: 5px;
+  margin-right: 5px;
   margin-top: 5px;
+  margin-bottom: 0px;
+
 }
 input {
   padding: 5px;

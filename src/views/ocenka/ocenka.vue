@@ -52,8 +52,6 @@ export default {
       request.send(`function=getPersonInfo${findType}&${findType}=${findValue}`)
       request.onload = () => {
         this.listPerson = request.response;
-        //console.log(typeof(this.listPerson));
-        //console.log(request.response);
         if ("length" in this.listPerson && this.listPerson == 0) this.selectEmpty = 'Записи отсутствуют';
         this.isLoad = !this.isLoad;
       }

@@ -1,14 +1,8 @@
 <template>
 <div class="menu">
   <ul>
-    <router-link
-      v-for="rowNav in arrNav"
-      v-bind:key="rowNav.url"
-      tag="li"
-      :to="rowNav.url"
-    >
-      <div><img v-bind:src="rowNav.urlImg" ></div>{{ rowNav.title }}
-    </router-link>
+    <li v-for="(rowNav, index) in arrNav"
+        :key="index" @click.prevent="goAdmin($event, rowNav.url)"><div ><img v-bind:src="rowNav.urlImg" ></div>{{ rowNav.title }}</li>
   </ul>
 </div>
 </template>
@@ -20,11 +14,17 @@ export default {
       {url: "/", urlImg: "img/home.png", title: "На главную"},
       {url: "/opeka", urlImg: "img/opeka.png", title: "Отдел опеки"},
       {url: "/ocenka", urlImg: "img/ocenka.png", title: "Оценка ПП ЗЛ"},
-      // {url: "/foms", urlImg: "img/foms.png", title: "ФОМС"},
-      // {url: "/fssp", urlImg: "img/fssp.png", title: "ФССП"},
-      // {url: "/czn", urlImg: "img/czn.png", title: "Центр занятости"}
     ]
-  })
+  }),
+  methods: {
+    goAdmin: function(event, url) {
+      if(event.ctrlKey && event.shiftKey && accessUserAdmin) {
+        this.$router.push('/ocenka-admin');
+      } else {
+        this.$router.push(url).catch(() => {}) ;
+      }
+    }
+  }
 }
 </script>
 

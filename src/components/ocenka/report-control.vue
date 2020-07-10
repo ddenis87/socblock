@@ -2,7 +2,7 @@
   <div class="report-control">
     <hr>
     <!-- дата отчета -->
-    <input-date widthInput="150px" @input="inputDate" positionLabel="left">Укажите дату на которую необходимо сформировать отчет:</input-date>
+    <input-date-period @input="selectDatePeriod"></input-date-period>
 
     <!-- блок расширенного фильтра -->
     <div class="report-control-filter" :style="{height: heightFilter + 'px'}">
@@ -99,12 +99,12 @@
 </template>
 
 <script>
-import InputDate from '@/components/elements/input-date';
+import InputDatePeriod from '@/components/elements/input-date-period';
 
 export default {
   name: "ReportControl",
   components: {
-    InputDate,
+    InputDatePeriod,
   },
   props: {
     
@@ -112,56 +112,16 @@ export default {
   data: function() {
     return {
       heightFilter: 30,
-      dateReport: '', // дата отчета // дата в формате yyyy-mm-dd
-      dateReportText: '..', // дата отчета // дата в формате dd.mm.yyyy
-      arrListDistrict: [ // список тер.органов
-          // {ID: '1',   CNAME: 'Благовещенск',         MRU: '0'},
-          // {ID: '2',   CNAME: 'Ивановка',             MRU: '1'},
-          // {ID: '3',   CNAME: 'Тамбовка',             MRU: '1'},
-          // {ID: '4',   CNAME: 'Константиновка',       MRU: '1'},
-          // {ID: '5',   CNAME: 'Белогорск',            MRU: '0'},
-          // {ID: '6',   CNAME: 'Зея',                  MRU: '1'},
-          // {ID: '7',   CNAME: 'Тында',                MRU: '1'},
-          // {ID: '8',   CNAME: 'Октябрьский район',    MRU: '1'},
-          // {ID: '9',   CNAME: 'Ромненский район',     MRU: '1'},
-          // {ID: '10',  CNAME: 'Серышевский район',    MRU: '1'},
-          // {ID: '11',  CNAME: 'Райчихинск',           MRU: '0'},
-          // {ID: '12',  CNAME: 'Архаринский район',    MRU: '1'},
-          // {ID: '13',  CNAME: 'Бурейский',            MRU: '1'},
-          // {ID: '14',  CNAME: 'Завитинский район',    MRU: '1'},
-          // {ID: '15',  CNAME: 'Михайловский район',   MRU: '1'},
-          // {ID: '16',  CNAME: 'Свободный',            MRU: '0'},
-          // {ID: '17',  CNAME: 'Шимановский район',    MRU: '1'},
-          // {ID: '18',  CNAME: 'Магдагачинский район', MRU: '1'},
-          // {ID: '19',  CNAME: 'Мазановский район',    MRU: '1'},
-          // {ID: '20',  CNAME: 'Селемджинский район',  MRU: '1'},
-          // {ID: '21',  CNAME: 'Сковородинский район', MRU: '1'},
-        ],
-      arrListReshenie: [ // список решений
-        // {ID: '1', CNAME: 'Корректировка СНИЛС'},
-        // {ID: '2', CNAME: 'Не служил'},
-        // {ID: '3', CNAME: 'Отправлено уведомление страхователю на прием'},
-        // {ID: '4', CNAME: 'Направлен межведомственный запрос'},
-        // {ID: '5', CNAME: 'Отправлено уведомление страхователю'},
-        // {ID: '6', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '7', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '8', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '9', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '10', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '11', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '12', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '13', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '14', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '15', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '16', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '17', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '18', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '19', CNAME: 'Направлено приглашение гражданину'},
-        // {ID: '20', CNAME: 'Направлено приглашение гражданину'},
-      ],
+      dateReportStart: '', // дата начала отчета // дата в формате yyyy-mm-dd
+      dateReportEnd: '', // дата окончания отчета // дата в формате yyyy-mm-dd
+      dateReportText: '..', // дата отчета // дата в формате dd.mm.yyyy ???? надо ли...
+      arrListDistrict: [], // список тер.органов,
+      arrListReshenie: [],// список решений
+      
       arrFilterMRU: [],
       arrFilterDistrict: [],
       arrFilterReshenie: [],
+      arrFilterDatePeriod: [],
 
       isCheckAllMRU: false,
       isCheckAllReshenie: true,
@@ -182,6 +142,10 @@ export default {
   mounted: function() {
   },
   methods: {
+    selectDatePeriod: function(dateStart, dateEnd) {
+      this.arrFilterDatePeriod = [];
+      this.arrFilterDatePeriod.push(dateStart, dateEnd);
+    },
     loadDecision: function(arrList){
       this.arrListReshenie = arrList;
       this.selectReshenieAll();
@@ -250,7 +214,7 @@ export default {
 
     buildingReport: function() {
       // this.dropFilter();
-      this.$emit('buildingReport', this.dateReport);
+      this.$emit('buildingReport', this.arrFilterDatePeriod);
     },
 
     ajaxQuery: function(fileQuery, stringQuery, collBackFunction) { // колбэк функция под вопросом
@@ -294,6 +258,14 @@ export default {
   }
   hr {
     margin: 5px 0px;
+  }
+
+  .date-period {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: flex-end;
+    padding-bottom: 5px;
   }
 /* -----filter----- */
   .report-control-filter {

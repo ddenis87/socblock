@@ -31,7 +31,11 @@ Vue.use(VueRouter)
     name: 'ocenka-report',
     component: () => import('../views/ocenka/ocenka-report.vue')
   },
-  
+  {
+    path: '/ocenka-admin',
+    name: 'ocenka-admin',
+    component: () => import('../views/ocenka/ocenka-admin.vue')
+  },
 ]
 
 const router = new VueRouter({

@@ -105,7 +105,7 @@ export default {
   }
 
   button {
-    width: 120px;
+    width: 150px;
     margin: 0px 10px;
     padding: 3px;
   }

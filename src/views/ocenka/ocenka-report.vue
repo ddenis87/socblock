@@ -10,7 +10,7 @@
                     @buildingReport="buildingReport"></report-control>
 
     <fieldset>
-      <legend>Вариант 1</legend>
+      <!-- <legend>Отчет</legend> -->
       <table>
         <!-- столбцы - вынесенные решения -->
         <tr>
@@ -33,13 +33,21 @@
                      class="count-content"
                      :class="{'title-row-mru': (+row[0]) ? true : false }">{{ (row[col + 1]) ? row[col + 1] : '0' }}</td> 
               
-              <td class="count-content"
+              <td class="count-content itog"
                 :class="{'title-row-mru': (+row[0]) ? true : false }">{{ sumCollumn(row) }}</td>
             </tr>
         </template>
         <!-- ------------------------------------------------ -->
-
         <tr>
+          <td class="table-footer">Всего по территориям</td>
+          <template v-for="(row, index) in arrReportAll">
+            <td  :key="index"
+                 class="table-footer">{{ row }}</td>
+          </template>
+          <td class="table-footer">{{ sumItog(arrReportAll) }}</td>
+        </tr>
+        <tr>
+
         </tr>
       </table>
     </fieldset>
@@ -62,11 +70,21 @@ export default {
       typeFilter: false,
       isWarning: true,
       arrReport: Array, // итоговый отчет [["0", "Благовещенск", "3", "1", ...]] [["MRU", "DISTRICT", "COUNT-DECISION", ...]]
+      arrReportAll: Array, //['0','0','0','0','0','0','0','0','0','0','0','0','0',],
       arrDistrict: [], // значения тер.органов для выбоки данных [ID]
       arrReshenie: [], // столбцы отчета [{ID: '1', CNAME: 'Пример решения'}]
     }
   },
   methods: {
+    sumItog: function(rowValue) {
+      let sum = 0;
+      for (let i = 0; i < rowValue.length; i++) {
+        if (rowValue[i]) {
+          sum += +rowValue[i];
+        }
+      }
+      return sum;
+    },
     sumCollumn: function(rowValue) {
       let sum = 0;
       for (let i = 2; i < rowValue.length; i++) {
@@ -88,14 +106,22 @@ export default {
         return;
       }
       this.arrReport = [];
+      this.arrReportAll = [];
+      for (let i = 0; i < this.arrReshenie.length; i++) this.arrReportAll.push('0');
+
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}`);
+      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}&dateStart=${dateReport[0]}&dateEnd=${dateReport[1]}`);
       request.onload = () => {
         let newArrReport = [];
         this.arrReport = request.response;
+        for(let i = 0; i < this.arrReport.length; i++) {
+          for(let j = 2; j < this.arrReport[i].length; j++) {
+            this.arrReportAll[j - 2] = +this.arrReportAll[j - 2] + +this.arrReport[i][j];
+          }
+        }
       }
     },
   },
@@ -179,6 +205,9 @@ export default {
     text-align: center;
     border-bottom: 0px solid grey;
   }
+  .itog {
+    background-color: lightblue;
+  }
 
   .title-row {
     width: 150px;
@@ -196,6 +225,16 @@ export default {
     padding-left: 5px;
   }
 
+  .table-footer {
+    text-align: center;
+    background-color: rgb(54, 95, 147);
+    color: white;
+  }
+  .table-footer:first-child {
+    text-align: left;
+    padding-left: 5px;
+  }
+
   fieldset {border: 1px solid black; padding: 10px;}
   hr {margin: 2px 0px;}
   .no-m-p {
@@ -207,6 +246,7 @@ export default {
     border-left: 2px solid grey;
     width: 150px;
     max-width: 150px;
+    text-decoration: un;
   }
     /* ------warning------- */
   .warning-insert {
@@ -229,6 +269,11 @@ export default {
 
   .is-visible {
     visibility: hidden;
+  }
+
+button {
+    width: 150px;
+    padding: 3px;
   }
 
   @media print {

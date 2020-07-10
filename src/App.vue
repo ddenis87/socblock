@@ -36,6 +36,6 @@ a {
 }
 
 h2, h3 {
-  color: forestgreen;
+  color: rgb(54, 95, 147);;
 }
 </style>
