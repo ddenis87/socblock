@@ -12,7 +12,7 @@ export default {
   data: () => ({
     arrNav: [
       {url: "/", urlImg: "img/home.png", title: "На главную"},
-      {url: "/opeka", urlImg: "img/opeka.png", title: "Отдел опеки"},
+      // {url: "/opeka", urlImg: "img/opeka.png", title: "Отдел опеки"},
       {url: "/ocenka", urlImg: "img/ocenka.png", title: "Оценка ПП ЗЛ"},
     ]
   }),
