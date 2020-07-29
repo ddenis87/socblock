@@ -10,7 +10,17 @@
     <table>
       <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0].FA + " " + arrDataPerson[0].IM + " " + arrDataPerson[0].OT}}</td></tr>
       <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0].BIRTHDAY }}</td></tr>
-      <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0].NAME_DISTRICT }}</td></tr>
+      <tr>
+        <td>Наименование территориального органа:</td>
+        <td>
+          <select class="select-mru" 
+                  v-model="divisionId"
+                  :class="{}">
+            <option v-for="(row, index) in arrDistrict" :key="index" :value="row.DISTRICTID">{{ row.DISTRICTNAME }}</option>
+          </select>
+        </td>
+      </tr>
+      <!-- <tr><td>Наименование территориального органа:</td><td>{{ arrDataPerson[0].NAME_DISTRICT }}</td></tr> -->
       <tr><td>Наименование МРУ:</td><td>{{ (arrDataPerson[0].NAME_MRU) ? arrDataPerson[0].NAME_MRU : 'Является МРУ' }}</td></tr>
 
       <tr><td>Работающий:</td><td>{{ (+arrDataPerson[0].JOB) ? 'Да' : 'Нет' }}</td></tr>
@@ -18,6 +28,10 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
+    <div class="person-control">
+      <div class="person-control__item"></div>
+      <div class="person-control__item"><button class="person-control__button" disabled>Сохранить</button></div>
+    </div>
 
     <div class="title">
       <h2>Сведения об обработке</h2>
@@ -73,10 +87,12 @@ export default {
       arrDataPerson: [['','','','','','','','']],
       arrDataHistory: [['','','']],
       arrList: [],
+      arrDistrict: [],
       isLoad: true, isWarning: true,
       personId: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
       access: accessUser,
       decisionId: '',
+      divisionId: '',
       selectEmpty: '',
       warningText: '',
     }
@@ -131,6 +147,16 @@ export default {
       }
 
     },
+    loadDistrict: function() {
+      let request = new XMLHttpRequest();
+      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      request.responseType = 'json';
+      request.send(`function=getListDistrict`);
+      request.onload = () => {
+        this.arrDistrict = request.response;
+      }
+    },
     loadInfo: function() {
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
@@ -139,6 +165,7 @@ export default {
       request.send(`function=getPersonInfo&personId=${this.personId}`);
       request.onload = () => {
         this.arrDataPerson = request.response;
+        this.divisionId = this.arrDataPerson[0].ID_DISTRICT;
       }
     },
     loadHistory: function() {
@@ -156,6 +183,8 @@ export default {
   },
   created: function() {
     this.isLoad = false;
+    // load list district
+    this.loadDistrict();
     // load person info
     this.loadInfo();
     // load history
@@ -186,6 +215,7 @@ export default {
     max-width: 1000px;
     font-size: 14px;
   }
+
   /* ------back-button------ */
   .back-img {
     width: 30px;
@@ -204,7 +234,7 @@ export default {
   table {
     width: 100%;
     margin: 10px 0px;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     font-size: 16px;
     border-spacing: 0px;
   }
@@ -216,6 +246,27 @@ export default {
   }
 
   td:last-child {font-style: italic;}
+/* ------------------------- */
+
+/* table select-mru */
+  .select-mru {
+    font-style: italic;
+    font-size: 14px;
+    padding: 3px;
+    margin-left: -8px;
+    border: 0px;
+  }
+
+/* ---------------- */
+
+/* --- person-control --- */
+  .person-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+/* --------------- */
 
 /* ------sved-control------- */
   .sved-control {
