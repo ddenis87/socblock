@@ -14,8 +14,9 @@
       <tr><td>Наименование МРУ:</td><td>{{ (arrDataPerson[0].NAME_MRU) ? arrDataPerson[0].NAME_MRU : 'Является МРУ' }}</td></tr>
 
       <tr><td>Работающий:</td><td>{{ (+arrDataPerson[0].JOB) ? 'Да' : 'Нет' }}</td></tr>
-      <tr><td>Включен в список "СЗВ-К":</td><td>{{ (arrDataPerson[0].SZVK) ? 'Да' : 'Нет' }}</td></tr>
+      <tr><td>Включен в список "СЗВ-К":</td><td>{{ (+arrDataPerson[0].SZVK) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
+      <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
 
     <div class="title">

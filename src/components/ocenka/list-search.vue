@@ -17,7 +17,7 @@
         <td>{{ rowPerson.FA + " " + rowPerson.IM + " " + rowPerson.OT }}</td>
         <td>{{ rowPerson.BIRTHDAY }}</td>
         <td>{{ rowPerson.NAME_DISTRICT }}</td>
-        <td>{{ (rowPerson.NAME_MRU) ? rowPerson.NAME_MRU : 'Аз есьм МРУ' }}</td>
+        <td>{{ (rowPerson.NAME_MRU) ? rowPerson.NAME_MRU : 'Является МРУ' }}</td>
       </tr>
       <tr :key="index + 1000"><td colspan="6"><hr></td></tr>
       </template>
