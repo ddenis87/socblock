@@ -14,7 +14,8 @@
         <td>Наименование территориального органа:</td>
         <td>
           <select class="select-mru" 
-                  v-model="divisionId"
+                  v-model="districtId"
+                  @change="changeMru"
                   :class="{}">
             <option v-for="(row, index) in arrDistrict" :key="index" :value="row.DISTRICTID">{{ row.DISTRICTNAME }}</option>
           </select>
@@ -28,9 +29,9 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
-    <div class="person-control">
-      <div class="person-control__item"></div>
-      <div class="person-control__item"><button class="person-control__button" disabled>Сохранить</button></div>
+    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}">
+      <div class="person-control__item person-control__item_hidden" :class="{'person-control__item_warning' : !isPersonControl}">Изменения не сохранены</div>
+      <div class="person-control__item" :class="{'person-control_warning' : !isPersonControl}"><button class="person-control__button" :disabled="isPersonControl" @click="savePerson">Сохранить</button></div>
     </div>
 
     <div class="title">
@@ -88,11 +89,13 @@ export default {
       arrDataHistory: [['','','']],
       arrList: [],
       arrDistrict: [],
-      isLoad: true, isWarning: true,
+      isLoad: true, 
+      isWarning: true,
+      isPersonControl: true,
       personId: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
       access: accessUser,
       decisionId: '',
-      divisionId: '',
+      districtId: '',
       selectEmpty: '',
       warningText: '',
     }
@@ -108,6 +111,22 @@ export default {
     },
     goBack: function() {
       this.$router.push(`/ocenka`);
+    },
+    changeMru: function() {
+      this.isPersonControl = false;
+    },
+    savePerson: function() {
+      console.log(this.personId);
+      this.isLoad = false;
+      let request = new XMLHttpRequest();
+      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      request.send(`function=changePerson&personId=${this.personId}&districtId=${this.districtId}`);
+      request.onload = () => {
+        this.loadInfo();
+        this.isPersonControl = true;
+        this.isLoad = true;
+      }
     },
     insertHistoryRecord: function() {
       if(this.decisionId != '') {
@@ -165,7 +184,7 @@ export default {
       request.send(`function=getPersonInfo&personId=${this.personId}`);
       request.onload = () => {
         this.arrDataPerson = request.response;
-        this.divisionId = this.arrDataPerson[0].ID_DISTRICT;
+        this.districtId = this.arrDataPerson[0].ID_DISTRICT;
       }
     },
     loadHistory: function() {
@@ -265,7 +284,20 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
-
+  .person-control__button {
+    cursor: pointer;
+  }
+  .person-control_warning {
+    background-color: red;
+    color: white;
+  }
+  .person-control__item_hidden {
+    padding-left: 10px;
+    visibility: hidden;
+  }
+  .person-control__item_warning {
+    visibility: visible;
+  }
 /* --------------- */
 
 /* ------sved-control------- */
