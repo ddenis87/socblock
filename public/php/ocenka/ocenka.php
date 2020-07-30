@@ -11,7 +11,9 @@ switch($_POST['function']) {
 
   case 'getPersonInfoSnils': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE SNILS = '" . $_POST['Snils'] . "'"); break;
   case 'getPersonInfoFio': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE UPPER(FA) LIKE UPPER('" . $_POST['Fio'] . "%')"); break;
-    
+  case 'changePerson': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.CHANGE_PERSON('" . $_POST['personId'] . "', '" 
+                                                                                      . $_POST['districtId'] . "'); END;"); break;
+                                            
   case 'getPersonInfo': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE ID = '" . $_POST['personId'] . "'"); break;
   case 'getPersonHistiry': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_HISTORY WHERE PERSON_ID = '" . $_POST['personId'] . "'"); break;
 
