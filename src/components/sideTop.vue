@@ -32,7 +32,6 @@ export default {
       let hh = dateNow.getHours();
     let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
     this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + pointPoint + mi;
-      //this.dT = Date()
     }, 1000);
     setInterval(() => {
       (pointPoint == ':') ? pointPoint = ' ' : pointPoint = ':';
@@ -73,7 +72,6 @@ export default {
 img {
   width: 40px;
   height: 40px;
-  /* margin-left: 5px;*/
   margin-right: 10px; 
 }
 
@@ -90,31 +88,8 @@ img {
   height: 45px;
   padding: 0px 10px;
   border: 0px solid white;
-  /* justify-content: space-between; */
   align-items: center;
   color: white;
-  /* visibility: hidden; */
 }
 
-/*.slide {
-  position: absolute;
-  display: block;
-  width: 150px;
-  height: 0px;
-  top: 41px;
-  left: -1px;
-  background-color: white;
-  border: 1px solid grey;
-  border-radius: 0px 0px 5px 5px;
-  box-shadow: 1px 1px 2px grey;
-  z-index: 200;
-  opacity: 0;
-  transition: .5s opacity, .5s height;
-  overflow: hidden;
-}
-
-.profil:hover > .slide {
-  opacity: 1;
-  height: 90px;
-}*/
 </style>

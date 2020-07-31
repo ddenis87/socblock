@@ -16,7 +16,7 @@
       </div>
       <div class="filter-body">
         <!-- -----блок МРУ----- -->
-        <fieldset class="block-checkbox">
+        <fieldset class="block-checkbox block-checkbox-mru">
           <legend>МРУ (сводно)</legend>
           <div class="blue">
             <label class="rn-title"><input type="checkbox" 
@@ -35,7 +35,7 @@
           </template>
         </fieldset>
         <!-- блок территориальные органы -->
-        <fieldset class="block-checkbox">
+        <fieldset class="block-checkbox block-checkbox-district">
           <legend>Территориальные органы (отдельно по каждому)</legend>
           <div class="blue">
             <label class="rn-title blue"><input type="checkbox" 
@@ -70,9 +70,9 @@
                                           @change="selectReshenieAll" disabled>Все</label> <!--убрать превент-->
           </div>
           <hr>
-          <div class="two-collumn">
+          <div class="">
             <template v-for="(row, index) in arrListReshenie">
-              <label :key="index" class="rn-row"><input type="checkbox"
+              <label :key="index" class="rn-row rn-row-title"><input type="checkbox"
                                                         :value="row"
                                                         :disabled="isDisabledReshenie"
                                                         v-model="arrFilterReshenie"
@@ -87,7 +87,7 @@
     <div class="report-control-filter">
       <div class="filter-header">
         <div class="filter-header-element">
-          Отчет будет сформирован на дату: {{ dateReportText }}
+          <!-- Отчет будет сформирован на дату: {{ dateReportText }} -->
         </div>
         <div class="filter-header-element button-build" @click="buildingReport">
           Построить отчет <img src="/img/report-build.png" >
@@ -231,10 +231,10 @@ export default {
     dropFilter: function() { // слайдер расширенного отчета
       if (this.heightFilter <= 30) {  //drop down
         let intervalHeight = setInterval(() => {
-          if (this.heightFilter > 360) {clearInterval(intervalHeight); return;};
+          if (this.heightFilter > 380) {clearInterval(intervalHeight); return;};
           this.heightFilter = +this.heightFilter + +10;
         }, 2);
-      } else if (this.heightFilter >= 360) {  //drop up
+      } else if (this.heightFilter >= 380) {  //drop up
         let intervalHeight = setInterval(() => {
           if (this.heightFilter <= 30) {clearInterval(intervalHeight); return;};
           this.heightFilter = +this.heightFilter - +10;
@@ -307,7 +307,6 @@ export default {
     width: 20px;
     height: 20px;
     margin: 0px;
-    /* margin-left: 8px; */
   }
 /* ---------------- */
 
@@ -316,25 +315,25 @@ export default {
     flex-direction: row;
     width: 100%;
     padding: 5px;
-
   }
   .block-checkbox {
-    min-width: 180px;
     height: auto;
     margin-right: 10px;
     border: 1px solid grey;
     padding: 5px;
+    font-size: 0.9em;
   }
+  .block-checkbox-mru { width: 150px; }
+
   .block-checkbox label {
     display: block;
-    width: 163px;
+    width: 100%;
   }
   input[type="checkbox"] {
     margin-right: 5px;
   }
   .rn-title {
     width: 100%;
-    /* margin: 5px 3px; */
     font-style: italic;
     font-weight: bold;
   }
@@ -342,9 +341,10 @@ export default {
   .green {width: 100%; background-color: lightgreen;}
 
   .rn-row {
-    margin: 5px 10px;
+    margin: 3px 10px;
     font-size: 13px;
   }
+  .rn-row-title {margin: 3px 0px;}
 
   .two-collumn {
     column-count: 2;

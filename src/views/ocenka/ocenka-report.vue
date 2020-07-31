@@ -172,25 +172,11 @@ export default {
   }
 
   td {
-    /* position: relative; */
     padding: 5px 0px;
-     /* border: 0px solid grey; */
-    /*border-left: 0px solid cadetblue;
-    border-right: 0px solid cadetblue; */
   }
   td:first-child {
     border-right: 2px solid grey;
-    /* border-top: 2px solid grey; */
   }
-
-  /* .vertical-text {
-    display: flex;
-    height: 100%;
-    width: 40px;
-    writing-mode: sideways-lr;
-    border: 0px solid black;
-    align-items: center;
-  } */
 
   .vertical-text {
     position: absolute;

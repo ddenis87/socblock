@@ -14,6 +14,7 @@
         <td>Наименование территориального органа:</td>
         <td>
           <select class="select-mru" 
+                  :disabled="!access"
                   v-model="districtId"
                   @change="changeMru"
                   :class="{}">
@@ -29,7 +30,7 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
-    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}">
+    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}" v-if="(access)">
       <div class="person-control__item person-control__item_hidden" :class="{'person-control__item_warning' : !isPersonControl}">Изменения не сохранены</div>
       <div class="person-control__item" :class="{'person-control_warning' : !isPersonControl}"><button class="person-control__button" :disabled="isPersonControl" @click="savePerson">Сохранить</button></div>
     </div>
@@ -116,7 +117,6 @@ export default {
       this.isPersonControl = false;
     },
     savePerson: function() {
-      console.log(this.personId);
       this.isLoad = false;
       let request = new XMLHttpRequest();
       request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
@@ -284,9 +284,7 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
-  .person-control__button {
-    cursor: pointer;
-  }
+
   .person-control_warning {
     background-color: red;
     color: white;
