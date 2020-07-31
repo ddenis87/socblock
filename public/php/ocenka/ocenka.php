@@ -12,8 +12,8 @@ switch($_POST['function']) {
   case 'getPersonInfoSnils': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE SNILS = '" . $_POST['Snils'] . "'"); break;
   case 'getPersonInfoFio': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE UPPER(FA) LIKE UPPER('" . $_POST['Fio'] . "%')"); break;
   case 'changePerson': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.CHANGE_PERSON('" . $_POST['personId'] . "', '" 
-                                                                                      . $_POST['districtId'] . "'); END;"); break;
-                                            
+																					  . $_POST['districtId'] . "'); END;"); break;
+	
   case 'getPersonInfo': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE ID = '" . $_POST['personId'] . "'"); break;
   case 'getPersonHistiry': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_HISTORY WHERE PERSON_ID = '" . $_POST['personId'] . "'"); break;
 
@@ -83,7 +83,7 @@ function buildReport($strDistrict, $typeFilter, $dateStart, $dateEnd) {
                           COUNT(ZXOCENKA_REPORT_MRU.DECISIONID) AS DECISIONCOUNT
                           FROM ZXOCENKA_REPORT_MRU
                           WHERE ZXOCENKA_REPORT_MRU.MRUID = '" . $arrDistrict[$i] . "' AND 
-                                ZXOCENKA_REPORT_MRU.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD')
+                                ZXOCENKA_REPORT_MRU.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND (TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD') + 1) 
                           GROUP BY ZXOCENKA_REPORT_MRU.DECISIONID) TB1 ON ZXOCENKA_DECISION.ID = TB1.DECISIONID";
     } elseif ($typeFilter == 'false') {
       $stringQuery = "SELECT ZXOCENKA_DECISION.ID AS DECISIONID, ZXOCENKA_DECISION.CNAME AS DECISIONNAME, TB1.DECISIONCOUNT AS DECISIONCOUNT 
@@ -95,7 +95,7 @@ function buildReport($strDistrict, $typeFilter, $dateStart, $dateEnd) {
     	                          COUNT(ZXOCENKA_HISTORY.DECISION_ID) AS DECISIONCOUNT 
                                 FROM ZXOCENKA_PERSON
                                 LEFT JOIN ZXOCENKA_HISTORY ON ZXOCENKA_PERSON.ID = ZXOCENKA_HISTORY.PERSON_ID 
-                                WHERE ZXOCENKA_PERSON.DISTRICT_ID = '" . $arrDistrict[$i] . "' AND ZXOCENKA_HISTORY.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD')
+                                WHERE ZXOCENKA_PERSON.DISTRICT_ID = '" . $arrDistrict[$i] . "' AND ZXOCENKA_HISTORY.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND (TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD') + 1) 
 	                              GROUP BY ZXOCENKA_HISTORY.DECISION_ID, ZXOCENKA_PERSON.DISTRICT_ID) TB1 ON ZXOCENKA_DECISION.ID = TB1.RESHENIEID
 	                              ORDER BY ZXOCENKA_DECISION.ID";
     }
