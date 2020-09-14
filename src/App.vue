@@ -37,4 +37,11 @@ body {
   margin-right: auto;
 }
 
+h1, h2, h3 {
+  font-family: 'Open sans';
+  color: grey;
+}
+
+a {text-decoration: none;}
+
 </style>

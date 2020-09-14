@@ -1,8 +1,8 @@
 <template>
   <div class='ocenka'>
-    <div class="title">
-      <h2>Оценка пенсионных прав застрахованного лица</h2>
-      <button @click="goReport">Перейти к отчетам</button>
+    <div class="ocenka-title">
+      <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
+      <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
     </div>
     <form-search @findPerson="findPerson"></form-search>
     <list-search :list-person="listPerson" @selectPerson="selectPerson"></list-search>
@@ -61,69 +61,69 @@ export default {
     }
   },
   created: function() {
-    //console.log(accessUser);
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   p {
     margin: 5px;
     font-size: 16px;
   }
-  .ocenka {
-    padding-left: 10px;
-    width: 100%;
-    max-width: 1000px;
-    font-size: 14px;
-  }
-
-  .title {
+.ocenka {
+  padding-left: 10px;
+  width: 98%;
+  font-size: 14px;
+  &-title {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
-  }
-
-  button {
-    width: 150px;
-    padding: 3px;
-  }
-
-  .progress-load {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-  }
-
-  .progress-load img {
-    margin-top: 300px;
-    width: 50px;
-    height: 50px;
-  }
-
-  /* ------warning------- */
-  .warning-insert {
-    display: flex;
-    position: fixed;
-    left: 45%;
-    top: 40%;
-    margin: auto;
-    width: 250px;
-    height: 30px;
-    background-color: black;
-    color: white;
-    justify-content: center;
     align-items: center;
-    font-size: 16px;
-    border-radius: 3px;
-    box-shadow: 2px 2px 2px grey;
+    &__title {
+      margin: 5px 0px;
+      padding: 0px;
+    }
+    &__button {
+      width: 150px;
+      padding: 3px;
+    }
   }
-  /* -------------------- */
+}
 
-  .is-visible {
-    visibility: hidden;
-  }
+.progress-load {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.progress-load img {
+  margin-top: 300px;
+  width: 50px;
+  height: 50px;
+}
+
+/* ------warning------- */
+.warning-insert {
+  display: flex;
+  position: fixed;
+  left: 45%;
+  top: 40%;
+  margin: auto;
+  width: 250px;
+  height: 30px;
+  background-color: black;
+  color: white;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 2px grey;
+}
+/* -------------------- */
+
+.is-visible {
+  visibility: hidden;
+}
 </style>

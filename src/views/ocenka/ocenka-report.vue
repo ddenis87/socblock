@@ -1,8 +1,8 @@
 <template>
   <div class='report'>
-    <div class="title">
-      <h2>Оценка пенсионных прав застрахованного лица</h2>
-      <button class="print" @click="goBase">Перейти к базе</button>
+    <div class="report-title">
+      <h2 class="report-title__title">Оценка пенсионных прав застрахованного лица</h2>
+      <button class="report-title__button" @click="goBase">Перейти к базе</button>
     </div>
     <report-control @selectedMRU="selectedMRU"
                     @selectedDistrict="selectedDistrict"
@@ -131,18 +131,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .report {
     padding-left: 10px;
-    width: 100%;
-    max-width: 1000px;
+    width: 98%;
+    // max-width: 1000px;
     font-size: 14px;
+    &-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      &__title {
+        margin: 5px 0px;
+        padding: 0px;
+      }
+      &__button {
+        width: 150px;
+        padding: 3px;
+      }
+    }
   }
-  .title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+
   table {
     border-spacing: 0px;
     width: 100%;
@@ -257,10 +266,10 @@ export default {
     visibility: hidden;
   }
 
-button {
-    width: 150px;
-    padding: 3px;
-  }
+// button {
+//     width: 150px;
+//     padding: 3px;
+//   }
 
   @media print {
     .print {display: none;}

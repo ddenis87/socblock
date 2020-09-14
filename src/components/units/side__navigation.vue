@@ -5,8 +5,7 @@
         v-for="(rowNav, index) in arrNav"
         :key="index" 
         @click.prevent="goAdmin($event, rowNav.url)">
-      
-        <img class="item__img" v-bind:src="rowNav.urlImg" />
+      <img class="item__img" v-bind:src="rowNav.urlImg" />
       <span class="item__title">{{ rowNav.title }}</span>
     </li>
   </ul>
@@ -48,8 +47,17 @@ export default {
       padding: 10px 5px;
       align-items: center;
       list-style: none;
-      text-transform: uppercase;
 
+      border-top: 1px solid white;
+      border-bottom: 1px solid white;
+      text-transform: uppercase;
+      cursor: pointer;
+      &:hover {
+        color: lightgray;
+        border-top: 1px solid grey;
+        border-bottom: 1px solid grey;
+        background-image: linear-gradient(90deg, lightgray, white );
+      }
       .item__img { width: 30px; margin-right: 10px; }
       .item__title {
         font-family: 'Open sans';
