@@ -57,10 +57,22 @@ export default {
 }
 </script>
 
+<style lang="scss" scoped>
+.register {
+  font-size: 16px;
+  &__title {
+    display: block;
+   padding: 10px 0px;    
+  }
+}
+</style>
+
 <style scoped>
   hr {margin: 5px 0px;}
   .register {
     font-size: 16px;
+
+
   }
 
   .register__title {

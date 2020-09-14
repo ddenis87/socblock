@@ -1,13 +1,14 @@
 <template>
-  <div class="side-bar">
-    <div >
-      <img class="logo" src="img/logo-pfr-blue.jpg">
+  <div class="side-top">
+    <div class="side-top__logo">
+      <img class="logo__img" src="@/assets/images/logo-pfr-blue.jpg">
     </div>
-    {{ dT }}
-    <div class="profil">
-      <img src="img/user.png" />
-      <span>{{ userName }}</span>
-
+    <div class="side-top__date-time">
+      {{ dT }}
+    </div>
+    <div class="side-top__profile">
+      <img class="profile__img" src="@/assets/images/user.png" />
+      <span class="profile__title" >{{ userName }}</span>
     </div>
   </div>
 </template>
@@ -33,9 +34,9 @@ export default {
     let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
     this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + pointPoint + mi;
     }, 1000);
-    setInterval(() => {
-      (pointPoint == ':') ? pointPoint = ' ' : pointPoint = ':';
-    }, 1000);
+    // setInterval(() => {
+    //   (pointPoint == ':') ? pointPoint = ' ' : pointPoint = ':';
+    // }, 1000);
   },
   created: function() {
     let request = new XMLHttpRequest();
@@ -60,36 +61,36 @@ export default {
 }
 </script>
 
-<style scoped>
-.side-bar {
+<style lang="scss" scoped>
+@import '@/variables.scss';
+
+.side-top {
   display: flex;
-  margin: 0px 10px;
-  align-items: center;
+  height: 100%;
   justify-content: space-between;
-  color: white;
-}
-
-img {
-  width: 40px;
-  height: 40px;
-  margin-right: 10px; 
-}
-
-.logo {
-  width: auto;
-  height: 48px;
-}
-
-.profil {
-  display: inline-flex;
-  position: relative;
-  width: auto;
-  min-width: 100px;
-  height: 45px;
-  padding: 0px 10px;
-  border: 0px solid white;
   align-items: center;
-  color: white;
-}
+  padding: 0px 20px;
+  background-image: linear-gradient(90deg, rgb(54, 96, 146) 55%, white );
+  font-family: 'Montserrat';
 
+  &__logo {
+    width: 60px;
+    height: auto;
+    .logo__img { width: 100%; }
+  }
+  &__date-time {
+    color: lightgreen;
+  }
+  &__profile { 
+    display: inline-flex;
+    align-items: center;
+    width: auto;
+    .profile__img { 
+      width: 40px;
+     }
+    .profile__title {
+      color: darkgreen;
+    }
+  }
+}
 </style>

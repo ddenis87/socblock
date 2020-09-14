@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import substrateMain from "@/substrate/substrateMain"
+import substrateMain from "@/substrate/substrate__main"
 export default {
   computed: {
     content() {return substrateMain;}
@@ -19,23 +19,22 @@ export default {
 console.log(substrateMain);
 </script>
 
-<style>
-body, div, fieldset, ul, li, img, h1, h2, h3 {
-  margin: 0;
-  padding: 0;
-  border: 0px;
-  font-family: 'Times New Roman', Times, serif;
-}
+<style lang="scss">
+@import 'variables.scss';
+@import 'fonts.scss';
 
 html {
   overflow-y: scroll;
 }
-
-a {
-  text-decoration:none;
+body {
+  margin: 0;
 }
 
-h2, h3 {
-  color: rgb(54, 95, 147);;
+#app {
+  width: 100%;
+  max-width: $pageWidthDefault;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 </style>
