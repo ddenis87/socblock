@@ -22,17 +22,30 @@ export default {
       userName: ''
     }
     axios
-      .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserInfo'}})
-      .then(response => {
-        if (response.data.length != 0) {
-          userInfo.userId = response.data[0].ID;
-          userInfo.userIp = response.data[0].CIP;
-          userInfo.userName = response.data[0].CNAME;
+        .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserIp'}})
+        .then(response => {
+          let arrUserIp = response.data.split('.');
+          userInfo.userIp = response.data;
+          if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
+            userInfo.userName = "Пользователь ОПФР";
+            userInfo.accessOpfr = true;
+          } else {
+            userInfo.userName = "Пользователь УПФР";
+          }
           this.$store.commit('setUserProfile', userInfo);
-        } else {
-          this.$store.commit('setUnknownUserProfile');
-        }
-      })
+        })
+    // axios
+    //   .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserInfo'}})
+    //   .then(response => {
+    //     if (response.data.length != 0) {
+    //       userInfo.userId = response.data[0].ID;
+    //       userInfo.userIp = response.data[0].CIP;
+    //       userInfo.userName = response.data[0].CNAME;
+    //       this.$store.commit('setUserProfile', userInfo);
+    //     } else {
+    //       this.$store.commit('setUnknownUserProfile');
+    //     }
+    //   })
   }
 }
 // console.log(substrateMain);

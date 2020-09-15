@@ -15,24 +15,20 @@ export default new Vuex.Store({
   },
   mutations: {
     setUserProfile(state, userProfile) {
-      if ('userId' in userProfile) state.userProfile.userId = userProfile.userId;
       if ('userIp' in userProfile) state.userProfile.userIp = userProfile.userIp;
       if ('userName' in userProfile) state.userProfile.userName = userProfile.userName;
-      let arrUserIp = userProfile.userIp.split('.');
-        if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
-          state.userProfile.accessOpfr = true;
-        }
+      if ('accessOpfr' in userProfile) state.userProfile.accessOpfr = userProfile.accessOpfr;
     },
-    setUnknownUserProfile(state) {
-      axios
-        .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserIp'}})
-        .then(response => {
-          let arrUserIp = response.data.split('.');
-          if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
-            state.userProfile.accessOpfr = true;
-          }
-        })
-    }
+    // setUnknownUserProfile(state) {
+    //   axios
+    //     .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserIp'}})
+    //     .then(response => {
+    //       let arrUserIp = response.data.split('.');
+    //       if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
+    //         state.userProfile.accessOpfr = true;
+    //       }
+    //     })
+    // }
   },
   actions: {
   },
