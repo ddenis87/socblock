@@ -61,8 +61,32 @@
             </template>
           </div>
         </fieldset>
+        <!-- блок писем -->
+        <fieldset class="block-checkbox" v-show="false">
+          <legend>Письма ПФР</legend>
+          <div class="green">
+            <label class="rn-row rn-row-title"><input type="checkbox"
+                                                        value="szvk"
+                                                        :disabled="false"
+                                                        v-model="arrFilterLetter"
+                                                        @change="selectLetter"
+                                                        >{{ 'СЗВ-К' }}</label>
+            <label class="rn-row rn-row-title"><input type="checkbox"
+                                                        value="slpriz"
+                                                        :disabled="false"
+                                                        v-model="arrFilterLetter"
+                                                        @change="selectLetter"
+                                                        >{{ 'СЛПриз' }}</label>
+            <label class="rn-row rn-row-title"><input type="checkbox"
+                                                        value="uhod"
+                                                        :disabled="false"
+                                                        v-model="arrFilterLetter"
+                                                        @change="selectLetter"
+                                                        >{{ 'Уход' }}</label>
+          </div>
+        </fieldset>
         <!-- блок решений -->
-        <fieldset class="block-checkbox">
+        <fieldset class="block-checkbox" v-show="false">
           <legend>Вынесенные решения</legend>
           <div class="green">
             <label class="rn-title green"><input type="checkbox" 
@@ -121,6 +145,7 @@ export default {
       arrFilterMRU: [],
       arrFilterDistrict: [],
       arrFilterReshenie: [],
+      arrFilterLetter: ["szvk","slpriz","uhod"],
       arrFilterDatePeriod: [],
 
       isCheckAllMRU: false,
@@ -130,6 +155,7 @@ export default {
       isDisabledMRU: false,
       isDisabledReshenie: false,
       isDisabledDistrict: false,
+      // isDisabledLetter: true,
 
       textFilterDistrict: 'Все',
       textFilterReshenie: 'Все',
@@ -138,6 +164,7 @@ export default {
   created: function() {
     this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDecision', this.loadDecision);
     this.ajaxQuery('php/ocenka/ocenka.php', 'function=getListDistrict', this.loadDistrict);
+    this.selectLetter();
   },
   mounted: function() {
   },
@@ -212,8 +239,13 @@ export default {
       this.$emit('selectedReshenie', this.arrFilterReshenie);
     },
 
+    selectLetter: function() {
+      this.$emit('selectedLetter', this.arrFilterLetter);
+    },
+
     buildingReport: function() {
       // this.dropFilter();
+      // console.log(this.arrFilterLetter);
       this.$emit('buildingReport', this.arrFilterDatePeriod);
     },
 

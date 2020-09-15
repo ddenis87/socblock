@@ -6,7 +6,7 @@ switch($_POST['function']) {
   case 'getListUser': echo selectDB("SELECT * FROM ZXOCENKA_SPEC ORDER BY CNAME"); break;
   case 'insertUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.INSERT_USER('" . $_POST['userFio'] . "', '" 
                                                                                   . $_POST['userIp'] . "'); END;"); break;
-  case 'deleteUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.DELETE_USER('" . $_POST['userId'] . "'); END;"); break;
+  //case 'deleteUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.DELETE_USER('" . $_POST['userId'] . "'); END;"); break;
   case 'getUser': echo selectDB("SELECT * FROM ZXOCENKA_SPEC WHERE CIP = '" . $strip . "'"); break;
 
   case 'getPersonInfoSnils': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE SNILS = '" . $_POST['Snils'] . "'"); break;

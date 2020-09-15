@@ -7,6 +7,7 @@
     <report-control @selectedMRU="selectedMRU"
                     @selectedDistrict="selectedDistrict"
                     @selectedReshenie="selectedReshenie"
+                    @selectedLetter="selectedLetter"
                     @buildingReport="buildingReport"></report-control>
 
     <fieldset>
@@ -73,6 +74,7 @@ export default {
       arrReportAll: Array, //['0','0','0','0','0','0','0','0','0','0','0','0','0',],
       arrDistrict: [], // значения тер.органов для выбоки данных [ID]
       arrReshenie: [], // столбцы отчета [{ID: '1', CNAME: 'Пример решения'}]
+      arrLetter: [], 
     }
   },
   methods: {
@@ -98,8 +100,10 @@ export default {
     selectedMRU: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
     selectedDistrict: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
     selectedReshenie: function(arrValue) {this.arrReshenie = arrValue;}, // событие фильтра
+    selectedLetter: function(arrValue) {this.arrLetter = arrValue;},
 
     buildingReport: function(dateReport) {
+      console.log(this.arrLetter);
       if (!this.arrDistrict.length) {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 2000);
@@ -113,7 +117,7 @@ export default {
       request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
-      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}&dateStart=${dateReport[0]}&dateEnd=${dateReport[1]}`);
+      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}&arrLetter=${this.arrLetter}&dateStart=${dateReport[0]}&dateEnd=${dateReport[1]}`);
       request.onload = () => {
         let newArrReport = [];
         this.arrReport = request.response;
@@ -272,6 +276,6 @@ export default {
 //   }
 
   @media print {
-    .print {display: none;}
+    .report-title__button {display: none;}
   }
 </style>

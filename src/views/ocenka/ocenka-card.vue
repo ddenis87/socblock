@@ -1,12 +1,12 @@
 <template>
   <div class="ocenka-card">
-    <div class="back">
-      <button @click="goBack">Вернуться</button>
+    <div class="ocenka-card-title">
+      <!-- <div class="ocenka-card-title__title"> -->
+        <h2 class="ocenka-card-title__title">Сведения о застрахованном лице: <i class="ocenka-card-title__title-black">{{ arrDataPerson[0].SNILS }}</i></h2>
+      <!-- </div> -->
+      <button class="title__button" @click="goBack">Вернуться</button>
     </div>
 
-    <div class="title">
-      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0].SNILS }}</i></h2>
-    </div>
     <table>
       <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0].FA + " " + arrDataPerson[0].IM + " " + arrDataPerson[0].OT}}</td></tr>
       <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0].BIRTHDAY }}</td></tr>
@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'CardPerson',
   data: function() {
@@ -167,37 +168,35 @@ export default {
 
     },
     loadDistrict: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getListDistrict`);
-      request.onload = () => {
-        this.arrDistrict = request.response;
-      }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+        .then(response => {
+          this.arrDistrict = response.data;
+        })
     },
     loadInfo: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getPersonInfo&personId=${this.personId}`);
-      request.onload = () => {
-        this.arrDataPerson = request.response;
-        this.districtId = this.arrDataPerson[0].ID_DISTRICT;
+      let requestOption = {
+        function: 'getPersonInfo',
+        personId: this.personId
       }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.arrDataPerson = response.data;
+          this.districtId = this.arrDataPerson[0].ID_DISTRICT;
+        })
     },
     loadHistory: function() {
-      let requestHistory = new XMLHttpRequest();
-      this.selectEmpty = '';
-      requestHistory.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      requestHistory.responseType = 'json';
-      requestHistory.send(`function=getPersonHistiry&personId=${this.personId}`);
-      requestHistory.onload = () => {
-        this.arrDataHistory = requestHistory.response;
-        if (this.arrDataHistory.length == 0) this.selectEmpty = 'Записи отсутствуют';
+      let requestOption = {
+        function: 'getPersonHistiry',
+        personId: this.personId
       }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.arrDataHistory = response.data;
+          if (this.arrDataHistory.length == 0) this.selectEmpty = 'Записи отсутствуют';
+        })
     },
   },
   created: function() {
@@ -211,43 +210,41 @@ export default {
     // load list reshenie if user access
     if(this.access) {
       this.isLoad = false;
-      let requestList = new XMLHttpRequest();
-      requestList.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      requestList.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      requestList.responseType = 'json';
-      requestList.send(`function=getListDecision`);
-      requestList.onload = () => {
-        this.arrList = requestList.response;
-      }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDecision'}})
+        .then(response => {
+          this.arrList = response.data;
+        })
     }
     this.isLoad = true;
   }
 }
 </script>
 
-<style scoped>
-  h2 {margin: 0px; margin-right: 10px;font-size: 18px;}
-
-  .ocenka-card {
-    padding-left: 10px;
-    width: 100%;
-    max-width: 1000px;
-    font-size: 14px;
-  }
-
-  /* ------back-button------ */
-  .back-img {
-    width: 30px;
-    height: auto;
-    cursor: pointer;
-  }
-  /* ----------------------- */
-  /* ------title------ */
-  .title {
+<style lang="scss" scoped>
+.ocenka-card {
+  padding-left: 10px;
+  width: 98%;
+  font-size: 14px;
+  &-title {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__title {
+      margin: 5px 0px;
+      padding: 0px;
+      &-black { color: black;}
+    }
+    &__button {
+      width: 150px;
+      padding: 3px;
+    }
   }
-  i {color: black;font-size: 16px;}
-  /* ----------------- */
+}
+</style>
+
+<style scoped>
+  /* h2 {margin: 0px; margin-right: 10px;font-size: 18px;} */
 
   /* ------table------ */
   table {

@@ -11,7 +11,7 @@
       </tr>
       <tr><td colspan="6"><hr></td></tr>
       <template v-for="(rowPerson, index) in listPerson">
-      <tr class="tr-active" :key="index" @click="$emit('selectPerson', rowPerson.ID)">
+      <tr class="tr-active" :key="index" @click="$emit('select-person', rowPerson.ID)">
         <td>{{ index + 1 }}</td>
         <td>{{ rowPerson.SNILS }}</td>
         <td>{{ rowPerson.FA + " " + rowPerson.IM + " " + rowPerson.OT }}</td>

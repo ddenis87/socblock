@@ -7,16 +7,35 @@
 </template>
 
 <script>
+import axios from 'axios';
 import substrateMain from "@/substrate/substrate__main"
+
 export default {
   computed: {
     content() {return substrateMain;}
   },
   components: {
     substrateMain
+  },
+  created: function() {
+    let userInfo = {
+      userName: ''
+    }
+    axios
+      .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserInfo'}})
+      .then(response => {
+        if (response.data.length != 0) {
+          userInfo.userId = response.data[0].ID;
+          userInfo.userIp = response.data[0].CIP;
+          userInfo.userName = response.data[0].CNAME;
+          this.$store.commit('setUserProfile', userInfo);
+        } else {
+          this.$store.commit('setUnknownUserProfile');
+        }
+      })
   }
 }
-console.log(substrateMain);
+// console.log(substrateMain);
 </script>
 
 <style lang="scss">

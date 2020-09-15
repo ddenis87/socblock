@@ -16,11 +16,14 @@
 <script>
 export default {
   name: 'sideTop',
+  computed: {
+    userName() {
+      return this.$store.state.userProfile.userName;
+    }
+  },
   data: function() {
     return {
       dT: '',
-      arrUser: Array,
-      userName: '',
     }
   },
   mounted: function() {
@@ -34,29 +37,8 @@ export default {
     let mi = (+dateNow.getMinutes() < 10) ? '0' + dateNow.getMinutes() : dateNow.getMinutes();
     this.dT = dd + '.' + mm + '.' + yyyy + ' ' + hh + pointPoint + mi;
     }, 1000);
-    // setInterval(() => {
-    //   (pointPoint == ':') ? pointPoint = ' ' : pointPoint = ':';
-    // }, 1000);
   },
   created: function() {
-    let request = new XMLHttpRequest();
-    request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-    request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    request.responseType = 'json';
-    request.send(`function=getUser`);
-    request.onload = () => {
-      this.arrUser = request.response;
-      if (this.arrUser.length) {
-        accessUser = true;
-        accessUserId = this.arrUser[0].ID;
-        this.userName = this.arrUser[0].CNAME;
-        if (this.userName[0] == '$') accessUserAdmin = true;
-      } else {
-        accessUser = false;
-        this.userName = 'Гость';
-      }
-      this.isLoad = true;
-    }
   }
 }
 </script>

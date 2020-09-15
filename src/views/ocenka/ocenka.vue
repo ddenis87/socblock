@@ -4,8 +4,8 @@
       <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
       <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
     </div>
-    <form-search @findPerson="findPerson"></form-search>
-    <list-search :list-person="listPerson" @selectPerson="selectPerson"></list-search>
+    <form-search @find-person="findPerson"></form-search>
+    <list-search :list-person="listPerson" @select-person="selectPerson"></list-search>
     <p>{{ selectEmpty }}</p>
     <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
       <img src="img/load.gif">
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import formSearch from '@/components/ocenka/form-search';
 import listSearch from '@/components/ocenka/list-search';
 
@@ -33,35 +34,36 @@ export default {
       isWarning: true,
     }
   },
+
   methods: {
     goReport: function() {
       this.$router.push(`/ocenka-report`);
     },
     findPerson: function(findValue, findType) {
+      this.isLoad = false;
       if (findValue == '') {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 1200);
         return;
       }
-      this.isLoad = !this.isLoad;
       this.selectEmpty = '';
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getPersonInfo${findType}&${findType}=${findValue}`)
-      request.onload = () => {
-        this.listPerson = request.response;
-        if ("length" in this.listPerson && this.listPerson == 0) this.selectEmpty = 'Записи отсутствуют';
-        this.isLoad = !this.isLoad;
-      }
+      let requestOption = {
+        function: 'getPersonInfo' + findType,
+        [findType]: findValue
+      };
+      console.log(requestOption);
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.listPerson = response.data;
+          if ("length" in this.listPerson && this.listPerson == 0) this.selectEmpty = 'Записи отсутствуют';
+          this.isLoad = true;
+        })
     },
     selectPerson: function(id) {
       this.$router.push(`/ocenka-card?id=${id}`);
     }
   },
-  created: function() {
-  }
 }
 </script>
 

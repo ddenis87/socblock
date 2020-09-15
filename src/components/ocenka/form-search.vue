@@ -24,7 +24,7 @@
                v-model="findValue" 
                @keydown="findPerson" />
       </template>
-      <button @click.prevent="$emit('findPerson', findValue, findType)">Найти...</button><br>
+      <button @click.prevent="$emit('find-person', findValue, findType)">Найти...</button><br>
     </div>
     <hr>
 
@@ -64,7 +64,7 @@ export default {
   .form-search {
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
-  hr {margin: 5px 0px;}
+  hr {margin: 5px 0px; margin-top: 0px;}
 
   .control-radio {
     margin: 10px 0px;
