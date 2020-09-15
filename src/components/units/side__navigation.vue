@@ -3,15 +3,15 @@
   <ul class="navigation">
     <router-link tag="li" class="navigation__item" to="/">
       <img class="item__img" src="@/assets/images/menu/menu_home.png" />
-      <span class="item__title">{{ "На главную" }}</span>
+      <span class="item__title">На главную</span>
     </router-link>
     <router-link tag="li" class="navigation__item" to="/office-work">
       <img class="item__img" src="@/assets/images/menu/menu_documents.png" />
-      <span class="item__title">{{ "Делопроизводство" }}</span>
+      <span class="item__title">Делопроизводство</span>
     </router-link>
     <li class="navigation__item" @click.prevent="goOcenkaAdmin($event, '/ocenka')">
       <img class="item__img" src="@/assets/images/menu/menu_ocenka.png" />
-      <span class="item__title">{{ "Оценка ПП ЗЛ" }}</span>
+      <span class="item__title">Оценка ПП ЗЛ</span>
     </li>
 
   </ul>
@@ -39,6 +39,7 @@ export default {
 
 .side-navigation {
   padding-right: 20px;
+  font-size: 14px;
   .navigation {
     padding-left: 10px;
     &__item {
@@ -57,7 +58,10 @@ export default {
         border-bottom: 1px solid grey;
         background-image: linear-gradient(90deg, lightgray, white );
       }
-      .item__img { width: 30px; margin-right: 10px; }
+      .item__img { 
+        width: 30px; 
+        margin-right: 10px; 
+      }
       .item__title {
         font-family: 'Open sans';
         font-weight: bold;
