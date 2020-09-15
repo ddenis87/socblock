@@ -1,8 +1,7 @@
 <template>
-  <div class="report-control">
-    <hr>
+  <div class="control">
     <!-- дата отчета -->
-    <date-range @get-date-range="selectDatePeriod"></date-range>
+    <!-- <date-range @get-date-range="selectDatePeriod"></date-range> -->
 
     <!-- блок расширенного фильтра -->
     <div class="report-control-filter" :style="{height: heightFilter + 'px'}">
@@ -123,12 +122,12 @@
 </template>
 
 <script>
-import dateRange from '@/components/elements/date-range';
+// import dateRange from '@/components/elements/date-range';
 
 export default {
-  name: "ReportControl",
+  name: "OcenkaReportControl",
   components: {
-    dateRange,
+    // dateRange,
   },
   props: {
     
@@ -284,9 +283,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .report-control {
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    // font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
   hr {
     margin: 5px 0px;

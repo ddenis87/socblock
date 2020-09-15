@@ -1,14 +1,25 @@
 <template>
-  <div class='report'>
-    <div class="report-title">
-      <h2 class="report-title__title">Оценка пенсионных прав застрахованного лица</h2>
-      <button class="report-title__button" @click="goBase">Перейти к базе</button>
+  <div class='ocenka-report'>
+    <div class="report-header">
+      <h2 class="report-header__title">Оценка пенсионных прав застрахованного лица</h2>
+      <button class="report-header__button" @click="goBase">Перейти к базе</button>
     </div>
-    <report-control @selectedMRU="selectedMRU"
+    <hr/>
+    <div class="report__date-and-type">
+      <date-range @get-date-range="selectDatePeriod"></date-range>
+    </div>
+    <div class="report__filter">
+      <ocenka-report-filter></ocenka-report-filter>
+    </div>
+    <div class="report__control">
+      123
+    </div>
+    
+    <!-- <report-control @selectedMRU="selectedMRU"
                     @selectedDistrict="selectedDistrict"
                     @selectedReshenie="selectedReshenie"
                     @selectedLetter="selectedLetter"
-                    @buildingReport="buildingReport"></report-control>
+                    @buildingReport="buildingReport"></report-control> -->
 
 
     <fieldset>
@@ -60,11 +71,12 @@
 </template>
 
 <script>
-import ReportControl from '@/components/units/ocenka/ocenka-report__control';
+import dateRange from '@/components/elements/date-range';
+import ocenkaReportFilter from '@/components/units/ocenka/ocenka-report__filter';
 export default {
   name: 'OcenkaReport',
   components: {
-    ReportControl,
+    dateRange, ocenkaReportFilter,
   },
   data: function() {
     return {
@@ -137,6 +149,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ocenka-report {
+  padding-left: 10px;
+  width: 98%;
+  font-size: 14px;
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__title { margin: 5px 0px; padding: 0px;}
+    &__button {
+      width: 150px;
+      padding: 3px;
+    }
+  }
+}
+
 .report {
     padding-left: 10px;
     width: 98%;
