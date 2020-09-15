@@ -34,21 +34,9 @@ export default {
           }
           this.$store.commit('setUserProfile', userInfo);
         })
-    // axios
-    //   .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserInfo'}})
-    //   .then(response => {
-    //     if (response.data.length != 0) {
-    //       userInfo.userId = response.data[0].ID;
-    //       userInfo.userIp = response.data[0].CIP;
-    //       userInfo.userName = response.data[0].CNAME;
-    //       this.$store.commit('setUserProfile', userInfo);
-    //     } else {
-    //       this.$store.commit('setUnknownUserProfile');
-    //     }
-    //   })
   }
 }
-// console.log(substrateMain);
+
 </script>
 
 <style lang="scss">
