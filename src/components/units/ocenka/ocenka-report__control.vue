@@ -2,7 +2,7 @@
   <div class="report-control">
     <hr>
     <!-- дата отчета -->
-    <input-date-period @input="selectDatePeriod"></input-date-period>
+    <date-range @get-date-range="selectDatePeriod"></date-range>
 
     <!-- блок расширенного фильтра -->
     <div class="report-control-filter" :style="{height: heightFilter + 'px'}">
@@ -123,12 +123,12 @@
 </template>
 
 <script>
-import InputDatePeriod from '@/components/elements/input-date-period';
+import dateRange from '@/components/elements/date-range';
 
 export default {
   name: "ReportControl",
   components: {
-    InputDatePeriod,
+    dateRange,
   },
   props: {
     

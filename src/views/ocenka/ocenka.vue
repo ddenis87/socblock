@@ -4,8 +4,10 @@
       <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
       <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
     </div>
-    <form-search @find-person="findPerson"></form-search>
-    <list-search :list-person="listPerson" @select-person="selectPerson"></list-search>
+
+    <ocenka-control @find-person="findPerson"></ocenka-control>
+    <ocenka-list :list-person="listPerson" @select-person="selectPerson"></ocenka-list>
+
     <p>{{ selectEmpty }}</p>
     <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
       <img src="img/load.gif">
@@ -19,12 +21,12 @@
 
 <script>
 import axios from 'axios';
-import formSearch from '@/components/ocenka/form-search';
-import listSearch from '@/components/ocenka/list-search';
+import ocenkaControl from '@/components/units/ocenka/ocenka__control';
+import ocenkaList from '@/components/units/ocenka/ocenka__list';
 
 export default {
   components: {
-    formSearch, listSearch,
+    ocenkaControl, ocenkaList,
   },
   data: function() {
     return {

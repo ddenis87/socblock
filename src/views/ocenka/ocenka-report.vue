@@ -10,6 +10,7 @@
                     @selectedLetter="selectedLetter"
                     @buildingReport="buildingReport"></report-control>
 
+
     <fieldset>
       <!-- <legend>Отчет</legend> -->
       <table>
@@ -59,7 +60,7 @@
 </template>
 
 <script>
-import ReportControl from '@/components/ocenka/report-control';
+import ReportControl from '@/components/units/ocenka/ocenka-report__control';
 export default {
   name: 'OcenkaReport',
   components: {

@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import register from '@/components/office-work/office-work__register.vue';
+import register from '@/components/units/office-work/office-work__register.vue';
 
 export default {
   name: 'office-work',
