@@ -55,16 +55,19 @@ export default {
   }
   .filter-header {
     display: flex;
-    height: 30px;
+    height: 28px;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid grey;
+
+    font-family: 'Open sans';
     &__title {
       padding-left: 10px;
       color: grey;
     }
     &__button {
+      width: 180px;
       height: 100%;
       border: 1px solid grey;
       color: white;
@@ -72,6 +75,8 @@ export default {
       background-color: rgb(54, 96, 146);
       outline: none;
       cursor: pointer;
+
+      font-family: 'Open sans';
       &:hover {
         background-color: rgb(54, 96, 146, 0.9);
       }
