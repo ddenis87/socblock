@@ -44,8 +44,8 @@ export default {
       background-color: rgb(54, 96, 146);
       outline: none;
       cursor: pointer;
-
       font-family: 'Open sans';
+      transition: background-color .5s;
       &:hover {
         background-color: rgb(54, 96, 146, 0.9);
       }
