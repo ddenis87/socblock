@@ -6,13 +6,18 @@
     </div>
     <hr/>
     <div class="report__date-and-type">
-      <date-range @getDateRange="selectDatePeriod"></date-range>
+      <div class="report__date-and-type_box">
+        <date-range @getDateRange="selectDatePeriod"></date-range>
+      </div>
+      <div class="report__date-and-type_box">
+        <ocenka-report-type></ocenka-report-type>
+      </div>
     </div>
     <div class="report__filter">
       <ocenka-report-filter></ocenka-report-filter>
     </div>
     <div class="report__control">
-      123
+      <ocenka-report-control></ocenka-report-control>
     </div>
     
     <!-- <report-control @selectedMRU="selectedMRU"
@@ -72,11 +77,13 @@
 
 <script>
 import dateRange from '@/components/elements/date-range';
+import ocenkaReportType from '@/components/units/ocenka/ocenka-report__type';
 import ocenkaReportFilter from '@/components/units/ocenka/ocenka-report__filter';
+import ocenkaReportControl from '@/components/units/ocenka/ocenka-report__control';
 export default {
   name: 'OcenkaReport',
   components: {
-    dateRange, ocenkaReportFilter,
+    dateRange, ocenkaReportType, ocenkaReportFilter, ocenkaReportControl,
   },
   data: function() {
     return {
@@ -155,37 +162,33 @@ export default {
   padding-left: 10px;
   width: 98%;
   font-size: 14px;
-  .report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    &__title { margin: 5px 0px; padding: 0px;}
-    &__button {
-      width: 150px;
-      padding: 3px;
-    }
-  }
-}
-
-.report {
+  .report {
     padding-left: 10px;
     width: 98%;
-    // max-width: 1000px;
     font-size: 14px;
-    &-title {
+    &-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      &__title {
-        margin: 5px 0px;
-        padding: 0px;
-      }
+      &__title { margin: 5px 0px; padding: 0px;}
       &__button {
         width: 150px;
         padding: 3px;
       }
     }
+    &__date-and-type {
+      display: flex;
+      padding-top: 5px;
+      &_box {
+        min-width: 300px;
+        max-width: 500px;
+        &:first-child {
+          margin-right: 20px;
+        }
+      }
+    }
   }
+}
 
   table {
     border-spacing: 0px;
@@ -300,11 +303,6 @@ export default {
   .is-visible {
     visibility: hidden;
   }
-
-// button {
-//     width: 150px;
-//     padding: 3px;
-//   }
 
   @media print {
     .report-title__button {display: none;}

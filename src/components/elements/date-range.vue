@@ -56,7 +56,7 @@ export default {
 <style lang="scss" scoped>
 
 .date-range {
-  display: inline-flex;
+  display: flex;
   flex-direction: column;
   box-sizing: border-box;
   &__title {
@@ -66,12 +66,13 @@ export default {
     text-transform: uppercase;
   }
   &__body {
-    display: inline-flex;
+    display: flex;
     justify-content: space-between;
-    min-width: 300px;
     margin-top: 5px;
+    box-sizing: border-box;
     .input-body {
       position: relative;
+      box-sizing: border-box;
       &__title {
         position: absolute;
         display: inline-block;
@@ -83,7 +84,7 @@ export default {
         text-transform: uppercase;
       }
       &__input {
-        width: 135px;
+        width: 140px;
         padding: 3px;
         padding-left: 6px;
         padding-top: 16px;
@@ -91,6 +92,7 @@ export default {
         outline: none;
         border-radius: 3px;
         box-sizing: border-box;
+        font-family: 'Open sans';
       }
     }
   }
