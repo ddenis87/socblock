@@ -1,5 +1,5 @@
 <template>
-  <div class="ocenka-report-filter">
+  <div class="ocenka-report-filter" id="ocenkaReportFilter">
     <div class="filter-header">
       <div class="filter-header__title">
         Фильтр по умолчанию: Территории - {{ textFilterDistrict }} | Решения - {{ textFilterReshenie }}
@@ -34,7 +34,9 @@ export default {
     }
   },
   methods: {
-    openFilter: function() {}
+    openFilter: function() {
+      document.getElementById('ocenkaReportFilter').classList.toggle('ocenka-report-filter_drop');
+    }
   }
 }
 </script>
@@ -42,11 +44,15 @@ export default {
 <style lang="scss" scoped>
 .ocenka-report-filter{
   width: 100%;
-  height: auto; //30px;
+  height: 30px;
   margin: 10px 0px;
   border: 1px solid grey;
-  // overflow: hidden;
+  overflow: hidden;
   box-sizing: border-box;
+  transition: .5s height ;
+  &_drop {
+    height: 345px;
+  }
   .filter-header {
     display: flex;
     height: 30px;
