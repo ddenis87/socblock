@@ -1,6 +1,5 @@
 <template>
   <div class="form-search">
-    <hr>
     <div class="control-radio">
       <input type="radio" id="find-snils" value="Snils" v-model="findType" @change="() => {findValue = '';}" /><label for="find-snils">Искать по СНИЛС</label>
       <input type="radio"  id="find-fio" value="Fio" v-model="findType" @change="() => {findValue = '';}" /><label for="find-fio">Искать по Фамилии</label>
@@ -26,8 +25,6 @@
       </template>
       <button @click.prevent="$emit('find-person', findValue, findType)">Найти...</button><br>
     </div>
-    <hr>
-
   </div>
 </template>
 

@@ -5,8 +5,9 @@
         <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
         <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
       </div>
-
+      <hr class="separator"/>
       <ocenka-control @find-person="findPerson"></ocenka-control>
+      <hr />
       <ocenka-list :list-person="listPerson" @select-person="selectPerson"></ocenka-list>
 
       <p>{{ selectEmpty }}</p>
@@ -121,6 +122,11 @@ export default {
       padding: 3px;
     }
   }
+}
+
+.separator {
+  margin: 0px;
+  margin-bottom: 5px;
 }
 
 .progress-load {

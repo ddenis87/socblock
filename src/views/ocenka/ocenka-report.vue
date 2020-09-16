@@ -4,7 +4,7 @@
       <h2 class="report-header__title">Оценка пенсионных прав застрахованного лица</h2>
       <button class="report-header__button" @click="goBase">Перейти к базе</button>
     </div>
-    <hr/>
+    <hr class="separator"/>
     <div class="report__date-and-type">
       <div class="report__date-and-type_box">
         <date-range @getDateRange="selectDatePeriod"></date-range>
@@ -19,6 +19,7 @@
     <div class="report__control">
       <ocenka-report-control></ocenka-report-control>
     </div>
+    <hr class="separator"/>
     <div class="report__list">
       <ocenka-report-list></ocenka-report-list>
     </div>
@@ -146,6 +147,11 @@ export default {
   }
 }
 
+.separator {
+  margin: 0px;
+  margin-bottom: 5px;
+}
+
   table {
     border-spacing: 0px;
     width: 100%;
@@ -225,7 +231,7 @@ export default {
   }
 
   fieldset {border: 1px solid black; padding: 10px;}
-  hr {margin: 2px 0px;}
+  // hr {margin: 2px 0px;}
   .no-m-p {
     margin-top: 0px;
     padding-top: 0px;
