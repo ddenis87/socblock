@@ -8,7 +8,7 @@
                                                         @change="selectMRUAll" >Все</label>
     
       <hr>
-      <template v-for="(row, index) in arrListDistrict">
+      <template v-for="(row, index) in arrListMru">
         <div v-if="(+row.ISMRU == 1)" :key="index">
           <label class="body__item"><input type="checkbox" 
                                            class="body__item-input"
@@ -25,18 +25,20 @@
 <script>
 import axios from 'axios';
 export default {
-  name: 'OcenkaReportFiltrMru',
+  name: 'OcenkaReportFilterMru',
   data: function() {
     return {
-      arrListDistrict: [], // список тер.органов,
+      arrListMru: [], // список тер.органов,
       isCheckAllMRU: false,
+      arrFilterMRU: [],
+      isDisabledMRU: false,
     }
   },
   created: function() {
     axios
       .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
       .then(response => {
-        this.arrListDistrict = response.data;
+        this.arrListMru = response.data;
       })
   },
   methods: {

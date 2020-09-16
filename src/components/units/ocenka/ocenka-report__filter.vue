@@ -10,17 +10,22 @@
       <div class="filter-body__mru">
         <ocenka-report-filter-mru></ocenka-report-filter-mru>
       </div>
+      <div class="filter-body__district">
+        <ocenka-report-filter-district></ocenka-report-filter-district>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import ocenkaReportFilterMru from '@/components/units/ocenka/__filter/ocenka-report__filter-mru';
+import ocenkaReportFilterDistrict from '@/components/units/ocenka/__filter/ocenka-report__filter-district';
 
 export default {
   name: 'OcenkaReportFilter',
   components: {
-    ocenkaReportFilterMru
+    ocenkaReportFilterMru,
+    ocenkaReportFilterDistrict
   },
   data: function() {
     return {
@@ -67,14 +72,21 @@ export default {
     }
   }
   .filter-body {
+    display: flex;
+    
     padding: 8px 8px;
     padding-bottom: 8px;
-    border: 1px solid darkcyan;
+    // border: 1px solid darkcyan;
     box-sizing: border-box;
     &__mru {
-      box-sizing: border-box;
       min-width: 200px;
-      max-width: 300px;
+      margin-right: 10px;
+      box-sizing: border-box;
+    }
+    &__district {
+      min-width: 550px;
+      margin-right: 10px;
+      box-sizing: border-box;
     }
   }
 }
