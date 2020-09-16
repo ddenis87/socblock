@@ -307,8 +307,9 @@ export default {
   .sved-control {
     display: flex;
     justify-content: space-between;
-    padding-left: 15px;
-    padding-right: 15px;
+    align-items: center;
+    /* padding-left: 15px;
+    padding-right: 15px; */
   }
 
   hr {margin: 10px 0px; padding: 0px;}

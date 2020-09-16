@@ -6,7 +6,7 @@
     </div>
     <hr/>
     <div class="report__date-and-type">
-      <date-range @get-date-range="selectDatePeriod"></date-range>
+      <date-range @getDateRange="selectDatePeriod"></date-range>
     </div>
     <div class="report__filter">
       <ocenka-report-filter></ocenka-report-filter>
@@ -91,6 +91,8 @@ export default {
     }
   },
   methods: {
+    selectDatePeriod: function() {},
+    // 
     sumItog: function(rowValue) {
       let sum = 0;
       for (let i = 0; i < rowValue.length; i++) {

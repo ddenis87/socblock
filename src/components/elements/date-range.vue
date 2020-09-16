@@ -47,7 +47,7 @@ export default {
     setDateRange: function() {
       this.dateRange.length = 0;
       this.dateRange.push(this.dateStart, this.dateEnd);
-      this.$emit('get-date-range', this.dateRange);
+      this.$emit('getDateRange', this.dateRange);
     }
   }
 }
