@@ -51,7 +51,7 @@ export default {
   box-sizing: border-box;
   transition: .5s height ;
   &_drop {
-    height: 345px;
+    height: 350px;
   }
   .filter-header {
     display: flex;
@@ -91,6 +91,7 @@ export default {
     }
     &__district {
       min-width: 550px;
+      max-width: 700px;
       margin-right: 10px;
       box-sizing: border-box;
     }

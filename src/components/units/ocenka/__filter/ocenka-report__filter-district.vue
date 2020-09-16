@@ -5,18 +5,18 @@
       <label class="body__item body__item-title"><input type="checkbox"
                                                         class="body__item-input body__item-input-title"
                                                         v-model="isCheckAllDistrict"
-                                                        @change="selectDistrictAll">Все</label>
+                                                        @change="selectDistrictAll(isCheckAllDistrict)">Все</label>
       <hr>
       <div class="block-checkbox__body-flex">
-        <template v-for="(row, index) in arrListDistrict">
+        <template v-for="(row, index) in arrListInitial">
           <div :key="index" 
                v-if="(+row.ISMRU == 1)">
             <label  class="body__item body__item-title"><input type="checkbox" 
                                               class="body__item-input body__item-input-title"
                                               :value="row.DISTRICTID"
                                               :disabled="isDisabledDistrict"
-                                              v-model="arrFilterDistrict"
-                                              @change="selectDistrict" >{{ row.DISTRICTNAME }}</label>
+                                              v-model="arrListFilter"
+                                              @change="$emit('change', arrListFilter)" >{{ row.DISTRICTNAME }}</label>
           </div>
           <div :key="index" 
                   v-else>
@@ -24,8 +24,8 @@
                                               class="body__item-input"
                                               :value="row.DISTRICTID"
                                               :disabled="isDisabledDistrict"
-                                              v-model="arrFilterDistrict"
-                                              @change="selectDistrict">{{ row.DISTRICTNAME }}</label>
+                                              v-model="arrListFilter"
+                                              @change="$emit('change', arrListFilter)">{{ row.DISTRICTNAME }}</label>
           </div>
         </template>
       </div>
@@ -37,11 +37,14 @@
 import axios from 'axios';
 export default {
   name: 'OcenkaReportFilterDistrict',
+  model: {
+    event: 'change'
+  },
   data: function() {
     return {
-      arrListDistrict: [], // список тер.органов,
+      arrListInitial: [], // начальный список тер.органов из базы,
+      arrListFilter: [], //отфильтрованный список
       isCheckAllDistrict: false,
-      arrFilterDistrict: [],
       isDisabledDistrict: false,
     }
   },
@@ -49,12 +52,20 @@ export default {
     axios
       .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
       .then(response => {
-        this.arrListDistrict = response.data;
+        this.arrListInitial = response.data;
       })
   },
   methods: {
-    selectDistrictAll: function () {},
-    selectDistrict: function() {}
+    selectDistrictAll: function(event) {
+      if (this.isCheckAllDistrict == true) {
+        this.isDisabledDistrict = true;
+        for (let i = 0; i < this.arrListInitial.length; i++) this.arrListFilter.push(this.arrListInitial[i].DISTRICTID);
+      } else {
+        this.isDisabledDistrict = false;
+        this.arrListFilter.length = 0;
+      }
+      this.$emit('change', this.arrListFilter)
+    },
   }
 }
 </script>
@@ -71,7 +82,7 @@ export default {
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
-      height: 230px;
+      height: 240px;
     }
   }
 }
