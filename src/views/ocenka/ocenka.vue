@@ -1,20 +1,27 @@
 <template>
   <div class='ocenka'>
-    <div class="ocenka-title">
-      <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
-      <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
-    </div>
+    <div v-if="access">
+      <div class="ocenka-title">
+        <h2 class="ocenka-title__title">Оценка пенсионных прав застрахованного лица</h2>
+        <button class="ocenka-title__button" @click="goReport">Перейти к отчетам</button>
+      </div>
 
-    <ocenka-control @find-person="findPerson"></ocenka-control>
-    <ocenka-list :list-person="listPerson" @select-person="selectPerson"></ocenka-list>
+      <ocenka-control @find-person="findPerson"></ocenka-control>
+      <ocenka-list :list-person="listPerson" @select-person="selectPerson"></ocenka-list>
 
-    <p>{{ selectEmpty }}</p>
-    <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
-      <img src="img/load.gif">
+      <p>{{ selectEmpty }}</p>
+      <div class="progress-load" :class="{'is-visible' : (isLoad) ? true : false}">
+        <img src="img/load.gif">
+      </div>
+      
+      <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
+        Не указано условие поиска!
+      </div>
     </div>
-    
-    <div class="warning-insert" :class="{'is-visible' : (isWarning) ? true : false}">
-      Не указано условие поиска!
+    <div v-else>
+      <div class="ocenka-title">
+        <h2 class="ocenka-title__title">Доступ запрещен</h2>
+      </div>
     </div>
   </div>
 </template>
@@ -28,15 +35,38 @@ export default {
   components: {
     ocenkaControl, ocenkaList,
   },
+  computed: {
+    access() { return this.$store.state.userProfile.accessResource.ocenka.access; }
+  },
   data: function() {
     return {
+      
       listPerson: [],
       isLoad: true,
       selectEmpty: '',
       isWarning: true,
     }
   },
-
+  created: function() {
+    let userInfo = {};
+    axios
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getUser'}})
+      .then(response => {
+        if (response.data.length != 0) {
+          userInfo.userId = response.data[0].ID;
+          userInfo.userIp = response.data[0].CIP;
+          userInfo.userName = response.data[0].CNAME;
+          let ocenka = {
+            ocenka: {
+              access: true,
+            }
+          }
+          if (userInfo.userName[0] == '$')  ocenka.ocenka.administrator = true;
+          userInfo.accessResource = ocenka;
+        }
+         this.$store.commit('setUserProfile', userInfo);
+      })
+  },
   methods: {
     goReport: function() {
       this.$router.push(`/ocenka-report`);

@@ -11,12 +11,13 @@ import axios from 'axios';
 import substrateMain from "@/substrate/substrate__main"
 
 export default {
+  components: {
+    substrateMain
+  },  
   computed: {
     content() {return substrateMain;}
   },
-  components: {
-    substrateMain
-  },
+
   created: function() {
     let userInfo = {
       userName: ''

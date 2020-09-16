@@ -11,24 +11,31 @@ export default new Vuex.Store({
       userIp: '',
       userName: 'Гость',
       accessOpfr: false,
+      accessResource: {
+        ocenka: {
+          access: false,
+          administrator: false
+        }
+      }
     }
   },
   mutations: {
     setUserProfile(state, userProfile) {
+      if ('userId' in userProfile) state.userProfile.userId = userProfile.userId;
       if ('userIp' in userProfile) state.userProfile.userIp = userProfile.userIp;
       if ('userName' in userProfile) state.userProfile.userName = userProfile.userName;
       if ('accessOpfr' in userProfile) state.userProfile.accessOpfr = userProfile.accessOpfr;
+
+      // access into Resource
+      if ('accessResource' in userProfile) {
+
+        if ('ocenka' in userProfile.accessResource) {
+          let ocenka = userProfile.accessResource.ocenka;
+          state.userProfile.accessResource.ocenka.access = ocenka.access;
+          if ('administrator' in ocenka) state.userProfile.accessResource.ocenka.administrator = ocenka.administrator;
+        }
+      }
     },
-    // setUnknownUserProfile(state) {
-    //   axios
-    //     .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserIp'}})
-    //     .then(response => {
-    //       let arrUserIp = response.data.split('.');
-    //       if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
-    //         state.userProfile.accessOpfr = true;
-    //       }
-    //     })
-    // }
   },
   actions: {
   },

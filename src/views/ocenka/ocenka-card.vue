@@ -14,10 +14,10 @@
         <td>Наименование территориального органа:</td>
         <td>
           <select class="select-mru" 
-                  :disabled="!access"
+                  
                   v-model="districtId"
                   @change="changeMru"
-                  :class="{}">
+                   :class="{}"><!--:disabled="!access" -->
             <option v-for="(row, index) in arrDistrict" :key="index" :value="row.DISTRICTID">{{ row.DISTRICTNAME }}</option>
           </select>
         </td>
@@ -30,7 +30,7 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
-    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}" v-if="(access)">
+    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}" > <!-- v-if="(access)" -->
       <div class="person-control__item person-control__item_hidden" :class="{'person-control__item_warning' : !isPersonControl}">Изменения не сохранены</div>
       <div class="person-control__item" :class="{'person-control_warning' : !isPersonControl}"><button class="person-control__button" :disabled="isPersonControl" @click="savePerson">Сохранить</button></div>
     </div>
@@ -40,7 +40,7 @@
     </div>
     <div class="sved">
       <hr>
-      <div class="sved-control" v-if="(access)"> <!-- access - может сразу использовать глобальную переменную -->
+      <div class="sved-control" > <!--v-if="(access)" access - может сразу использовать глобальную переменную -->
         
         <label for="">Укажите результат:</label>
         <select v-model="decisionId">
@@ -64,9 +64,11 @@
           <td>{{ rowDataHistory.SPEC }}</td>
           <td>{{ modDate(rowDataHistory.CDATE),  }}</td>
           <td>{{ rowDataHistory.DECISION }}</td>
-          <td align="center"><img src="img/button-row-delete.png" class="button-row-control" 
-                                    title="Удалить запись" 
-                                    @click="deleteHistoryRecord(rowDataHistory.ID)"  /></td>
+          <td align="center"><img v-if="administrator" 
+                                  src="img/button-row-delete.png" 
+                                  class="button-row-control" 
+                                  title="Удалить запись" 
+                                  @click="deleteHistoryRecord(rowDataHistory.ID)"  /></td>
         </tr>
       </table>
       <p>{{ selectEmpty }}</p>
@@ -84,6 +86,10 @@
 import axios from 'axios';
 export default {
   name: 'CardPerson',
+  computed: {
+    //access() { return this.$store.state.userProfile.accessResource.ocenka.access; },
+    administrator() { return this.$store.state.userProfile.accessResource.ocenka.administrator; }
+  },
   data: function() {
     return {
       arrMonth: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
@@ -95,7 +101,7 @@ export default {
       isWarning: true,
       isPersonControl: true,
       personId: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
-      access: accessUser,
+      // access: accessUser,
       decisionId: '',
       districtId: '',
       selectEmpty: '',
@@ -148,7 +154,7 @@ export default {
       }
     },
     deleteHistoryRecord: function(param) {
-      if (accessUserAdmin == true) {
+      // if (accessUserAdmin == true) {
         this.isLoad = false;
         let request = new XMLHttpRequest();
         request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
@@ -160,12 +166,11 @@ export default {
           if (request.response == '1') {alert("Запись удалена");}
           else {alert("БД: Ошибка удаления");}
         }
-      } else {
-        this.warningText = 'Нет прав на удаление!';
-        this.isWarning = false;
-        setTimeout(() => { this.isWarning = true }, 1500);
-      }
-
+      // } else {
+      //   this.warningText = 'Нет прав на удаление!';
+      //   this.isWarning = false;
+      //   setTimeout(() => { this.isWarning = true }, 1500);
+      // }
     },
     loadDistrict: function() {
       axios
@@ -208,14 +213,14 @@ export default {
     // load history
     this.loadHistory();
     // load list reshenie if user access
-    if(this.access) {
-      this.isLoad = false;
-      axios
-        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDecision'}})
-        .then(response => {
-          this.arrList = response.data;
-        })
-    }
+    // if(this.access) {
+      // this.isLoad = false;
+    axios
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDecision'}})
+      .then(response => {
+        this.arrList = response.data;
+      })
+    // }
     this.isLoad = true;
   }
 }
