@@ -23,6 +23,9 @@ import ocenkaReportFilterDistrict from '@/components/units/ocenka/__filter/ocenk
 
 export default {
   name: 'OcenkaReportFilter',
+  model: {
+    event: 'change'
+  },
   components: {
     ocenkaReportFilterMru,
     ocenkaReportFilterDistrict
@@ -41,16 +44,16 @@ export default {
       switch(type) {
         case 'mru': {
           this.$refs.ocenkaReportFilterDistrict.clearFilter();
-          // this.arrFilterDistrict = [];
           this.arrFilterTerritory = this.arrFilterMru.slice();
-          console.log(this.arrFilterTerritory);
+          // console.log(this.arrFilterTerritory);
+          this.$emit('change', this.arrFilterTerritory);
           break;
           }
         case 'district': {
           this.$refs.ocenkaReportFilterMru.clearFilter();
-          // this.arrFilterMru.length = 0;
           this.arrFilterTerritory = this.arrFilterDistrict.slice();
-          console.log(this.arrFilterTerritory);
+          // console.log(this.arrFilterTerritory);
+          this.$emit('change', this.arrFilterTerritory);
           break;
         }
       }

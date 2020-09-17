@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="report__filter">
-      <ocenka-report-filter></ocenka-report-filter>
+      <ocenka-report-filter v-model="arrDistrict" ></ocenka-report-filter>
     </div>
     <div class="report__control">
       <ocenka-report-control @build-report="buildReport"></ocenka-report-control>
@@ -58,8 +58,11 @@ export default {
   methods: {
     getDistrict: function(arrDistrict) {
       console.log(arrDistrict);
+      console.log(this.arrDistrict);
     },
-    selectDatePeriod: function() {},
+    selectDatePeriod: function() {
+      
+    },
     // 
     sumItog: function(rowValue) {
       let sum = 0;
