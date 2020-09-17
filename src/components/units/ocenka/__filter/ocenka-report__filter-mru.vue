@@ -23,26 +23,29 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 export default {
   name: 'OcenkaReportFilterMru',
   model: {
     event: 'change'
   },
+  props: [
+    'arrListInitialInput'
+  ],
   data: function() {
     return {
-      arrListInitial: [], // список тер.органов,
+      arrListInitial: this.arrListInitialInput, // список тер.органов,
       arrListFilter: [],
       isCheckAllMru: false,
       isDisabledMru: false,
     }
   },
   created: function() {
-    axios
-      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
-      .then(response => {
-        this.arrListInitial = response.data;
-      })
+    // axios
+    //   .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+    //   .then(response => {
+    //     this.arrListInitial = response.data;
+    //   })
   },
   methods: {
     selectMruAll: function() {

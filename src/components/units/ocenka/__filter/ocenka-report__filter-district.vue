@@ -34,26 +34,29 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
 export default {
   name: 'OcenkaReportFilterDistrict',
   model: {
     event: 'change'
   },
+  props: [
+    'arrListInitialInput'
+  ],
   data: function() {
     return {
-      arrListInitial: [], // начальный список тер.органов из базы,
+      arrListInitial: this.arrListInitialInput, // начальный список тер.органов из базы,
       arrListFilter: [], //отфильтрованный список
       isCheckAllDistrict: false,
       isDisabledDistrict: false,
     }
   },
   created: function() {
-    axios
-      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
-      .then(response => {
-        this.arrListInitial = response.data;
-      })
+    // axios
+    //   .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+    //   .then(response => {
+    //     this.arrListInitial = response.data;
+    //   })
   },
   methods: {
     selectDistrictAll: function() {

@@ -35,6 +35,7 @@ export default {
           }
           this.$store.commit('setUserProfile', userInfo);
         })
+        .catch(() => console.log("Failed to connect server"))
   }
 }
 

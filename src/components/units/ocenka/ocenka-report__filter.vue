@@ -8,16 +8,23 @@
     </div>
     <div class="filter-body">
       <div class="filter-body__mru">
-        <ocenka-report-filter-mru ref="ocenkaReportFilterMru" v-model="arrFilterMru" @change="getTerritories('mru')"></ocenka-report-filter-mru>
+        <ocenka-report-filter-mru ref="ocenkaReportFilterMru" 
+                                  :arrListInitialInput="arrTerritory"
+                                  v-model="arrFilterMru" 
+                                  @change="getTerritories('mru')"></ocenka-report-filter-mru>
       </div>
       <div class="filter-body__district">
-        <ocenka-report-filter-district ref="ocenkaReportFilterDistrict" v-model="arrFilterDistrict" @change="getTerritories('district')"></ocenka-report-filter-district>
+        <ocenka-report-filter-district ref="ocenkaReportFilterDistrict" 
+                                       :arrListInitialInput="arrTerritory"
+                                       v-model="arrFilterDistrict" 
+                                       @change="getTerritories('district')"></ocenka-report-filter-district>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import ocenkaReportFilterMru from '@/components/units/ocenka/__filter/ocenka-report__filter-mru';
 import ocenkaReportFilterDistrict from '@/components/units/ocenka/__filter/ocenka-report__filter-district';
 
@@ -32,12 +39,25 @@ export default {
   },
   data: function() {
     return {
+      arrTerritory: [], // - список тер. органов из базы, входной параметр для компонентов фильтра
       arrFilterMru: [],
       arrFilterDistrict: [],
-      arrFilterTerritory: [],
+      arrFilterTerritory: [], // - отфильтрованный список тер.органов для построения отчета
       textFilterDistrict: 'Все',
       textFilterReshenie: 'Все',
     }
+  },
+  created: function() {
+    axios
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+      .then(response => {
+        this.arrTerritory = response.data;
+      })
+      .catch(() => {
+        this.arrTerritory = [
+          {MRUID: '2', MRUNAME: 'Белогорск', DISTRICTID: '2', DISTRICTNAME: 'Бнлогорск', ISMRU: 1}
+        ]
+      })
   },
   methods: {
     getTerritories: function(type) {
