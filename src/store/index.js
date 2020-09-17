@@ -6,30 +6,30 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-  //   userProfile: {
-  //     userId: '',
-  //     userIp: '',
-  //     userName: 'Гость',
-  //     accessOpfr: false,
-  //     accessResource: {
-  //       ocenka: {
-  //         access: false,
-  //         administrator: false
-  //       }
-  //     }
-  //   }
     userProfile: {
       userId: '',
       userIp: '',
       userName: 'Гость',
-      accessOpfr: true,
+      accessOpfr: false,
       accessResource: {
         ocenka: {
-          access: true,
-          administrator: true
+          access: false,
+          administrator: false
         }
       }
     }
+    // userProfile: {
+    //   userId: '',
+    //   userIp: '',
+    //   userName: 'Гость',
+    //   accessOpfr: true,
+    //   accessResource: {
+    //     ocenka: {
+    //       access: true,
+    //       administrator: true
+    //     }
+    //   }
+    // }
   },
   mutations: {
     setUserProfile(state, userProfile) {

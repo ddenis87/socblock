@@ -32,9 +32,12 @@ export default {
   props: [
     'arrListInitialInput'
   ],
+  computed: {
+    arrListInitial: function() { return this.arrListInitialInput; }
+  },
   data: function() {
     return {
-      arrListInitial: this.arrListInitialInput, // список тер.органов,
+      // arrListInitial: this.arrListInitialInput, // список тер.органов,
       arrListFilter: [],
       isCheckAllMru: false,
       isDisabledMru: false,

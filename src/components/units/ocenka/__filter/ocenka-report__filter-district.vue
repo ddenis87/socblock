@@ -43,9 +43,12 @@ export default {
   props: [
     'arrListInitialInput'
   ],
+  computed: {
+    arrListInitial: function() { return this.arrListInitialInput; }
+  },
   data: function() {
     return {
-      arrListInitial: this.arrListInitialInput, // начальный список тер.органов из базы,
+      // arrListInitial: this.arrListInitialInput, // начальный список тер.органов из базы,
       arrListFilter: [], //отфильтрованный список
       isCheckAllDistrict: false,
       isDisabledDistrict: false,
