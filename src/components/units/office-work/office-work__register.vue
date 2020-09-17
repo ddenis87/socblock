@@ -1,12 +1,34 @@
 <template>
   <div class="register">
-    <hr>
-    <!-- <span class='register__title'>Регистрация документа</span> -->
     <h3 class="register__title">Регистрация документа</h3>
 
-    <div class="register__radio">
-        <label for="registerOrder"><input type="radio" id="registerOrder" value="Order" v-model="registerType" @change="() => {docName = ''; docNomen = ''}" />ПРИКАЗ</label>
-        <label for="registerLetter"><input type="radio"  id="registerLetter" value="Letter" v-model="registerType" @change="() => {docName = ''; docNomen = ''}" />ПИСЬМО</label>
+    <div class="register__body">
+      <div class="doc-type" >
+        <h5 class="doc-type__title">Укажите тип документа</h5>
+        <div class="doc-type__body">
+          <div class="doc-type__input-body">
+            <label for="registerOrder"><input type="radio" id="registerOrder" value="Order" v-model="registerType" @change="() => {docName = ''; docNomen = ''}" />ПРИКАЗ</label>
+          </div>
+          <div class="input-body">
+            <label for="registerLetter"><input type="radio"  id="registerLetter" value="Letter" v-model="registerType" @change="() => {docName = ''; docNomen = ''}" />ПИСЬМО</label>
+          </div>
+        </div>
+      </div>
+      <div class="doc-name">
+        <h5 class="doc-name__title">Укажите реквизиты документа</h5>
+        <div class="doc-name__body">
+          <div class="input-body">
+            <label class="input-body__title">Наименование документа</label>
+            <input class="input-body__input" 
+                  type="text" />
+          </div>
+          <div class="input-body">
+            <label class="input-body__title">Номенклатура дела</label>
+            <input class="input-body__input" 
+                  type="text" />
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="register__body">
@@ -41,7 +63,7 @@ export default {
   name: 'register',
   data: function() {
     return {
-      registerType: 'Order',
+      registerType: '',
       docName: '',
       docNomen: '',
       isRegisterNumber: false,
@@ -59,16 +81,87 @@ export default {
 
 <style lang="scss" scoped>
 .register {
-  font-size: 16px;
+  font-family: 'Open sans';
   &__title {
-    display: block;
-   padding: 10px 0px;    
+    margin: 0px;
+    margin-bottom: 5px;
+    color:black
+  }
+  &__body {
+    .doc-type {
+      display: inline-flex;
+      flex-direction: column;
+      width: 200px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      // border: 1px solid darkgoldenrod;
+      &__title {
+        margin: 0px;
+        // font-family: 'Open sans';
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+      &__body {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+        box-sizing: border-box;
+      }
+      &__input-body {
+        position: relative;
+        box-sizing: border-box;
+      }
+    }
+    .doc-name {
+      // display: inline-flex;
+      // flex-direction: column;
+      width: 500px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      &__title {
+        margin: 0px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+      &__body {
+        display: inline-flex;
+        .input-body {
+          position: relative;
+          box-sizing: border-box;
+
+          &__title {
+            position: absolute;
+            display: inline-block;
+            left: 6px;
+            top: 3px;
+
+            font-size: 10px;
+            color: grey;
+            text-transform: uppercase;
+          }
+          &__input {
+            // width: 140px;
+            padding: 3px;
+            padding-left: 6px;
+            padding-top: 16px;
+            border: 1px solid grey;
+            outline: none;
+            border-radius: 3px;
+            box-sizing: border-box;
+            font-family: 'Open sans';
+          }
+        }
+      }
+    }
   }
 }
 </style>
 
 <style scoped>
-  hr {margin: 5px 0px;}
+/* .register {
+
+}
+
   .register {
     font-size: 16px;
 
@@ -140,5 +233,5 @@ export default {
     text-transform: uppercase;
     font-size: 22px;
     color: red;
-  }
+  } */
 </style>

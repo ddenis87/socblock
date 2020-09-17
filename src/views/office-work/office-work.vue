@@ -3,37 +3,45 @@
     <div class="office-work-title">
       <h2 class="office-work-title__title">Отдел делопроизводства</h2>
     </div>
-    <register></register>
+    <hr class="separator" />
+    <office-work-register></office-work-register>
+    <hr class="separator" />
   </div>
 </template>
 
 <script>
-import register from '@/components/units/office-work/office-work__register.vue';
+import officeWorkRegister from '@/components/units/office-work/office-work__register.vue';
 
 export default {
-  name: 'office-work',
+  name: 'officeWork',
   components: {
-    register,
+    officeWorkRegister,
   }
 }
 </script>
 
 <style lang="scss" scoped>
-
-
 .office-work {
   padding-left: 10px;
-  width: 100%;
-  max-width: 1000px;
+  width: 98%;
   font-size: 14px;
-}
-.office-work-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  &__title {
-    margin: 5px 0px;
-    padding: 0px;
+  &-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__title {
+      margin: 5px 0px;
+      padding: 0px;
+    }
+    &__button {
+      width: 150px;
+      padding: 3px;
+    }
   }
+}
+
+.separator {
+  margin: 0px;
+  margin-bottom: 5px;
 }
 </style>
