@@ -5,7 +5,7 @@
       <label class="body__item body__item-title"><input type="checkbox"
                                                         class="body__item-input body__item-input-title"
                                                         v-model="isCheckAllDistrict"
-                                                        @change="selectDistrictAll(isCheckAllDistrict)">Все</label>
+                                                        @change="selectDistrictAll">Все</label>
       <hr>
       <div class="block-checkbox__body-flex">
         <template v-for="(row, index) in arrListInitial">
@@ -56,16 +56,23 @@ export default {
       })
   },
   methods: {
-    selectDistrictAll: function(event) {
+    selectDistrictAll: function() {
+      let arrDistrictId = [];
       if (this.isCheckAllDistrict == true) {
         this.isDisabledDistrict = true;
-        for (let i = 0; i < this.arrListInitial.length; i++) this.arrListFilter.push(this.arrListInitial[i].DISTRICTID);
+        for (let i = 0; i < this.arrListInitial.length; i++) arrDistrictId.push(this.arrListInitial[i].DISTRICTID);
+        this.arrListFilter = arrDistrictId.slice();
       } else {
         this.isDisabledDistrict = false;
-        this.arrListFilter.length = 0;
+        this.arrListFilter = arrDistrictId.slice();
       }
       this.$emit('change', this.arrListFilter)
     },
+    clearFilter: function() {
+      this.isCheckAllDistrict = false;
+      this.isDisabledDistrict = false;
+      this.arrListFilter = [];
+    }
   }
 }
 </script>

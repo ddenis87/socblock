@@ -17,11 +17,12 @@
       <ocenka-report-filter></ocenka-report-filter>
     </div>
     <div class="report__control">
-      <ocenka-report-control></ocenka-report-control>
+      <ocenka-report-control @build-report="buildReport"></ocenka-report-control>
     </div>
     <hr class="separator"/>
     <div class="report__list">
-      <ocenka-report-list></ocenka-report-list>
+      <ocenka-report-list v-bind:arrInReport="arrReport"
+                          v-bind:arrInReportAll="arrReportAll"></ocenka-report-list>
     </div>
 
 
@@ -55,6 +56,9 @@ export default {
     }
   },
   methods: {
+    getDistrict: function(arrDistrict) {
+      console.log(arrDistrict);
+    },
     selectDatePeriod: function() {},
     // 
     sumItog: function(rowValue) {
@@ -76,13 +80,13 @@ export default {
       return sum;
     },
     goBase: function() {this.$router.push(`/ocenka`);},
-    selectedMRU: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
-    selectedDistrict: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
-    selectedReshenie: function(arrValue) {this.arrReshenie = arrValue;}, // событие фильтра
-    selectedLetter: function(arrValue) {this.arrLetter = arrValue;},
 
-    buildingReport: function(dateReport) {
-      console.log(this.arrLetter);
+    // selectedMRU: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
+    // selectedDistrict: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
+    // selectedReshenie: function(arrValue) {this.arrReshenie = arrValue;}, // событие фильтра
+    // selectedLetter: function(arrValue) {this.arrLetter = arrValue;},
+
+    buildReport: function(dateReport) {
       if (!this.arrDistrict.length) {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 2000);
@@ -127,7 +131,10 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      &__title { margin: 5px 0px; padding: 0px;}
+      &__title { 
+        margin: 5px 0px; 
+        padding: 0px;
+      }
       &__button {
         width: 150px;
         padding: 3px;

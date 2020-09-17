@@ -4,7 +4,7 @@
       <div class="control-header__title">
         <!-- Отчет будет сформирован на дату: {{ dateReportText }} -->
       </div>
-      <button class="control-header__button" @click="buildingReport">Построить отчет</button>
+      <button class="control-header__button" @click="$emit('build-report')">Построить отчет</button>
     </div>
   </div>
 </template>
@@ -12,6 +12,9 @@
 <script>
 export default {
   name: 'ocenkaReportControl',
+  methods: {
+    buildReport: function() {},
+  }
 }
 </script>
 

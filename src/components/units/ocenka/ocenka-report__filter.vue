@@ -8,10 +8,10 @@
     </div>
     <div class="filter-body">
       <div class="filter-body__mru">
-        <ocenka-report-filter-mru></ocenka-report-filter-mru>
+        <ocenka-report-filter-mru ref="ocenkaReportFilterMru" v-model="arrFilterMru" @change="getTerritories('mru')"></ocenka-report-filter-mru>
       </div>
       <div class="filter-body__district">
-        <ocenka-report-filter-district></ocenka-report-filter-district>
+        <ocenka-report-filter-district ref="ocenkaReportFilterDistrict" v-model="arrFilterDistrict" @change="getTerritories('district')"></ocenka-report-filter-district>
       </div>
     </div>
   </div>
@@ -29,11 +29,33 @@ export default {
   },
   data: function() {
     return {
+      arrFilterMru: [],
+      arrFilterDistrict: [],
+      arrFilterTerritory: [],
       textFilterDistrict: 'Все',
       textFilterReshenie: 'Все',
     }
   },
   methods: {
+    getTerritories: function(type) {
+      switch(type) {
+        case 'mru': {
+          this.$refs.ocenkaReportFilterDistrict.clearFilter();
+          // this.arrFilterDistrict = [];
+          this.arrFilterTerritory = this.arrFilterMru.slice();
+          console.log(this.arrFilterTerritory);
+          break;
+          }
+        case 'district': {
+          this.$refs.ocenkaReportFilterMru.clearFilter();
+          // this.arrFilterMru.length = 0;
+          this.arrFilterTerritory = this.arrFilterDistrict.slice();
+          console.log(this.arrFilterTerritory);
+          break;
+        }
+      }
+     
+    },
     openFilter: function() {
       document.getElementById('ocenkaReportFilter').classList.toggle('ocenka-report-filter_drop');
     }
