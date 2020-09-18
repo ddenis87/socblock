@@ -57,6 +57,13 @@ export default {
       arrLetter: [], 
     }
   },
+  created: function() {
+    axios
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDecision'}})
+      .then(response => {
+        this.arrReshenie = response.data;
+      })
+  },
   methods: {
 
     goBase: function() {this.$router.push(`/ocenka`);},
@@ -93,9 +100,6 @@ export default {
         })
     },
   },
-  created: function() {
-    //console.log(this.arrReport);
-  }
 }
 </script>
 
