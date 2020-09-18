@@ -4,18 +4,18 @@
       <h2 class="office-work-title__title">Отдел делопроизводства</h2>
     </div>
     <hr class="separator" />
-    <office-work-register></office-work-register>
+    <office-work-control></office-work-control>
     <hr class="separator" />
   </div>
 </template>
 
 <script>
-import officeWorkRegister from '@/components/units/office-work/office-work__register.vue';
+import officeWorkControl from '@/components/units/office-work/office-work__control.vue';
 
 export default {
   name: 'officeWork',
   components: {
-    officeWorkRegister,
+    officeWorkControl,
   }
 }
 </script>
