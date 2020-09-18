@@ -55,7 +55,7 @@ export default {
       })
       .catch(() => {
         this.arrTerritory = [
-          {MRUID: '2', MRUNAME: 'Белогорск', DISTRICTID: '2', DISTRICTNAME: 'Бнлогорск', ISMRU: 1}
+          {MRUID: '2', MRUNAME: 'Белогорск', DISTRICTID: '2', DISTRICTNAME: 'Белогорск', ISMRU: 1}
         ]
       })
   },
@@ -65,15 +65,13 @@ export default {
         case 'mru': {
           this.$refs.ocenkaReportFilterDistrict.clearFilter();
           this.arrFilterTerritory = this.arrFilterMru.slice();
-          // console.log(this.arrFilterTerritory);
-          this.$emit('change', this.arrFilterTerritory);
+          this.$emit('change', this.arrFilterTerritory, true); // - 3 arg - тип отчета true -> МРУ
           break;
           }
         case 'district': {
           this.$refs.ocenkaReportFilterMru.clearFilter();
           this.arrFilterTerritory = this.arrFilterDistrict.slice();
-          // console.log(this.arrFilterTerritory);
-          this.$emit('change', this.arrFilterTerritory);
+          this.$emit('change', this.arrFilterTerritory, false);
           break;
         }
       }

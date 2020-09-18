@@ -34,7 +34,7 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 export default {
   name: 'OcenkaReportFilterDistrict',
   model: {
@@ -44,22 +44,24 @@ export default {
     'arrListInitialInput'
   ],
   computed: {
-    arrListInitial: function() { return this.arrListInitialInput; }
+    // arrListInitial: function() { return this.arrListInitialInput; } // - по умолчанию при загрузке
   },
   data: function() {
     return {
-      // arrListInitial: this.arrListInitialInput, // начальный список тер.органов из базы,
+      arrListInitial: [], // начальный список тер.органов из базы,
       arrListFilter: [], //отфильтрованный список
-      isCheckAllDistrict: false,
-      isDisabledDistrict: false,
+      isCheckAllDistrict: true,
+      isDisabledDistrict: true,
     }
   },
   created: function() {
-    // axios
-    //   .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
-    //   .then(response => {
-    //     this.arrListInitial = response.data;
-    //   })
+    axios // - по умолчанию при загрузке
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+      .then(response => {
+        this.arrListInitial = response.data;
+        this.selectDistrictAll();
+      })
+
   },
   methods: {
     selectDistrictAll: function() {

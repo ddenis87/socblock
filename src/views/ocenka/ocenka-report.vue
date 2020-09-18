@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="report__filter">
-      <ocenka-report-filter v-model="arrDistrict" ></ocenka-report-filter>
+      <ocenka-report-filter v-model="arrDistrict" @change="setReportType"></ocenka-report-filter>
     </div>
     <div class="report__control">
       <ocenka-report-control @build-report="buildReport"></ocenka-report-control>
@@ -47,7 +47,7 @@ export default {
   data: function() {
     return {
       sumRow: 0,
-      typeFilter: false,
+      reportType: false,
       isWarning: true,
       arrReport: Array, // итоговый отчет [["0", "Благовещенск", "3", "1", ...]] [["MRU", "DISTRICT", "COUNT-DECISION", ...]]
       arrReportAll: Array, //['0','0','0','0','0','0','0','0','0','0','0','0','0',],
@@ -67,9 +67,11 @@ export default {
   methods: {
 
     goBase: function() {this.$router.push(`/ocenka`);},
+    setReportType: function(arr, type) {
+      this.reportType = type;
+    },
 
     buildReport: function() {
-      console.log(this.arrDistrict);
       if (!this.arrDistrict.length) {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 2000);
@@ -81,7 +83,7 @@ export default {
       let requestOption = {
         function: 'buildReport',
         arrDistrict: this.arrDistrict.join(),
-        typeFilter: this.typeFilter,
+        typeFilter: this.reportType,
         dateStart: this.arrReportDateRange[0],
         dateEnd: this.arrReportDateRange[1],
       };
@@ -89,7 +91,6 @@ export default {
       axios
         .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
         .then(response => {
-          console.log(response.data);
           let newArrReport = [];
           this.arrReport = response.data;
           for(let i = 0; i < this.arrReport.length; i++) {

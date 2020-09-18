@@ -5,10 +5,10 @@
       <div class="select-body">
         <label class="select-body__title">Укажите тип отчета</label>
         <select class="select-body__select">
-          <option>Все</option>
-          <option>СЗВ-К</option>
-          <option>СлПриз</option>
-          <option>Уход</option>
+          <option>Без типа</option>
+          <option>Нет "СЗВ-К" - письмо ПФР от 23.04.2020 № СЧ-25-24/8528</option>
+          <option>Нет кода "СЛПРИЗ" - письмо ПФР от 12.03.2020 № СЧ-25-24/5350</option>
+          <option>Нет периодов "УХОД"  - письмо ПФР от 16.07.2020 № МТ-25-24/14079</option>
         </select>
       </div>
     </div>
@@ -56,7 +56,7 @@ export default {
         padding: 3px;
         padding-left: 3px;
         padding-top: 15px;
-        padding-bottom: 4px;
+        padding-bottom: 2px;
         border: 1px solid grey;
         outline: none;
         border-radius: 3px;
