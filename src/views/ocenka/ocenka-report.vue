@@ -7,7 +7,7 @@
     <hr class="separator"/>
     <div class="report__date-and-type">
       <div class="report__date-and-type_box">
-        <date-range @getDateRange="selectDatePeriod"></date-range>
+        <date-range v-model="arrReportDateRange"></date-range>
       </div>
       <div class="report__date-and-type_box">
         <ocenka-report-type></ocenka-report-type>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import dateRange from '@/components/elements/date-range';
 import ocenkaReportType from '@/components/units/ocenka/ocenka-report__type';
 import ocenkaReportFilter from '@/components/units/ocenka/ocenka-report__filter';
@@ -50,46 +51,18 @@ export default {
       isWarning: true,
       arrReport: Array, // итоговый отчет [["0", "Благовещенск", "3", "1", ...]] [["MRU", "DISTRICT", "COUNT-DECISION", ...]]
       arrReportAll: Array, //['0','0','0','0','0','0','0','0','0','0','0','0','0',],
+      arrReportDateRange: [],
       arrDistrict: [], // значения тер.органов для выбоки данных [ID]
       arrReshenie: [], // столбцы отчета [{ID: '1', CNAME: 'Пример решения'}]
       arrLetter: [], 
     }
   },
   methods: {
-    getDistrict: function(arrDistrict) {
-      console.log(arrDistrict);
-      console.log(this.arrDistrict);
-    },
-    selectDatePeriod: function() {
-      
-    },
-    // 
-    sumItog: function(rowValue) {
-      let sum = 0;
-      for (let i = 0; i < rowValue.length; i++) {
-        if (rowValue[i]) {
-          sum += +rowValue[i];
-        }
-      }
-      return sum;
-    },
-    sumCollumn: function(rowValue) {
-      let sum = 0;
-      for (let i = 2; i < rowValue.length; i++) {
-        if (rowValue[i]) {
-          sum += +rowValue[i];
-        }
-      }
-      return sum;
-    },
+
     goBase: function() {this.$router.push(`/ocenka`);},
 
-    // selectedMRU: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
-    // selectedDistrict: function(arrValue, typeFilter) {this.arrDistrict = arrValue; this.typeFilter = typeFilter; /*console.log(this.typeFilter);*/ }, // событие фильтра
-    // selectedReshenie: function(arrValue) {this.arrReshenie = arrValue;}, // событие фильтра
-    // selectedLetter: function(arrValue) {this.arrLetter = arrValue;},
-
-    buildReport: function(dateReport) {
+    buildReport: function() {
+      console.log(this.arrDistrict);
       if (!this.arrDistrict.length) {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 2000);
@@ -98,21 +71,26 @@ export default {
       this.arrReport = [];
       this.arrReportAll = [];
       for (let i = 0; i < this.arrReshenie.length; i++) this.arrReportAll.push('0');
+      let requestOption = {
+        function: 'buildReport',
+        arrDistrict: this.arrDistrict.join(),
+        typeFilter: this.typeFilter,
+        dateStart: this.arrReportDateRange[0],
+        dateEnd: this.arrReportDateRange[1],
+      };
 
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=buildReport&arrDistrict=${this.arrDistrict}&typeFilter=${this.typeFilter}&arrLetter=${this.arrLetter}&dateStart=${dateReport[0]}&dateEnd=${dateReport[1]}`);
-      request.onload = () => {
-        let newArrReport = [];
-        this.arrReport = request.response;
-        for(let i = 0; i < this.arrReport.length; i++) {
-          for(let j = 2; j < this.arrReport[i].length; j++) {
-            this.arrReportAll[j - 2] = +this.arrReportAll[j - 2] + +this.arrReport[i][j];
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          console.log(response.data);
+          let newArrReport = [];
+          this.arrReport = response.data;
+          for(let i = 0; i < this.arrReport.length; i++) {
+            for(let j = 2; j < this.arrReport[i].length; j++) {
+              this.arrReportAll[j - 2] = +this.arrReportAll[j - 2] + +this.arrReport[i][j];
+            }
           }
-        }
-      }
+        })
     },
   },
   created: function() {

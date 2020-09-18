@@ -13,7 +13,7 @@
 export default {
   name: 'ocenkaReportControl',
   methods: {
-    buildReport: function() {},
+    // buildReport: function() {},
   }
 }
 </script>

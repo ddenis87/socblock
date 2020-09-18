@@ -52,11 +52,13 @@ export default {
     'arrInReport',
     'arrInReportAll',
   ],
+  computed: {
+    arrReport: function() { return this.arrInReport },
+    arrReportAll: function() { return this.arrInReportAll },
+  },
   data: function() {
     return {
       arrListDecision: [],
-      arrReport: this.arrInReport,
-      arrReportAll: this.arrInReportAll,
     }
   },
   created: function() {
@@ -65,15 +67,26 @@ export default {
       .then(response => {
         this.arrListDecision = response.data;
       })
-    // axios
-    //   .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
-    //   .then(response => {
-    //     this.arrReport = response.data;
-    //   })
   },
   methods: {
-    sumItog: function() {},
-    sumCollumn: function() {},
+    sumItog: function(rowValue) {
+      let sum = 0;
+      for (let i = 0; i < rowValue.length; i++) {
+        if (rowValue[i]) {
+          sum += +rowValue[i];
+        }
+      }
+      return sum;
+    },
+    sumCollumn: function(rowValue) {
+      let sum = 0;
+      for (let i = 2; i < rowValue.length; i++) {
+        if (rowValue[i]) {
+          sum += +rowValue[i];
+        }
+      }
+      return sum;
+    },
   }
 }
 </script>

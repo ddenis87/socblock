@@ -23,6 +23,9 @@
 <script>
 export default {
   name: 'DateRange',
+  // model: {
+  //   event: ''
+  // },
   props: {
   },
   data: function() {
@@ -45,9 +48,9 @@ export default {
   },
   methods: {
     setDateRange: function() {
-      this.dateRange.length = 0;
+      this.dateRange = [];
       this.dateRange.push(this.dateStart, this.dateEnd);
-      this.$emit('getDateRange', this.dateRange);
+      this.$emit('input', this.dateRange);
     }
   }
 }
