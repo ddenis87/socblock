@@ -11,6 +11,7 @@
           <option value="uhod">Нет периодов "УХОД"  - письмо ПФР от 16.07.2020 № МТ-25-24/14079</option>
         </select>
       </div>
+      <span class="select-warning" :class="{'select-warning_show' : (this.typeReport == 'empty') ? false : true}">Отчет по типу доступен только в разрезе территориальных органов</span>
     </div>
   </div>
 </template>
@@ -51,11 +52,11 @@ export default {
   &__body {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-top: 5px;
     box-sizing: border-box;
     .select-body {
       position: relative;
-      width: 100%;
       box-sizing: border-box;
       &__title {
         position: absolute;
@@ -68,7 +69,7 @@ export default {
         text-transform: uppercase;
       }
       &__select {
-        width: 100%;
+        width: auto;
         padding: 3px;
         padding-left: 3px;
         padding-top: 15px;
@@ -78,6 +79,16 @@ export default {
         border-radius: 3px;
         box-sizing: border-box;
         font-family: 'Open sans';
+      }
+    }
+    .select-warning {
+      padding-left: 20px;
+      font-family: 'Open sans';
+      font-size: 12px;
+      color: darkred;
+      visibility: hidden;
+      &_show {
+        visibility: visible;
       }
     }
   }
