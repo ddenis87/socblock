@@ -4,11 +4,11 @@
     <div class="type-report__body">
       <div class="select-body">
         <label class="select-body__title">Укажите тип отчета</label>
-        <select class="select-body__select">
-          <option>Без типа</option>
-          <option>Нет "СЗВ-К" - письмо ПФР от 23.04.2020 № СЧ-25-24/8528</option>
-          <option>Нет кода "СЛПРИЗ" - письмо ПФР от 12.03.2020 № СЧ-25-24/5350</option>
-          <option>Нет периодов "УХОД"  - письмо ПФР от 16.07.2020 № МТ-25-24/14079</option>
+        <select class="select-body__select" v-model="typeReport" @change="setTypeReport">
+          <option value="empty">Без типа</option>
+          <option value="szvk">Нет "СЗВ-К" - письмо ПФР от 23.04.2020 № СЧ-25-24/8528</option>
+          <option value="slpriz">Нет кода "СЛПРИЗ" - письмо ПФР от 12.03.2020 № СЧ-25-24/5350</option>
+          <option value="uhod">Нет периодов "УХОД"  - письмо ПФР от 16.07.2020 № МТ-25-24/14079</option>
         </select>
       </div>
     </div>
@@ -18,6 +18,22 @@
 <script>
 export default {
   name: 'ocenkaReportType',
+  model: {
+    event: 'change'
+  },
+  data: function() {
+    return {
+      typeReport: 'empty',
+    }
+  },
+  created: function() {
+    this.setTypeReport();
+  },
+  methods: {
+    setTypeReport: function() {
+      this.$emit('change', this.typeReport)
+    },
+  }
 }
 </script>
 

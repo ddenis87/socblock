@@ -10,11 +10,11 @@
         <date-range v-model="arrReportDateRange"></date-range>
       </div>
       <div class="report__date-and-type_box">
-        <ocenka-report-type></ocenka-report-type>
+        <ocenka-report-type v-model="typeReport"></ocenka-report-type>
       </div>
     </div>
     <div class="report__filter">
-      <ocenka-report-filter v-model="arrDistrict" @change="setReportType"></ocenka-report-filter>
+      <ocenka-report-filter v-model="arrDistrict" @change="setTypeDistrict"></ocenka-report-filter>
     </div>
     <div class="report__control">
       <ocenka-report-control @build-report="buildReport"></ocenka-report-control>
@@ -47,7 +47,8 @@ export default {
   data: function() {
     return {
       sumRow: 0,
-      reportType: false,
+      typeDistrict: false,
+      typeReport: '',
       isWarning: true,
       arrReport: Array, // итоговый отчет [["0", "Благовещенск", "3", "1", ...]] [["MRU", "DISTRICT", "COUNT-DECISION", ...]]
       arrReportAll: Array, //['0','0','0','0','0','0','0','0','0','0','0','0','0',],
@@ -67,11 +68,12 @@ export default {
   methods: {
 
     goBase: function() {this.$router.push(`/ocenka`);},
-    setReportType: function(arr, type) {
-      this.reportType = type;
+    setTypeDistrict: function(arr, type) {
+      this.typeDistrict = type;
     },
 
     buildReport: function() {
+      console.log(this.typeReport);
       if (!this.arrDistrict.length) {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 2000);
@@ -83,7 +85,7 @@ export default {
       let requestOption = {
         function: 'buildReport',
         arrDistrict: this.arrDistrict.join(),
-        typeFilter: this.reportType,
+        typeDistrict: this.typeDistrict,
         dateStart: this.arrReportDateRange[0],
         dateEnd: this.arrReportDateRange[1],
       };
