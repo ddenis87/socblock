@@ -44,14 +44,14 @@
                    :class="{'input-body__input_validation': !isValidationNomenclature}"
                    type="text"
                    v-model="documentNomenclature"
-                   placeholder="18-24" 
+                   placeholder="18-24"
                    @input="() => {isValidationNomenclature = true}"/>
             <div class="input-body__validation"
                  :class="{'input-body__validation_visibility': isValidationNomenclature}">* Не указана номенклатура</div>
           </div>
           <div class="input-body"
-               :class="{'input-body_display': (this.documentNumber != null) ? true : false}">
-            <span class="input-body__doc-number">{{ documentNumber }}</span>
+               :class="{'input-body_display': (documentNumber != '') ? false : true}">
+            <span class="input-body__doc-number">{{ '- ' + documentNumber }}</span>
           </div>
         </div>
       </div>
@@ -67,11 +67,11 @@
 <script>
 export default {
   name: 'officeWorkRegister',
-  props: {
-    inDocumentNumber: Number,
-  },
+  props: [
+    'inDocumentNumber'
+  ],
   computed: {
-    documentNumber: function() { return (this.inDocumentNumber) ? this.inDocumentNumber : null},
+    documentNumber: function() { return this.inDocumentNumber},
   },
   data: function() {
     return {
@@ -164,7 +164,6 @@ export default {
         .input-body {
           position: relative;
           box-sizing: border-box;
-
           &__title {
             position: absolute;
             display: inline-block;
@@ -209,6 +208,7 @@ export default {
             }
           }
           &__doc-number {
+            margin-left: -10px;
             font-family: "Montserrat";
             font-size: 30px;
             font-weight: bold;

@@ -5,8 +5,9 @@
     </div>
     <hr class="separator" />
     <div class="office-work__control">
-      <office-work-control @getDocumentNumber="getDocumentNumber"
-                         @change="changeDocumentType"></office-work-control>
+      <office-work-control :inDocumentNumber="documentNumber"
+                           @getDocumentNumber="getDocumentNumber"
+                           @change="changeDocumentType"></office-work-control>
     </div>
     <hr class="separator" />
     <div class="office-work__list" 
@@ -28,6 +29,7 @@ export default {
   data: function() {
     return {
       documentType: 'order',
+      documentNumber: '',
       listDocument: Array,
       listDocumentOrder: [
         {ID: '4', CNAME: 'О ношении масок', CDATETIME: '01.09.2020', CDOCNUMBER: '15', CSPECIP: '10.38.99.60'},
@@ -36,12 +38,15 @@ export default {
         {ID: '1', CNAME: 'О назначении ответственных', CDATETIME: '12.07.2020', CDOCNUMBER: '12', CSPECIP: '10.38.100.12'},
       ],
       listDocumentLetter: [
-        {ID: '8888', CNAME: 'О расшифровке писем', CNOMENCLATURE: '18-24', CDATETIME: '01.09.2020', CDOCNUMBER: '15', CSPECIP: '10.38.99.60'},
-        {ID: '8887', CNAME: 'О смене мастер-ключа', CNOMENCLATURE: '18-24', CDATETIME: '24.08.2020', CDOCNUMBER: '14', CSPECIP: '10.38.0.34'},
-        {ID: '8886', CNAME: 'О смене паролей', CNOMENCLATURE: '08-10', CDATETIME: '12.07.2020', CDOCNUMBER: '13', CSPECIP: '10.38.99.42'},
-        {ID: '8885', CNAME: 'О проведении конкурса', CNOMENCLATURE: '07-01', CDATETIME: '12.07.2020', CDOCNUMBER: '12', CSPECIP: '10.38.100.12'},
+        {ID: '4', CNAME: 'О расшифровке писем', CNOMENCLATURE: '18-24', CDATETIME: '01.09.2020', CDOCNUMBER: '8888', CSPECIP: '10.38.99.60'},
+        {ID: '3', CNAME: 'О смене мастер-ключа', CNOMENCLATURE: '18-24', CDATETIME: '24.08.2020', CDOCNUMBER: '8887', CSPECIP: '10.38.0.34'},
+        {ID: '2', CNAME: 'О смене паролей', CNOMENCLATURE: '08-10', CDATETIME: '12.07.2020', CDOCNUMBER: '8886', CSPECIP: '10.38.99.42'},
+        {ID: '1', CNAME: 'О проведении конкурса', CNOMENCLATURE: '07-01', CDATETIME: '12.07.2020', CDOCNUMBER: '8885', CSPECIP: '10.38.100.12'},
       ],
       isListOpacity: false,
+
+      countOrder: 15,
+      countLetter: 8888,
     }
   },
   created: function() {
@@ -49,11 +54,39 @@ export default {
   },
   methods: {
     getDocumentNumber: function(documentOptions) {
+      switch(documentOptions.documentType) {
+        case 'letter': {
+          this.countLetter++;
+          this.listDocumentLetter.unshift({
+            ID: this.countLetter,
+            CDOCNUMBER: this.countLetter,
+            CNAME: documentOptions.documentName,
+            CNOMENCLATURE: documentOptions.documentNomenclature,
+            CDATETIME: this.formatedDate(new Date()),
+            CSPECIP: '10.10.10.0'
+          })
+          this.documentNumber = this.countLetter;
+          break;
+        }
+        case 'order': {
+          this.countOrder++;
+          this.listDocumentOrder.unshift({
+            ID: this.countOrder,
+            CDOCNUMBER: this.countOrder,
+            CNAME: documentOptions.documentName,
+            CDATETIME: this.formatedDate(new Date()),
+            CSPECIP: '10.10.10.0'
+          })
+          this.documentNumber = this.countOrder;
+          break;
+        }
+      }
       console.log(documentOptions);
+
     },
     changeDocumentType: function(documentType) {
-      
-      console.log(documentType);
+      this.documentNumber = '';
+      // console.log(documentType);
       switch(documentType) {
         case 'order': {
           this.isListOpacity = true;
@@ -73,6 +106,15 @@ export default {
           }, 500)
           break;}
       }
+    },
+    formatedDate(noFormat) {
+      let formatDate = '';
+      let dateNow = new Date(noFormat);
+      let dd = (+dateNow.getDate() < 10) ? '0' + dateNow.getDate() : dateNow.getDate();
+      let mm = (+dateNow.getMonth() < 10) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
+      let yyyy = dateNow.getFullYear();
+      formatDate = dd + '.' + mm + '.' + yyyy;
+      return formatDate;
     }
   }
 }
