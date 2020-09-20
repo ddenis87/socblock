@@ -12,17 +12,21 @@
       <router-view />
     </div>
 
+    <div class="substrate-main__side-footer">
+      <side-footer></side-footer>
+    </div>
   </div>
 </template>
 
 <script>
 import sideTop from "@/components/units/side__top"
 import sideNavigation from "@/components/units/side__navigation"
+import sideFooter from "@/components/units/side__footer"
 
 export default {
   name: 'substrateMain',
   components: {
-    sideTop, sideNavigation
+    sideTop, sideNavigation, sideFooter,
   }
 }
 </script>
@@ -33,8 +37,9 @@ export default {
 .substrate-main {
   display: grid;
   grid-template-areas: "side-top side-top"
-                       "side-navigation side-content";
-  grid-template-rows: 80px auto;
+                       "side-navigation side-content"
+                       "side-footer side-footer";
+  grid-template-rows: 80px auto 40px;
   grid-template-columns: auto 1fr;
   width: 100%;
   box-sizing: border-box;
@@ -51,6 +56,12 @@ export default {
   }
   &__side-content {
     grid-area: side-content;
+    min-height: calc(100vh - 120px);
+    padding-top: 5px;
+    box-sizing: border-box;
+  }
+  &__side-footer {
+    grid-area: side-footer;
     padding-top: 5px;
     box-sizing: border-box;
   }
