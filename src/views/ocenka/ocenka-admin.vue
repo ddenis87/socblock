@@ -52,7 +52,7 @@ export default {
   methods: {
     insertUser: function() {
       let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.send(`function=insertUser&userFio=${this.userFio}&userIp=${this.userIp}`);
       request.onload = () => {
@@ -67,7 +67,7 @@ export default {
     },
     deleteUser: function(userId) {
       let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.send(`function=deleteUser&userId=${userId}`);
       request.onload = () => {
@@ -80,7 +80,7 @@ export default {
     },
     loadUser: function() {
       let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
+      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       request.responseType = 'json';
       request.send(`function=getListUser`)

@@ -110,6 +110,7 @@ export default {
       axios
         .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
         .then(response => {
+          // console.log(response.data);
           let newArrReport = [];
           this.arrReport = response.data;
           for(let i = 0; i < this.arrReport.length; i++) {

@@ -77,6 +77,7 @@ export default {
       if (findValue == '') {
         this.isWarning = false;
         setTimeout(() => {this.isWarning = true}, 1200);
+        this.isLoad = true;
         return;
       }
       this.selectEmpty = '';
