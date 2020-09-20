@@ -146,6 +146,12 @@ export default {
       axios
         .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
         .then(response => {
+          console.log(response.data);
+          if (response.data == '2') {
+            this.warningText = 'Ошибка: Решение уже добавлено!';
+            this.isWarning = false;
+            setTimeout(() => { this.isWarning = true }, 2000);
+          }
           this.loadHistory();
           this.decisionId = '';
           this.isLoad = true;
@@ -153,7 +159,7 @@ export default {
       } else {
         this.warningText = 'Не указано решение!';
         this.isWarning = false;
-        setTimeout(() => { this.isWarning = true }, 1200);
+        setTimeout(() => { this.isWarning = true }, 2000);
       }
     },
     deleteHistoryRecord: function(param) {

@@ -6,8 +6,8 @@ switch($_GET['function']) {
   case 'getListUser': echo selectDB("SELECT * FROM ZXOCENKA_SPEC ORDER BY CNAME"); break;
   case 'insertUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.INSERT_USER('" . $_GET['userFio'] . "', '" 
                                                                                   . $_GET['userIp'] . "'); END;"); break;
-  //case 'deleteUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.DELETE_USER('" . $_POST['userId'] . "'); END;"); break;
-  case 'getUser': echo selectDB("SELECT * FROM ZXOCENKA_SPEC WHERE CIP = '" . $strip . "'"); break;
+  case 'disabledUser': echo executeDB("BEGIN :stringReturn:=ZXOCENKA.DISABLED_USER('" . $_GET['userId'] . "'); END;"); break;
+  case 'getUser': echo selectDB("SELECT * FROM ZXOCENKA_SPEC WHERE CACCESS = '1' AND CIP = '" . $strip . "'"); break;
 
   case 'getPersonInfoSnils': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE SNILS = '" . $_GET['Snils'] . "'"); break;
   case 'getPersonInfoFio': echo selectDB("SELECT * FROM ZXOCENKA_PERSON_INFO WHERE UPPER(FA) LIKE UPPER('" . $_GET['Fio'] . "%')"); break;

@@ -14,13 +14,21 @@
         </tr>
         <template v-for="(row, index) in arrUser">
           <tr :key="index">
-            <td align="center">{{ index + 1 }}</td>
-            <td>{{ row.CNAME }}</td>
-            <td>{{ row.CIP }}</td>
-            <td align="center"><img src="img/button-row-delete.png" 
-                                    class="button-row-control" 
-                                    title="Удалить запись" 
-                                    @click="deleteUser(row.ID)"></td>
+            <td align="center" :class="{'td_disabled': (row.CACCESS == '0') ? true : false}">{{ index + 1 }}</td>
+            <td :class="{'td_disabled': (row.CACCESS == '0') ? true : false}">{{ row.CNAME }}</td>
+            <td :class="{'td_disabled': (row.CACCESS == '0') ? true : false}">{{ row.CIP }}</td>
+            <template v-if="(row.CACCESS == '1')">
+              <td align="center">
+                <img src="@/assets/images/button_visible-off.png" 
+                                  class="button-row-control" 
+                                  title="Заблокировать" 
+                                  @click="disabledUser(row.ID)">
+              </td>
+            </template>
+            <template v-else>
+              <td class="td_disabled">Отключен</td>
+            </template>
+            
           </tr>
         </template>
       </table>
@@ -40,6 +48,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'OcenkaAdmin',
   data: function() {
@@ -51,42 +60,95 @@ export default {
   },
   methods: {
     insertUser: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send(`function=insertUser&userFio=${this.userFio}&userIp=${this.userIp}`);
-      request.onload = () => {
-        if (request.response == '1') {
-          alert("Пользователь добавлен");
-          this.userFio = '';
-          this.userIp = '';
-          this.loadUser();
-        }
-        else {alert("БД: Ошибка добавления");}
-      }
+      let requestOption = {
+        function: 'insertUser',
+        userFio: this.userFio,
+        userIp: this.userIp,
+      };
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          console.log(response.data);
+          switch(response.data) {
+            case 1: {
+              alert("Пользователь добавлен!");
+              this.userFio = '';
+              this.userIp = '';
+              this.loadUser();
+              break;
+            }
+            case 2: {
+              alert("Пользователь с указанным IP уже добавлен и активен!");
+              this.userFio = '';
+              this.userIp = '';
+              break;
+            }
+            default: {
+              alert("БД: Ошибка добавления!");
+            }
+          }
+          // if (request.data == '1') {
+          //   alert("Пользователь добавлен");
+          //   this.userFio = '';
+          //   this.userIp = '';
+          //   this.loadUser();
+          // }
+          // else {alert("БД: Ошибка добавления");}
+        })
+      // let request = new XMLHttpRequest();
+      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
+      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // request.send(`function=insertUser&userFio=${this.userFio}&userIp=${this.userIp}`);
+      // request.onload = () => {
+      //   if (request.response == '1') {
+      //     alert("Пользователь добавлен");
+      //     this.userFio = '';
+      //     this.userIp = '';
+      //     this.loadUser();
+      //   }
+      //   else {alert("БД: Ошибка добавления");}
+      // }
     },
-    deleteUser: function(userId) {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send(`function=deleteUser&userId=${userId}`);
-      request.onload = () => {
-        if (request.response == '1') {
-          alert("Пользователь удален");
-          this.loadUser();
-        }
-        else {alert("БД: Ошибка удаления");}
-      }
+    disabledUser: function(userId) {
+      let requestOption = {
+        function: 'disabledUser',
+        userId: userId,
+      };
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          if (response.data == '1') {
+            alert("Пользователь отключен!");
+            this.loadUser();
+          }
+          else {alert("БД: Ошибка!");}
+        })
+      // let request = new XMLHttpRequest();
+      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
+      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // request.send(`function=disabledUser&userId=${userId}`);
+      // request.onload = () => {
+      //   if (request.response == '1') {
+      //     alert("Пользователь удален");
+      //     this.loadUser();
+      //   }
+      //   else {alert("БД: Ошибка удаления");}
+      // }
     },
     loadUser: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getListUser`)
-      request.onload = () => {
-        this.arrUser = request.response;
-      }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListUser'}})
+        .then(response => {
+          this.arrUser = response.data;
+        })
+      // let request = new XMLHttpRequest();
+      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
+      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // request.responseType = 'json';
+      // request.send(`function=getListUser`)
+      // request.onload = () => {
+      //   this.arrUser = request.response;
+      // }
     },
     // ajaxQuery: function() {
     //   let request = new XMLHttpRequest();
@@ -149,7 +211,10 @@ export default {
     padding: 3px;
     padding-left: 5px;
   }
-
+  .td_disabled {
+    background-color:lightgray;
+    /* color: white; */
+  }
   .button-row-control {
     width: 18px;
     height: 18px;
