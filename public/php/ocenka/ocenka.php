@@ -55,7 +55,7 @@ function executeDB($stringQuery) {
   oci_close($stringConnection);
   return $stringReturn;
 }
-//typeDistrict
+
 function buildReport($strDistrict, $typeDistrict, $dateStart, $dateEnd) {
   if (!$stringConnection = oci_connect("C##QSECOFR","Ufkfrnbrf","XE","AL32UTF8")) {return json_encode("Error connecting to Database#");}
   $arrDistrict = explode(',',$strDistrict);
@@ -118,7 +118,6 @@ function buildReport($strDistrict, $typeDistrict, $dateStart, $dateEnd) {
 }
 ///////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////
-//typeFilter
 function buildReportType($strDistrict, $typeReport, $dateStart, $dateEnd) {
   if (!$stringConnection = oci_connect("C##QSECOFR","Ufkfrnbrf","XE","AL32UTF8")) {return json_encode("Error connecting to Database#");}
   $arrDistrict = explode(',',$strDistrict);
@@ -129,7 +128,6 @@ function buildReportType($strDistrict, $typeReport, $dateStart, $dateEnd) {
 	case 'uhod': $strWhereType = "ZXOCENKA_PROPS.UHOD = '1' AND"; break;
 	
   }
-  //return json_encode($strWhereType, JSON_UNESCAPED_UNICODE);
   for($i = 0; $i < count($arrDistrict); $i++) {
     $rowReturn = [];
     $stringQuery = "SELECT * FROM ZXOCENKA_DISTRICT WHERE ID = '" . $arrDistrict[$i] . "'" ;
@@ -140,22 +138,7 @@ function buildReportType($strDistrict, $typeReport, $dateStart, $dateEnd) {
       $rowReturn[] = $row["FLAG_MRU"]; // $rowReturn[] = ($typeFilter == 'true') ? '1' : $row["FLAG_MRU"];
       $rowReturn[] = $row["CNAME"];
     }
-//    if($typeFilter == 'true') {
-//      $stringQuery = "SELECT 
-//                          ZXOCENKA_DECISION.ID AS DECISIONID, 
-//                          ZXOCENKA_DECISION.CNAME AS DECISIONNAME, 
-//                          TB1.DECISIONCOUNT AS DECISIONCOUNT 
-//                      FROM ZXOCENKA_DECISION
-//                      LEFT OUTER JOIN (
-//                      SELECT 
-//                          ZXOCENKA_REPORT_MRU.DECISIONID AS DECISIONID,
-//                          COUNT(ZXOCENKA_REPORT_MRU.DECISIONID) AS DECISIONCOUNT
-//                          FROM ZXOCENKA_REPORT_MRU
-//                          WHERE ZXOCENKA_REPORT_MRU.MRUID = '" . $arrDistrict[$i] . "' AND 
-//                                ZXOCENKA_REPORT_MRU.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND (TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD') + 1) 
-//                          GROUP BY ZXOCENKA_REPORT_MRU.DECISIONID) TB1 ON ZXOCENKA_DECISION.ID = TB1.DECISIONID";
-//						  
-//    } elseif ($typeFilter == 'false') {
+
       $stringQuery = "SELECT ZXOCENKA_DECISION.ID AS DECISIONID, ZXOCENKA_DECISION.CNAME AS DECISIONNAME, TB1.DECISIONCOUNT AS DECISIONCOUNT 
                       FROM ZXOCENKA_DECISION
                       LEFT OUTER JOIN (
@@ -169,8 +152,7 @@ function buildReportType($strDistrict, $typeReport, $dateStart, $dateEnd) {
                                 WHERE " . $strWhereType . " ZXOCENKA_PERSON.DISTRICT_ID = '" . $arrDistrict[$i] . "' AND ZXOCENKA_HISTORY.CDATE BETWEEN TO_DATE('" . $dateStart . "', 'YYYY-MM-DD') AND (TO_DATE('" . $dateEnd . "', 'YYYY-MM-DD') + 1) 
 	                              GROUP BY ZXOCENKA_HISTORY.DECISION_ID, ZXOCENKA_PERSON.DISTRICT_ID) TB1 ON ZXOCENKA_DECISION.ID = TB1.RESHENIEID
 	                              ORDER BY ZXOCENKA_DECISION.ID";
-//    }
-//return json_encode($stringQuery, JSON_UNESCAPED_UNICODE);
+
     $stringQuery = ociparse($stringConnection, $stringQuery);
     ociexecute($stringQuery, OCI_DEFAULT);
     while($row = oci_fetch_assoc($stringQuery)) {

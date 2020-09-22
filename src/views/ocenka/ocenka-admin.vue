@@ -87,27 +87,7 @@ export default {
               alert("БД: Ошибка добавления!");
             }
           }
-          // if (request.data == '1') {
-          //   alert("Пользователь добавлен");
-          //   this.userFio = '';
-          //   this.userIp = '';
-          //   this.loadUser();
-          // }
-          // else {alert("БД: Ошибка добавления");}
         })
-      // let request = new XMLHttpRequest();
-      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // request.send(`function=insertUser&userFio=${this.userFio}&userIp=${this.userIp}`);
-      // request.onload = () => {
-      //   if (request.response == '1') {
-      //     alert("Пользователь добавлен");
-      //     this.userFio = '';
-      //     this.userIp = '';
-      //     this.loadUser();
-      //   }
-      //   else {alert("БД: Ошибка добавления");}
-      // }
     },
     disabledUser: function(userId) {
       let requestOption = {
@@ -123,17 +103,6 @@ export default {
           }
           else {alert("БД: Ошибка!");}
         })
-      // let request = new XMLHttpRequest();
-      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // request.send(`function=disabledUser&userId=${userId}`);
-      // request.onload = () => {
-      //   if (request.response == '1') {
-      //     alert("Пользователь удален");
-      //     this.loadUser();
-      //   }
-      //   else {alert("БД: Ошибка удаления");}
-      // }
     },
     loadUser: function() {
       axios
@@ -141,32 +110,11 @@ export default {
         .then(response => {
           this.arrUser = response.data;
         })
-      // let request = new XMLHttpRequest();
-      // request.open('POST', pathBackEnd + 'php/ocenka/ocenka.php', true);
-      // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      // request.responseType = 'json';
-      // request.send(`function=getListUser`)
-      // request.onload = () => {
-      //   this.arrUser = request.response;
-      // }
     },
-    // ajaxQuery: function() {
-    //   let request = new XMLHttpRequest();
-    //     request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-    //     request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    //     request.responseType = 'json';
-    //     request.send(`function=getListUser`)
-    //     request.onload = () => {
-    //       this.arrUser = request.response;
-    //     }
-    // },
   },
   created: function() {
     this.loadUser();
-
-    
   },
-
 }
 </script>
 

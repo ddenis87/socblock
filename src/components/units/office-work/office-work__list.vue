@@ -92,7 +92,7 @@ export default {
         &_c1 { width: 60px; text-align: left; }
         &_c2 { text-align: left; }
         &_c3 { width: 80px;}
-        &_c4 { width: 100px; }
+        &_c4 { width: 110px; }
         &_c5 { width: 100px; }
         &:first-child { border-left: 0px; }
       }

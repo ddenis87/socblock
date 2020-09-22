@@ -86,7 +86,6 @@ export default {
     },
     changeDocumentType: function(documentType) {
       this.documentNumber = '';
-      // console.log(documentType);
       switch(documentType) {
         case 'order': {
           this.isListOpacity = true;

@@ -37,18 +37,12 @@ export default {
   },
   data: function() {
     return {
-      // arrListInitial: this.arrListInitialInput, // список тер.органов,
       arrListFilter: [],
       isCheckAllMru: false,
       isDisabledMru: false,
     }
   },
   created: function() {
-    // axios
-    //   .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
-    //   .then(response => {
-    //     this.arrListInitial = response.data;
-    //   })
   },
   methods: {
     selectMruAll: function() {
@@ -61,7 +55,6 @@ export default {
         this.isDisabledMru = false;
         this.arrListFilter = arrMruId.slice();
       }
-      // console.log(this.arrListFilter);
       this.$emit('change', this.arrListFilter)
     },
     clearFilter: function() {

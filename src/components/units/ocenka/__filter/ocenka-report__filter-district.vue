@@ -44,7 +44,6 @@ export default {
     'arrListInitialInput'
   ],
   computed: {
-    // arrListInitial: function() { return this.arrListInitialInput; } // - по умолчанию при загрузке
   },
   data: function() {
     return {

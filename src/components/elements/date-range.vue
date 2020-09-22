@@ -23,9 +23,6 @@
 <script>
 export default {
   name: 'DateRange',
-  // model: {
-  //   event: ''
-  // },
   props: {
   },
   data: function() {

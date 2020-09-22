@@ -27,7 +27,6 @@ export default {
   data: () => ({
   }),
   created: function() {
-    // console.log(this.accessOpfr);
   },
   methods: {
     goOcenkaAdmin: function(event, url) {

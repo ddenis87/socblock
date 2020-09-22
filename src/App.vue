@@ -27,7 +27,7 @@ export default {
         .then(response => {
           let arrUserIp = response.data.split('.');
           userInfo.userIp = response.data;
-          if (arrUserIp[2] == '0' || arrUserIp[2] == '100') {
+          if (arrUserIp[2] == '0' || arrUserIp[2] == '100' || arrUserIp[2] == '99') {
             userInfo.userName = "Пользователь ОПФР";
             userInfo.accessOpfr = true;
           } else {

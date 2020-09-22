@@ -48,7 +48,6 @@ export default {
       }
     },
     findPerson: function(param) {
-      //console.log(param);
       if (param.key == "Enter") {
         this.$emit('findPerson', this.findValue, this.findType);
       }
