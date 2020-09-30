@@ -17,7 +17,11 @@ export default {
   computed: {
     content() {return substrateMain;}
   },
-
+  data: function() {
+    return {
+      userIp: '',
+    }
+  },
   created: function() {
     let userInfo = {
       userName: ''
@@ -25,6 +29,7 @@ export default {
     axios
         .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserIp'}})
         .then(response => {
+          this.userIp = response.data;
           let arrUserIp = response.data.split('.');
           userInfo.userIp = response.data;
           if (arrUserIp[2] == '0' || arrUserIp[2] == '100' || arrUserIp[2] == '99') {
@@ -34,8 +39,25 @@ export default {
             userInfo.userName = "Пользователь УПФР";
           }
           this.$store.commit('setUserProfile', userInfo);
+          this.getAccessOzi();
         })
         .catch(() => console.log("Failed to connect server"))
+  },
+  methods: {
+    getAccessOzi: function() {
+      let userInfo = {};
+      axios
+        .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserOzi'}})
+        .then(response => {
+          if (response.data.length != 0) {
+            userInfo.userId = response.data[0].ID;
+            userInfo.userIp = response.data[0].CIP;
+            userInfo.userName = response.data[0].CNAME;
+            userInfo.accessOzi = true;
+            this.$store.commit('setUserProfileOzi', userInfo);
+          }
+        })
+    }
   }
 }
 

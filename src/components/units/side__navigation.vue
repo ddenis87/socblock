@@ -13,6 +13,10 @@
       <img class="item__img" src="@/assets/images/menu/menu_ocenka.png" />
       <span class="item__title">Оценка ПП ЗЛ</span>
     </li>
+    <router-link tag="li" class="navigation__item" to="/report-week" v-if="accessOzi">
+      <img class="item__img" src="@/assets/images/menu/menu_report.png" />
+      <span class="item__title">Отчет ОЗИ</span>
+    </router-link>
 
   </ul>
 </div>
@@ -22,6 +26,7 @@
 export default {
   computed: {
     accessOpfr() { return this.$store.state.userProfile.accessOpfr; },
+    accessOzi() { return this.$store.state.userProfile.accessOzi; },
     administrator() { return this.$store.state.userProfile.accessResource.ocenka.administrator; }
   },  
   data: () => ({
