@@ -18,7 +18,8 @@ export default {
     'inValue',
   ],
   computed: {
-    isEmpty() {return this.inValidation;}
+    isEmpty() { return this.inValidation; },
+    // inputValue() { return this.inValue; }
   },
   data: function() {
     return {
@@ -31,9 +32,13 @@ export default {
   methods: {
     setInputValue: function() {
       this.$emit('input', this.inputValue);
+      // this.inputValue = '123';
     },
     enterInputValue: function(event) {
       this.$emit('keydown', event.key);
+    },
+    clear: function() {
+      this.inputValue = '';
     }
   }
 }

@@ -2,6 +2,7 @@
   <div class="report-control">
     <div class="report-control__title">Добавить задачу</div>
     <c-input class="report-control__input"
+             ref="fieldTask"
              v-model="taskText"><slot name="titleInput"></slot></c-input>
     <div class="report-control__box">
       <c-select class="report-control__select-item"
@@ -32,6 +33,7 @@ export default {
   data: function() {
     return {
       taskText: '',
+      taskTextDefault: '',
       taskStatus: '',
       listItem: [
         {ID: 'Без статуса', CNAME: 'Без статуса'},
@@ -42,13 +44,16 @@ export default {
   },
   methods: {
     addTask: function() {
+      this.taskTextDefault = this.taskText;
       let taskProps = {
         text: this.taskText,
         status: this.taskStatus,
-        userId: this.userId
+        userId: this.userId,
       };
-    this.$emit('click', taskProps);
-    }
+    
+      this.$emit('click', taskProps);
+      this.$refs.fieldTask.clear();
+    },
   }
 }
 </script>

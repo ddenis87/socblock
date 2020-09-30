@@ -11,7 +11,8 @@
       </div>
       <hr class="report__separator"/>
       <div class="report__body-list">
-        <report-list :listItem="listItem"></report-list>
+        <report-list :listItem="listItem"
+                     @delete-task="deleteTask"></report-list>
       </div>
     </div>
   </div>
@@ -29,6 +30,9 @@ export default {
     reportControl,
     reportList,
   },
+  computed: {
+    userId() { return this.$store.state.userProfile.userId; }
+  },
   data: function() {
     return {
       listItem: [
@@ -36,7 +40,8 @@ export default {
         {ID: '2', CNAMEAUTOR: 'Корчмит А.А.', VTASKNAME: 'Создание связей ViPNet', CSTATUS: 'Без статуса'},
         {ID: '3', CNAMEAUTOR: 'Корчмит А.А.', VTASKNAME: 'Смена мастер-ключа', CSTATUS: 'В работе'},
         {ID: '4', CNAMEAUTOR: 'Давыдов А.Ю.', VTASKNAME: 'Смена парольной документации ПК КС', CSTATUS: 'Завершено'},
-      ]
+      ],
+      weekStart: '0',
     }
   },
   created: function() {
@@ -47,12 +52,43 @@ export default {
       axios
         .post(pathBackEnd + 'php/report.php', null, {params: {function: 'taskGet'}})
         .then(response => {
-          // console.log(response.data);
-          this.listItem = response.data;
+          let arrItem = [];
+          for (let i = 0; i < response.data.length; i++) {
+            if (this.getWeekEnd(response.data[i].VTASKDATE)) { arrItem.push({WEEK: 'true', VTASKDATE: response.data[i].VTASKDATE, WEEKNAME: this.getWeekRange(response.data[i].VTASKDATE)});}
+            arrItem.push(response.data[i]);
+            if (i == response.data.length - 1) { this.listItem = arrItem; }
+          }
         })
+        .catch(() => { console.log('I`m tormoz') })
+    },
+    getWeekEnd: function(inDate) {
+      let fDate = inDate; // this.modDate(inDate, 1);
+      let cDate = new Date(fDate);
+      let weekStart = cDate.getDate() - cDate.getDay() + 7;
+      if (this.weekStart != weekStart) { this.weekStart = weekStart; return true; }
+      return false;
+    },
+    getWeekRange: function(inDate) {
+      let curr = new Date(inDate);
+      let rMonth = curr.getMonth();
+      let rYear = curr.getFullYear();
+      let weekStart = curr.getDate() - curr.getDay() + 1;
+      let weekEnd = weekStart + 6;
+      // console.log( new Date(rYear, rMonth, weekEnd) );
+      return this.formatedDateRange([new Date(rYear, rMonth, weekStart), new Date(rYear, rMonth, weekEnd)]);
+    },
+    formatedDateRange(noFormat) {
+      let formatDate = '';
+      let option = {
+        day: '2-digit',
+        month: 'short'
+      };
+      formatDate = Intl.DateTimeFormat('ru-RU',option).format(new Date(noFormat[0])).slice(0, -1) + ' - ' +
+                   Intl.DateTimeFormat('ru-RU',option).format(new Date(noFormat[1])).slice(0, -1)
+      return formatDate;
     },
     addTask: function(taskOption) {
-      console.log(taskOption);
+      // console.log(taskOption);
       let option = {
         function: 'taskAdd',
         specId: taskOption.userId,
@@ -62,8 +98,26 @@ export default {
       axios
         .post(pathBackEnd + 'php/report.php', null, {params: option})
         .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
           this.getTask();
+        })
+    },
+    deleteTask: function(taskOption) {
+      console.log(this.userId);
+      if (this.userId != taskOption.VAUTORID) {
+        alert('This task is not your!!!');
+        return;
+      }
+      let option = {
+        function: 'taskDelete',
+        taskId: taskOption.VID
+      }
+      axios
+        .post(pathBackEnd + 'php/report.php', null, {params: option})
+        .then(response => {
+          // console.log(response.data);
+          if (response.data == '1') this.getTask();
+          else alert('Error for delete')
         })
     }
   }

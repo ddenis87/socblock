@@ -1,8 +1,11 @@
 <?php
 
 $strip = $_SERVER['REMOTE_ADDR'];
+//echo json_encode($_SERVER);
+//echo json_encode($_SESSION);
 switch($_GET['function']) {
   case 'getUserInfo': echo selectDB("SELECT * FROM ZXOCENKA_SPEC WHERE CIP = '" . $strip . "'"); break;
+  case 'getUserOzi': echo selectDB("SELECT * FROM ZRREPORT_SPEC WHERE CIP = '" . $strip . "'"); break;
   case 'getUserIp': echo json_encode($strip); break;
 }
 
