@@ -12,6 +12,7 @@ export default new Vuex.Store({
       userName: 'Гость',
       accessOpfr: false,
       accessOzi: false,
+      accessLevel: 0,
       accessResource: {
         ocenka: {
           access: false,
@@ -54,6 +55,7 @@ export default new Vuex.Store({
       if ('userIp' in userProfile) state.userProfile.userIp = userProfile.userIp;
       if ('userName' in userProfile) state.userProfile.userName = userProfile.userName;
       if ('accessOzi' in userProfile) state.userProfile.accessOzi = userProfile.accessOzi;
+      if ('accessLevel' in userProfile) state.userProfile.accessLevel = userProfile.accessLevel;
     }
   },
   actions: {

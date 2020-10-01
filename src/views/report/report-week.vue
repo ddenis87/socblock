@@ -3,7 +3,7 @@
     <h3 class="report__title">Отчеты - Еженедельные отчеты</h3>
 
     <div class="report__body">
-      <div class="report__body-control">
+      <div class="report__body-control" v-if="(accessLevel != 0)">
         <report-control @click="addTask">
           <template v-slot:titleInput>Наименование задачи</template>
           <template v-slot:titleSelect>Статус</template>
@@ -31,7 +31,8 @@ export default {
     reportList,
   },
   computed: {
-    userId() { return this.$store.state.userProfile.userId; }
+    userId() { return this.$store.state.userProfile.userId; },
+    accessLevel() { return this.$store.state.userProfile.accessLevel; }
   },
   data: function() {
     return {
@@ -45,6 +46,7 @@ export default {
     }
   },
   created: function() {
+    this.getAccessOzi();
     this.getTask();
   },
   methods: {
@@ -115,9 +117,23 @@ export default {
       axios
         .post(pathBackEnd + 'php/report.php', null, {params: option})
         .then(response => {
-          // console.log(response.data);
-          if (response.data == '1') this.getTask();
-          else alert('Error for delete')
+          console.log(response.data);
+          this.getTask();
+          if (response.data != '1') { alert('Error for delete'); }
+        })
+    },
+    getAccessOzi: function() {
+      let userInfo = {};
+      axios
+        .post(pathBackEnd + 'php/index.php', null, {params: {function: 'getUserOzi'}})
+        .then(response => {
+          if (response.data.length != 0) {
+            userInfo.userId = response.data[0].ID;
+            userInfo.userIp = response.data[0].CIP;
+            userInfo.userName = response.data[0].CNAME;
+            userInfo.accessOzi = true;
+            this.$store.commit('setUserProfileOzi', userInfo);
+          }
         })
     }
   }

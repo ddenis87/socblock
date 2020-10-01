@@ -54,6 +54,8 @@ export default {
             userInfo.userIp = response.data[0].CIP;
             userInfo.userName = response.data[0].CNAME;
             userInfo.accessOzi = true;
+            userInfo.accessLevel = response.data[0].CACCESSLEVEL;
+
             this.$store.commit('setUserProfileOzi', userInfo);
           }
         })
