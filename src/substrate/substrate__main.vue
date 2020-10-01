@@ -70,9 +70,13 @@ export default {
   .substrate-main {
     grid-template-areas: "side-top"
                          "side-content";
-    grid-template-columns: 1fr;
+    grid-template-columns: 100%;
+    grid-template-rows: 60px auto;
     &__side-navigation {
       display: none;
+    }
+    &__side-content {
+      min-height: auto;
     }
   }
 

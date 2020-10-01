@@ -88,4 +88,12 @@ export default {
     }
   }
 }
+
+@media print {
+  .side-top {
+    &__logo {
+      display: none;
+    }
+  }
+}
 </style>

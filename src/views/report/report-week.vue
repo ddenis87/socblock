@@ -152,4 +152,14 @@ export default {
     margin: 10px 20px;
   }
 }
+
+@media print {
+  .report {
+    &__body {
+      &-control {
+        display: none;
+      }
+    }
+  }
+}
 </style>
