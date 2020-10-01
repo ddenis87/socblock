@@ -34,7 +34,7 @@ export default {
   },
   created: function() {
     let dateNow = new Date();
-    let mm = (+dateNow.getMonth() < 10) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
+    let mm = (+dateNow.getMonth() < 9) ? '0' + (+dateNow.getMonth() + 1) : +dateNow.getMonth() + 1;
     let yyyy = dateNow.getFullYear();
     let dateStart = new Date(yyyy, mm, 0);
     let dd = (+dateStart.getDate() < 10) ? '0' + dateStart.getDate() : dateStart.getDate();
