@@ -1,15 +1,23 @@
 <template>
-  <form>
-    <h2>Выберите базу</h2>
+  <div class="home">
+    <div class="titile">
+      <h2>Выберите базу</h2>
+    </div>
     <ul>
       <li>Запуск базы <b>Оценка ПП ЗЛ</b> - 13.07.2020 г.</li>
     </ul>
-  </form>
+  </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+
+.home {
+  padding-left: 10px;
+  font-size: 14px;
+}
+
 ul {
-  list-style-type: none;
+  list-style: none;
 }
 
 li {

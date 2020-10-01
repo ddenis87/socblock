@@ -12,9 +12,9 @@ Vue.use(VueRouter)
   }
   ,
   {
-    path: '/opeka',
-    name: 'opeka',
-    component: () => import('../views/opeka.vue')
+    path: '/office-work',
+    name: 'office-work',
+    component: () => import('../views/office-work/office-work.vue')
   },
   {
     path: '/ocenka',
@@ -35,6 +35,11 @@ Vue.use(VueRouter)
     path: '/ocenka-admin',
     name: 'ocenka-admin',
     component: () => import('../views/ocenka/ocenka-admin.vue')
+  },
+  {
+    path: '/report-week',
+    name: 'report-week',
+    component: () => import('../views/report/report-week.vue')
   },
 ]
 

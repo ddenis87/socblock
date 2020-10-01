@@ -1,12 +1,10 @@
 <template>
   <div class="ocenka-card">
-    <div class="back">
-      <button @click="goBack">Вернуться</button>
+    <div class="ocenka-card-title">
+        <h2 class="ocenka-card-title__title">Сведения о застрахованном лице: <i class="ocenka-card-title__title-black">{{ arrDataPerson[0].SNILS }}</i></h2>
+      <button class="title__button" @click="goBack">Вернуться</button>
     </div>
 
-    <div class="title">
-      <h2>Сведения о застрахованном лице: </h2><h2><i>{{ arrDataPerson[0].SNILS }}</i></h2>
-    </div>
     <table>
       <tr><td width="50%">Застрахованное лицо:</td><td>{{ arrDataPerson[0].FA + " " + arrDataPerson[0].IM + " " + arrDataPerson[0].OT}}</td></tr>
       <tr><td>Дата рождения:</td><td>{{ arrDataPerson[0].BIRTHDAY }}</td></tr>
@@ -14,9 +12,10 @@
         <td>Наименование территориального органа:</td>
         <td>
           <select class="select-mru" 
+                  :disabled="!administrator"
                   v-model="districtId"
                   @change="changeMru"
-                  :class="{}">
+                   :class="{}">
             <option v-for="(row, index) in arrDistrict" :key="index" :value="row.DISTRICTID">{{ row.DISTRICTNAME }}</option>
           </select>
         </td>
@@ -29,7 +28,7 @@
       <tr><td>Включен в список "СлПриз":</td><td>{{ (+arrDataPerson[0].SLPRIZ) ? 'Да' : 'Нет' }}</td></tr>
       <tr><td>Уход:</td><td>{{ (+arrDataPerson[0].UHOD) ? 'Да' : 'Нет' }}</td></tr>
     </table>
-    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}">
+    <div class="person-control" :class="{'person-control_warning' : !isPersonControl}" > <!-- v-if="(access)" -->
       <div class="person-control__item person-control__item_hidden" :class="{'person-control__item_warning' : !isPersonControl}">Изменения не сохранены</div>
       <div class="person-control__item" :class="{'person-control_warning' : !isPersonControl}"><button class="person-control__button" :disabled="isPersonControl" @click="savePerson">Сохранить</button></div>
     </div>
@@ -39,8 +38,7 @@
     </div>
     <div class="sved">
       <hr>
-      <div class="sved-control" v-if="(access)"> <!-- access - может сразу использовать глобальную переменную -->
-        
+      <div class="sved-control" v-if="(!guest)"> <!--v-if="(access)" access - может сразу использовать глобальную переменную -->
         <label for="">Укажите результат:</label>
         <select v-model="decisionId">
           <option value="" selected disabled>Выберите результат из списка</option>
@@ -49,7 +47,6 @@
                   :value='rowList.ID'>{{ rowList.CNAME }}</option>
         </select>
         <button @click="insertHistoryRecord">Добавить результат</button>
-        
       </div>
       <hr>
       <table>
@@ -63,9 +60,11 @@
           <td>{{ rowDataHistory.SPEC }}</td>
           <td>{{ modDate(rowDataHistory.CDATE),  }}</td>
           <td>{{ rowDataHistory.DECISION }}</td>
-          <td align="center"><img src="img/button-row-delete.png" class="button-row-control" 
-                                    title="Удалить запись" 
-                                    @click="deleteHistoryRecord(rowDataHistory.ID)"  /></td>
+          <td align="center"><img v-if="administrator" 
+                                  src="img/button-row-delete.png" 
+                                  class="button-row-control" 
+                                  title="Удалить запись" 
+                                  @click="deleteHistoryRecord(rowDataHistory.ID)"  /></td>
         </tr>
       </table>
       <p>{{ selectEmpty }}</p>
@@ -80,8 +79,15 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: 'CardPerson',
+  computed: {
+    //access() { return this.$store.state.userProfile.accessResource.ocenka.access; },
+    administrator() { return this.$store.state.userProfile.accessResource.ocenka.administrator; },
+    guest() { return this.$store.state.userProfile.accessResource.ocenka.guest; },
+    specId() { return this.$store.state.userProfile.userId; }
+  },
   data: function() {
     return {
       arrMonth: ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'],
@@ -93,7 +99,6 @@ export default {
       isWarning: true,
       isPersonControl: true,
       personId: decodeURI(window.location.search.slice(window.location.search.indexOf("=") + 1)),
-      access: accessUser,
       decisionId: '',
       districtId: '',
       selectEmpty: '',
@@ -116,91 +121,105 @@ export default {
       this.isPersonControl = false;
     },
     savePerson: function() {
-      console.log(this.personId);
       this.isLoad = false;
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send(`function=changePerson&personId=${this.personId}&districtId=${this.districtId}`);
-      request.onload = () => {
-        this.loadInfo();
-        this.isPersonControl = true;
-        this.isLoad = true;
+      let requestOption = {
+        function: 'changePerson',
+        personId: this.personId,
+        districtId: this.districtId
       }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.loadInfo();
+          this.isPersonControl = true;
+          this.isLoad = true;
+        })
     },
     insertHistoryRecord: function() {
       if(this.decisionId != '') {
         this.isLoad = false;
-        let request = new XMLHttpRequest();
-        request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.send(`function=insertHistory&personId=${this.personId}&specId=${accessUserId}&decisionId=${this.decisionId}`);
-        request.onload = () => {
+        let requestOption = {
+          function: 'insertHistory',
+          personId: this.personId,
+          specId: this.specId,
+          decisionId: this.decisionId
+        }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          console.log(response.data);
+          if (response.data == '2') {
+            this.warningText = 'Ошибка: Решение уже добавлено!';
+            this.isWarning = false;
+            setTimeout(() => { this.isWarning = true }, 2000);
+          }
           this.loadHistory();
           this.decisionId = '';
           this.isLoad = true;
-        }
+        })
       } else {
         this.warningText = 'Не указано решение!';
         this.isWarning = false;
-        setTimeout(() => { this.isWarning = true }, 1200);
+        setTimeout(() => { this.isWarning = true }, 2000);
       }
     },
     deleteHistoryRecord: function(param) {
-      if (accessUserAdmin == true) {
-        this.isLoad = false;
-        let request = new XMLHttpRequest();
-        request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-        request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        request.send(`function=deleteHistory&historyId=${param}`);
-        request.onload = () => {
-          this.loadHistory();
-          this.isLoad = true;
-          if (request.response == '1') {alert("Запись удалена");}
-          else {alert("БД: Ошибка удаления");}
-        }
-      } else {
-        this.warningText = 'Нет прав на удаление!';
-        this.isWarning = false;
-        setTimeout(() => { this.isWarning = true }, 1500);
+      this.isLoad = false;
+      let requestOption = {
+        function: 'deleteHistory',
+        historyId: param,
       }
-
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          if (response.data == '1') {
+            alert("Запись удалена");
+            this.loadHistory();
+          }
+          else {
+            alert("БД: Ошибка удаления");
+          }
+          this.isLoad = true;
+        })
     },
     loadDistrict: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getListDistrict`);
-      request.onload = () => {
-        this.arrDistrict = request.response;
-      }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDistrict'}})
+        .then(response => {
+          this.arrDistrict = response.data;
+        })
     },
     loadInfo: function() {
-      let request = new XMLHttpRequest();
-      request.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.responseType = 'json';
-      request.send(`function=getPersonInfo&personId=${this.personId}`);
-      request.onload = () => {
-        this.arrDataPerson = request.response;
-        this.districtId = this.arrDataPerson[0].ID_DISTRICT;
+      let requestOption = {
+        function: 'getPersonInfo',
+        personId: this.personId
       }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.arrDataPerson = response.data;
+          this.districtId = this.arrDataPerson[0].ID_DISTRICT;
+        })
     },
     loadHistory: function() {
-      let requestHistory = new XMLHttpRequest();
-      this.selectEmpty = '';
-      requestHistory.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      requestHistory.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      requestHistory.responseType = 'json';
-      requestHistory.send(`function=getPersonHistiry&personId=${this.personId}`);
-      requestHistory.onload = () => {
-        this.arrDataHistory = requestHistory.response;
-        if (this.arrDataHistory.length == 0) this.selectEmpty = 'Записи отсутствуют';
+      let requestOption = {
+        function: 'getPersonHistiry',
+        personId: this.personId
       }
+      axios
+        .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: requestOption})
+        .then(response => {
+          this.arrDataHistory = response.data;
+          if (this.arrDataHistory.length == 0) {
+            this.selectEmpty = 'Записи отсутствуют';
+          } else {
+            this.selectEmpty = '';
+          }
+        })
     },
   },
   created: function() {
+    console.log(this.guest);
     this.isLoad = false;
     // load list district
     this.loadDistrict();
@@ -209,45 +228,39 @@ export default {
     // load history
     this.loadHistory();
     // load list reshenie if user access
-    if(this.access) {
-      this.isLoad = false;
-      let requestList = new XMLHttpRequest();
-      requestList.open('POST', pathBackEndrep + 'php/ocenka/ocenka.php', true);
-      requestList.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      requestList.responseType = 'json';
-      requestList.send(`function=getListDecision`);
-      requestList.onload = () => {
-        this.arrList = requestList.response;
-      }
-    }
+    axios
+      .post(pathBackEnd + 'php/ocenka/ocenka.php', null, {params: {function: 'getListDecision'}})
+      .then(response => {
+        this.arrList = response.data;
+      })
     this.isLoad = true;
   }
 }
 </script>
 
-<style scoped>
-  h2 {margin: 0px; margin-right: 10px;font-size: 18px;}
-
-  .ocenka-card {
-    padding-left: 10px;
-    width: 100%;
-    max-width: 1000px;
-    font-size: 14px;
-  }
-
-  /* ------back-button------ */
-  .back-img {
-    width: 30px;
-    height: auto;
-    cursor: pointer;
-  }
-  /* ----------------------- */
-  /* ------title------ */
-  .title {
+<style lang="scss" scoped>
+.ocenka-card {
+  padding-left: 10px;
+  width: 98%;
+  font-size: 14px;
+  &-title {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    &__title {
+      margin: 5px 0px;
+      padding: 0px;
+      &-black { color: black;}
+    }
+    &__button {
+      width: 150px;
+      padding: 3px;
+    }
   }
-  i {color: black;font-size: 16px;}
-  /* ----------------- */
+}
+</style>
+
+<style scoped>
 
   /* ------table------ */
   table {
@@ -284,9 +297,7 @@ export default {
     justify-content: space-between;
     align-items: center;
   }
-  .person-control__button {
-    cursor: pointer;
-  }
+
   .person-control_warning {
     background-color: red;
     color: white;
@@ -304,8 +315,9 @@ export default {
   .sved-control {
     display: flex;
     justify-content: space-between;
-    padding-left: 15px;
-    padding-right: 15px;
+    align-items: center;
+    /* padding-left: 15px;
+    padding-right: 15px; */
   }
 
   hr {margin: 10px 0px; padding: 0px;}
