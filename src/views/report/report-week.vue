@@ -117,7 +117,8 @@ export default {
       axios
         .post(pathBackEnd + 'php/report.php', null, {params: option})
         .then(response => {
-          console.log(response.data);
+          // console.log(response.data);
+          if (response.data == '1') { alert('Task delete') }
           this.getTask();
           if (response.data != '1') { alert('Error for delete'); }
         })
