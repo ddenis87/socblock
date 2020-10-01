@@ -38,7 +38,7 @@
     </div>
     <div class="sved">
       <hr>
-      <div class="sved-control" > <!--v-if="(access)" access - может сразу использовать глобальную переменную -->
+      <div class="sved-control" v-if="(!guest)"> <!--v-if="(access)" access - может сразу использовать глобальную переменную -->
         <label for="">Укажите результат:</label>
         <select v-model="decisionId">
           <option value="" selected disabled>Выберите результат из списка</option>
@@ -85,6 +85,7 @@ export default {
   computed: {
     //access() { return this.$store.state.userProfile.accessResource.ocenka.access; },
     administrator() { return this.$store.state.userProfile.accessResource.ocenka.administrator; },
+    guest() { return this.$store.state.userProfile.accessResource.ocenka.guest; },
     specId() { return this.$store.state.userProfile.userId; }
   },
   data: function() {
@@ -218,6 +219,7 @@ export default {
     },
   },
   created: function() {
+    console.log(this.guest);
     this.isLoad = false;
     // load list district
     this.loadDistrict();

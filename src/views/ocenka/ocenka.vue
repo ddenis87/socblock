@@ -63,6 +63,7 @@ export default {
             }
           }
           if (userInfo.userName[0] == '$')  ocenka.ocenka.administrator = true;
+          if (userInfo.userName[0] == '*')  ocenka.ocenka.guest = true;
           userInfo.accessResource = ocenka;
         }
          this.$store.commit('setUserProfile', userInfo);

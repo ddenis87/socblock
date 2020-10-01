@@ -16,7 +16,8 @@ export default new Vuex.Store({
       accessResource: {
         ocenka: {
           access: false,
-          administrator: false
+          administrator: false,
+          guest: false
         }
       }
     }
@@ -47,6 +48,7 @@ export default new Vuex.Store({
           let ocenka = userProfile.accessResource.ocenka;
           state.userProfile.accessResource.ocenka.access = ocenka.access;
           if ('administrator' in ocenka) state.userProfile.accessResource.ocenka.administrator = ocenka.administrator;
+          if ('guest' in ocenka) state.userProfile.accessResource.ocenka.guest = ocenka.guest;
         }
       }
     },
